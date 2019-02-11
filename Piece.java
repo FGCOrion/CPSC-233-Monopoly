@@ -4,7 +4,7 @@ class Piece {
     private char avatar;
 
     /* Getters */
-    public int getXposition(){
+    public int getPosition(){
         return position;
     }
     public char getAvatar(){
@@ -16,6 +16,6 @@ class Piece {
         position = newPosition;
     }
     public void setAvatar(char avatarType){
-            avatar = avatarType;
+        avatar = avatarType;
     }
 }
