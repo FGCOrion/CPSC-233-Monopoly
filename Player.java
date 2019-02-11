@@ -10,7 +10,7 @@ class Player {
   
   public Piece getPiece()
   {
-    return piece
+    return piece;
   }
   //setter method
   
