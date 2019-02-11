@@ -1,0 +1,24 @@
+Board:
+    Array for what each space is (called from the spaces class)
+    
+Player:
+    Integer for what space they are on
+    Integer for how much money they have
+    Int for what space its in
+    What image it is
+    
+Space:
+    String Name
+    Int Cost to buy
+    Int Value, how much person has to pay when they land on it
+    Int owner, 1 for player, 2 for computer
+    Will have a constructor the board calls to fill the array
+    
+Computer AI:
+    Player object that makes choices based on their money
+    
+GameMain:
+    The main method
+    Calls all the classes and puts them together
+    Handles rolling dice and exchanging money
+    
