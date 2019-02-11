@@ -2,16 +2,16 @@ class GameMain {
   public int money;
   public String name;
   
-  GameMain(Str string, int startingMoney) { //Constructor for initializing game
+  GameMain(String name, int startingMoney) { //Constructor for initializing game
     money = startingMoney;
-    name = str;
+    name = name;
   }
   
-  public gainMoney(int num) { //when a player lands on a property
+  public void gainMoney(int num) { //when a player lands on a property
     money += num;
   }
   
-  public loseMoney(int num) { // when a player lands on a property
+  public void loseMoney(int num) { // when a player lands on a property
     money -= num;
   }
 
