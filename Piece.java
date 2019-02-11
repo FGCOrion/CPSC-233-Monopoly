@@ -17,5 +17,5 @@ class Piece {
     }
     public void setAvatar(char avatarType){
             avatar = avatarType;
-
+    }
 }
