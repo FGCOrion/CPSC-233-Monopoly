@@ -4,32 +4,35 @@ class Player {
      * Setters and Getters for instance variables
      */
     //instance variables
-    private Piece piece;
+    private int position = 0;
+    private char avatar;
 
-    //getter method
-
-    public Piece getPiece()
-    {
-        return piece;
+    /* Getters */
+    public int getPosition(){
+        return position;
     }
-    //setter method
-
-    public void setPiece(Piece newPiece)
-    {
-        piece=newPiece;
+    public char getAvatar(){
+        return avatar;
     }
 
-    //constructor
-
-    public Player()
-    {
-
+    /* Setters */
+    public void setPosition(int newPosition){
+        position = newPosition;
     }
-    //constructors
-    public Player(Piece otherPiece)
+    public void setAvatar(char avatarType) {
+        avatar = avatarType;
+    }
+
+    /* constructor */
+    public Player() {
+        position = 0;
+        avatar = 'a';
+    }
+
+    public Player(Player otherPlayer)
     {
-        piece.setPosition(otherPiece.getPosition());
-        piece.setAvatar(otherPiece.getAvatar());
+        position = otherPlayer.getPosition();
+        avatar = otherPlayer.getAvatar();
     }
 
 }
