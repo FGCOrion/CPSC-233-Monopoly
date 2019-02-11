@@ -2,7 +2,7 @@ class GameMain {
   public int money;
   public String name;
   
-  Game_Main(Str string, int startingMoney) { //Constructor for initializing game
+  GameMain(Str string, int startingMoney) { //Constructor for initializing game
     money = startingMoney;
     name = str;
   }
