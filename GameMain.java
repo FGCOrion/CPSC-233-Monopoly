@@ -1,4 +1,4 @@
-class Game_Main {
+class GameMain {
   public int money;
   public String name;
   
