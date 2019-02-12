@@ -4,7 +4,20 @@ class Board {
     * Setters and Getters for instance variables
     */
   
-    int boardArray[] = new int[28];
-    //Creates a new array of integers with 28 elements (6 on each side + corners)
+    //Sets every space as a space object to add to the array of the board
+    Space space1 = new Space("Space 1", 150, 50);
+    Space space2 = new Space("Space 2", 200, 75);
+    Space space3 = new Space("?", 0, 0);
+    Space space4 = new Space("Space 4", 250, 100);
+    Space space5 = new Space("Space 5", 300, 125);
+    Space space6 = new Space("Jail", 350, 150);
+    
+    Space[] boardArray = {space1, 
+                          space2,
+                          space3,
+                          space4,
+                          space5,
+                          space6,
+                         };
 
 }
