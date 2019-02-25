@@ -20,8 +20,6 @@ class Player {
     public int getMoney(){
         return money;
     }
-    public ArrayList getOwns(){
-        return new ArrayList (owns);
     /*manage the place*/
     public boolean buyPlace(String p){
         if (owns.contains(p))
@@ -33,7 +31,7 @@ class Player {
         if (!owns.contains(p))
             return false;
         owns.remove(p);
-        retrun true;
+        return true;
     }
         
     public boolean placeExist(String p){
