@@ -11,6 +11,7 @@ class Board {
         ArrayList<Space> boardArray = new ArrayList<Space>();
     
         //Sets every space as a space object to add to the array of the board
+	    
 		Space space0 = new Space("GO", 0, 0);
 		
 		Space space1 = new Space("Yellow 1", 150, 50); 		//33.3% income to cost
