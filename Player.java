@@ -20,7 +20,29 @@ class Player {
     public int getMoney(){
         return money;
     }
-
+    public ArrayList getOwns(){
+        return new ArrayList (owns);
+    /*manage the place*/
+    public boolean buyPlace(String p){
+        if (owns.contains(p))
+            return false;
+        owns.add(p);
+        return true;
+    }
+    public boolean sellPlace(String p){
+        if (!owns.contains(p))
+            return false;
+        owns.remove(p);
+        retrun true;
+    }
+        
+    public boolean placeExist(String p){
+        if (owns.contains(p))
+            return true;
+        else
+            return false;
+    }
+    
     /* Setters */
     public void setPosition(int newPosition){
         position = newPosition;
@@ -29,9 +51,10 @@ class Player {
         avatar = avatarType;
     }
     public void setMoney(int newMoney){
-        money=newMoney;
+        money = newMoney;
     }
-
+    
+   
     /* constructor */
     public Player() {
         position = 0;
