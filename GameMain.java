@@ -9,29 +9,56 @@ class GameMain {
 	static Board board = new Board();
 	
 	//Method to roll a single 7 sided die
+	/**
+	*Method to roll a single 7 sided die
+	*@return result of the Dice
+	**/
+	
 	private static int rollDie() {
 		Random result = new Random();
 		return result.nextInt(7) + 1;
 	}
 	
-	//Method to print text so I don't have to write System.out.print every single time
+	/**
+	*Method to print text so I don't have to write System.out.print every single time
+	*Take text as a String parameter to output messages
+	*@param text
+	**/
+	
 	public static void print(String text) {
 		System.out.println(text);
 	}
 	
-	//Method to print a bunch of stuff at the start
+	/**
+	*Method to print a bunch of stuff at the start
+	*output the WELCOME MESSAGE
+	**/
+	
 	private static void gameStart() {
 		print("Welcome to Mono-Poly!");
 	}
 
-	//Prints a bunch of info at the start of each round (like money and stuff)
+	/**
+	*Prints a bunch of info at the start of each round (like money and stuff)
+	*take turn as a parameter, will output the information of the player in each turn
+	*@param turn
+	**/
+	
 	private static void roundStart(int turn) {
 		print("Turn " + String.valueOf(turn));
 		print("Player:   $" + String.valueOf(player.getMoney()));
 		print("Computer: $" + String.valueOf(computer.getMoney()));
 	}
 	
-	//Figures out if the game has ended or not
+	/**
+	*Figures out if the game has ended or not
+	*take turn,player,computer as a parameter
+	*when people plays more than 500 turns, or any of the players' asset become negative, the game ends.
+	*@param turn;
+	*@param player;
+	*@param computer;
+	**/
+	
 	private static boolean endConditions(int turn, Player player, Player computer) {
 		if (turn > 500)
 			return true;
@@ -53,7 +80,7 @@ class GameMain {
 		
 		//Reads the starting text
 		gameStart();
-		
+		//determine whether the game end or not
 		while (endConditions(turn, player, computer) == false) {
 			roundStart(turn);
 				
