@@ -33,7 +33,7 @@ class GameMain {
 	
 	//Method for the players turn
 	private static void playerTurn() {
-		print("It is your turn");
+		print("\nIt is your turn");
 		int x = rollDie();
 		print("You rolled a " + String.valueOf(x));
 		int oldPosition = player.getPosition();
@@ -44,7 +44,7 @@ class GameMain {
 			player.setMoney(player.getMoney() + 200);
 		}
 		
-		print("You landed on " + board.getSpace(player.getPosition()).getName());
+		print("You landed on " + board.getSpace(player.getPosition() - 1).getName());
 		
 		//If the space the player lands on is unowned
 		if (board.getSpace(player.getPosition() - 1).getOwner() == 0) {
@@ -60,10 +60,12 @@ class GameMain {
 		//turn increases by 1 every round until it reaches 500
 		int turn = 0;
 		
+		//Reads the starting text
+		gameStart();
+		
 		while (turn <= 500) {
 			roundStart(turn);
-			gameStart();
-			
+				
 			playerTurn();
 			
 		turn += 1;
