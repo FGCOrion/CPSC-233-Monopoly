@@ -12,13 +12,13 @@ class Player {
 
     /* Getters */
     public int getPosition(){
-        return new int(position);
+        return position;
     }
     public char getAvatar(){
-        return new char(avatar);
+        return avatar;
     }
     public int getMoney(){
-        return new int(money);
+        return money;
     }
     /*manage the place*/
     public boolean buyPlace(String p){
@@ -43,13 +43,13 @@ class Player {
     
     /* Setters */
     public void setPosition(int newPosition){
-        this.position = new int (newPosition);
+        this.position = newPosition;
     }
     public void setAvatar(char avatarType) {
-        this.avatar = new char(avatarType);
+        this.avatar = avatarType;
     }
     public void setMoney(int newMoney){
-        this.money = new int(newMoney);
+        this.money = newMoney;
     }
     
    
