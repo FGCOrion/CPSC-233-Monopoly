@@ -8,10 +8,10 @@ class GameMain {
 	
 	static Board board = new Board();
 	
-	//Method to roll a single 6 sided die
+	//Method to roll a single 7 sided die
 	private static int rollDie() {
 		Random result = new Random();
-		return result.nextInt(6) + 1;
+		return result.nextInt(7) + 1;
 	}
 	
 	//Method to print text so I don't have to write System.out.print every single time
@@ -31,8 +31,23 @@ class GameMain {
 		print("Computer: $" + String.valueOf(computer.getMoney()));
 	}
 	
+	//Figures out if the game has ended or not
+	private static boolean endConditions(int turn, Player player, Player computer) {
+		if (turn > 500)
+			return true;
+		if (player.getMoney() < 0)
+			return true;
+		if (computer.getMoney() < 0)
+			return true;
+		else
+			return false;
+	}
+	
 	//Method for the players turn
 	private static void playerTurn() {
+		Scanner input = new Scanner(System.in);
+		//Creates a new scanner
+		
 		print("\nIt is your turn");
 		int x = rollDie();
 		print("You rolled a " + String.valueOf(x));
@@ -44,16 +59,37 @@ class GameMain {
 			player.setMoney(player.getMoney() + 200);
 		}
 		
-		print("You landed on " + board.getSpace(player.getPosition() - 1).getName());
+		Space newSpace = board.getSpace(player.getPosition() - 1);
+		print("You landed on " + newSpace.getName());
 		
 		//If the space the player lands on is unowned
-		if (board.getSpace(player.getPosition() - 1).getOwner() == 0) {
-			
+		if (newSpace.getOwner() == 0) {
+			print(newSpace.getName() + " is unowned. Would you like to purchase it for $" + String.valueOf(newSpace.getCost()) + "? (Value of $" + String.valueOf(newSpace.getValue()) + ")");
+			print("(y/n only please)");
+			char choice = ' ';
+			while (choice != 'y' && choice != 'n') {
+				choice = input.next().charAt(0);
+			}
+			if (choice == 'y') {
+				
+				//If the player has >= money to the spaces cost then they buy it
+				if (player.getMoney() >= newSpace.getCost()) {
+					print("Success");
+					player.setMoney(player.getMoney() - newSpace.getCost());
+					newSpace.setOwner(1);
+				}
+				else {
+					print("You cannot afford this space");
+				}
+			}		
 		}
+			
 	}
+
 	
 	
     public static void main(String[] args) {
+		
         Board board = new Board();
         //Constructs a new board	
 		
@@ -63,12 +99,12 @@ class GameMain {
 		//Reads the starting text
 		gameStart();
 		
-		while (turn <= 500) {
+		while (endConditions(turn, player, computer) == false) {
 			roundStart(turn);
 				
 			playerTurn();
-			
-		turn += 1;
+
+			turn += 1;
 		}
     }
 }

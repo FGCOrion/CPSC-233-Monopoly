@@ -28,7 +28,7 @@ class Space {
         this.owner = owner;
     }
     
-    public void newOwner(int owner) {
+    public void setOwner(int owner) {
         this.owner = owner;
     }
     
