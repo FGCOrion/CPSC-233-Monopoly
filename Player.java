@@ -8,7 +8,7 @@ class Player {
     private int position = 0;
     private char avatar;
     private int money;
-    private ArrayList owns= new ArrayList();
+    //private ArrayList<Space> owns= new ArrayList<Space>();
 
     /* Getters */
     public int getPosition(){
@@ -21,7 +21,7 @@ class Player {
         return money;
     }
     /*manage the place*/
-    public boolean buyPlace(String p){
+    /*public boolean buyPlace(String p){
         if (owns.contains(p))
             return false;
         owns.add(p);
@@ -39,7 +39,8 @@ class Player {
             return true;
         else
             return false;
-    }
+    }*/
+	//This is broken for now
     
     /* Setters */
     public void setPosition(int newPosition){
