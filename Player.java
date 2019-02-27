@@ -92,7 +92,11 @@ class Player {
 		try {Thread.sleep(milliseconds);} catch(InterruptedException intrx) {/* handle the exception */}
 	}
 	
-	//Method for the players turn
+	/**
+	*Method for the players turn
+	*giving user an output to show the value of dice they rolled, then player walks the equal step. Out put play's current loation.
+	*After a player pass the final position, player got 200$, this player's position will be recount.
+	**/
 	public void takeTurn(Board board) {
 		Scanner input = new Scanner(System.in);
 		//Creates a new scanner
@@ -118,6 +122,10 @@ class Player {
 		print("You landed on " + newSpace.getName());
 		
 		//If the space the player lands on is unowned
+		/**
+		*when a player comes to an unowned place, player will have the opinion to determine purchase this very place or not. 
+		*if player decide to own the place and have enough money, player will lose the amount of money and own this place.
+		**/
 		if (newSpace.getOwner() == 0) {
 			wait(250);
 			print(newSpace.getName() + " is unowned. Would you like to purchase it for $" + String.valueOf(newSpace.getCost()) + "? (Value of $" + String.valueOf(newSpace.getValue()) + ")");
