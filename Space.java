@@ -20,18 +20,28 @@ class Space {
         this.owner = 0;
         //Defaults to nobody having any control of the space
     }
-    
+    /**
+    *constructor with the owner
+    *@param name
+    *@param cost
+    *@param value
+    *@param owner
+    **/
     public Space(String name,int cost, int value, int owner) {
         this.name = name;
         this.cost = cost;
         this.value = value;
         this.owner = owner;
     }
-    
+    //setter method
     public void setOwner(int owner) {
         this.owner = owner;
     }
-    
+    /**
+    *@return name
+    *@return cost
+    *@return value
+    **/
     public String getName() {
         return this.name;
     }
