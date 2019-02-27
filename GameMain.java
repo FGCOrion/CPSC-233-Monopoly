@@ -28,7 +28,7 @@ class GameMain {
 	public static void print(String text) {
 		System.out.println(text);
 	}
-	
+
 	/**
 	*Method to print a bunch of stuff at the start
 	*output the WELCOME MESSAGE
@@ -45,9 +45,13 @@ class GameMain {
 	**/
 	
 	private static void roundStart(int turn) {
-		print("Turn " + String.valueOf(turn));
+		Player.wait(250);
+		print("\nTurn " + String.valueOf(turn));
+		Player.wait(250);
 		print("Player:   $" + String.valueOf(player.getMoney()));
+		Player.wait(250);
 		print("Computer: $" + String.valueOf(computer.getMoney()));
+		Player.wait(250);
 	}
 	
 	/**
@@ -80,7 +84,7 @@ class GameMain {
 		
 		//Reads the starting text
 		gameStart();
-		//determine whether the game end or not
+		//determine whether the game ends or not
 		while (endConditions(turn, player, computer) == false) {
 			roundStart(turn);
 				

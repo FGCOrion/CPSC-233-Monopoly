@@ -61,7 +61,7 @@ class Player {
     public Player() {
         position = 0;
         avatar = 'a';
-        money = 0;
+        money = 1500;
     }
 
     public Player(Player otherPlayer)
@@ -81,28 +81,45 @@ class Player {
 	public static void print(String text) {
 		System.out.println(text);
 	}
+
+
+	/**
+	 * Method to make the program wait x amount of milliseconds, so I don't have to write the code every time
+	 * @param milliseconds
+	 */
+
+	public static void wait(int milliseconds){
+		try {Thread.sleep(milliseconds);} catch(InterruptedException intrx) {/* handle the exception */}
+	}
 	
 	//Method for the players turn
 	public void takeTurn(Board board) {
 		Scanner input = new Scanner(System.in);
 		//Creates a new scanner
-		
+
+		wait(250);
 		print("\nIt is your turn");
 		int x = rollDie();
+		wait(250);
 		print("You rolled a " + String.valueOf(x));
 		int oldPosition = this.getPosition();
 		this.setPosition(oldPosition + x);
 		if (this.getPosition() > board.getLength()) {
+			wait(250);
 			print("You passed GO and collected $200");
 			this.setPosition(this.getPosition() - board.getLength());
 			this.setMoney(this.getMoney() + 200);
+			wait(250);
+			print("You now have $" + this.getMoney());
 		}
 		
 		Space newSpace = board.getSpace(this.getPosition() - 1);
+		wait(250);
 		print("You landed on " + newSpace.getName());
 		
 		//If the space the player lands on is unowned
 		if (newSpace.getOwner() == 0) {
+			wait(250);
 			print(newSpace.getName() + " is unowned. Would you like to purchase it for $" + String.valueOf(newSpace.getCost()) + "? (Value of $" + String.valueOf(newSpace.getValue()) + ")");
 			print("(y/n only please)");
 			char choice = ' ';
@@ -110,7 +127,9 @@ class Player {
 				choice = input.next().charAt(0);
 			}
 			if (choice == 'y') {
-				
+
+				wait(250);
+
 				//If the player has >= money to the spaces cost then they buy it
 				if (this.getMoney() >= newSpace.getCost()) {
 					print("Success");
