@@ -3,7 +3,12 @@ class Piece {
     private int position = 0;
     private char avatar;
 
-    /* Getters */
+    /**
+    *Getters
+    *@return position
+    *@return avatar
+    **/
+    
     public int getPosition(){
         return position;
     }
@@ -11,7 +16,9 @@ class Piece {
         return avatar;
     }
 
-    /* Setters */
+    /* 
+    *Setters 
+    */
     public void setPosition(int newPosition){
         position = newPosition;
     }
