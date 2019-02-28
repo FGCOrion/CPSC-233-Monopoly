@@ -102,5 +102,13 @@ class GameMain {
 			
 			turn += 1;
 		}
+		
+		//Once the game is over, figures out who won
+		if (player.getMoney() < 0)
+			print("You Lose!");
+		else if (computer.getMoney() < 0)
+			print("You Win!");
+		else if (turn > 500)
+			print("Its a Draw! (so far)");
     }
 }
