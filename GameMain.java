@@ -4,11 +4,10 @@ import java.util.Scanner;
 
 class GameMain {
 	static Player player = new Player();
-	static Player computer = new Player();
+	static ComputerAI computer = new ComputerAI();
 	
 	static Board board = new Board();
 	
-	//Method to roll a single 7 sided die
 	/**
 	*Method to roll a single 7 sided die
 	*@return result of the Dice
@@ -27,6 +26,15 @@ class GameMain {
 	
 	public static void print(String text) {
 		System.out.println(text);
+	}
+
+	/**
+	 * Method to make the program wait x amount of milliseconds, so I don't have to write the code every time
+	 * @param milliseconds
+	 */
+
+	public static void wait(int milliseconds){
+		try {Thread.sleep(milliseconds);} catch(InterruptedException intrx) {/* handle the exception */}
 	}
 
 	/**
@@ -87,10 +95,20 @@ class GameMain {
 		//determine whether the game ends or not
 		while (endConditions(turn, player, computer) == false) {
 			roundStart(turn);
+			wait(250);
 				
-			player.takeTurn(board);
+			player.takeTurn(board, computer);
+			computer.takeTurn(board, player);
 
 			turn += 1;
 		}
+		
+		//Once the game is over, figures out who won
+		if (player.getMoney() < 0)
+			print("You Lose!");
+		else if (computer.getMoney() < 0)
+			print("You Win!");
+		else if (turn > 500)
+			print("Its a Draw! (so far)");
     }
 }

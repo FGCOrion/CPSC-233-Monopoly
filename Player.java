@@ -8,7 +8,7 @@ class Player {
      * Setters and Getters for instance variables
      */
     //instance variables
-    private int position = 0;
+    private int position = 1;
     private char avatar;
     private int money;
     //private ArrayList<Space> owns= new ArrayList<Space>();
@@ -60,7 +60,7 @@ class Player {
     /* constructor */
     public Player() {
         position = 0;
-        avatar = 'a';
+        avatar = '@';
         money = 1500;
     }
 
@@ -97,7 +97,7 @@ class Player {
 	*giving user an output to show the value of dice they rolled, then player walks the equal step. Out put play's current loation.
 	*After a player pass the final position, player got 200$, this player's position will be recount.
 	**/
-	public void takeTurn(Board board) {
+	public void takeTurn(Board board, ComputerAI comp) {
 		Scanner input = new Scanner(System.in);
 		//Creates a new scanner
 
@@ -143,11 +143,25 @@ class Player {
 					print("Success");
 					this.setMoney(this.getMoney() - newSpace.getCost());
 					newSpace.setOwner(1);
+					board.setSpace(this.getPosition() - 1, newSpace);
 				}
 				else {
 					print("You cannot afford this space");
 				}
 			}		
+		}
+		//If the player lands on a space they already own
+		else if (newSpace.getOwner() == 1) {
+			wait(250);
+			print("You own " + newSpace.getName());
+		}
+		
+		//If the player lands on a space owned by the AI
+		else if (newSpace.getOwner() == 2) {
+			wait(250);
+			print(newSpace.getName() + " is owned by the AI. You owe them $" + String.valueOf(newSpace.getValue()));
+			this.setMoney(this.getMoney() - newSpace.getValue());
+			comp.setMoney(comp.getMoney() + newSpace.getValue());
 		}
 			
 	}

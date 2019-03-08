@@ -13,9 +13,21 @@ class Board {
 	
 	public int getLength() {
 		return boardArray.size();
+	}	
+  
+	public void setSpace(int number, Space space) {
+		boardArray.set(number, space);
 	}
-    
-    public Board() {
+	
+	
+	//A method to print out every space and the ownership of that space to make sure things are working
+	public void returnBoard() {
+		for (int i = 0; i < boardArray.size(); i++) {
+			System.out.println(boardArray.get(i).getInfo());
+		}
+	} 
+  
+  public Board() {
     //Basic Constructor that builds the board
     
 		boardArray = new ArrayList<Space>();

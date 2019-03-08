@@ -57,5 +57,10 @@ class Space {
     public int getOwner() {
         return this.owner;
     }
+	
+	//A test method for Board to check every space in the boardArray
+	public String getInfo() {
+		return name + ":  " + String.valueOf(owner);
+	}
 
 }
