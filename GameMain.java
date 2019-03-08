@@ -99,7 +99,7 @@ class GameMain {
 				
 			player.takeTurn(board, computer);
 			computer.takeTurn(board, player);
-			
+
 			turn += 1;
 		}
 		

@@ -72,7 +72,7 @@ class Player {
     }
 	
 	//Method to roll a single 7 sided die
-	protected static int rollDie() {
+	private static int rollDie() {
 		Random result = new Random();
 		return result.nextInt(7) + 1;
 	}
@@ -150,7 +150,6 @@ class Player {
 				}
 			}		
 		}
-		
 		//If the player lands on a space they already own
 		else if (newSpace.getOwner() == 1) {
 			wait(250);
