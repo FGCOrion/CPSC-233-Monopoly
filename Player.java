@@ -72,7 +72,7 @@ class Player {
     }
 	
 	//Method to roll a single 7 sided die
-	private static int rollDie() {
+	public static int rollDie() {
 		Random result = new Random();
 		return result.nextInt(7) + 1;
 	}
