@@ -25,7 +25,19 @@ class Board {
 		for (int i = 0; i < boardArray.size(); i++) {
 			System.out.println(boardArray.get(i).getInfo());
 		}
-	} 
+	}
+	//A method to output the number of the land that player holds. 
+	public int getNumberOfLand(){
+			int num=0;
+			for(int i=1;i<boardArray.size();i++)
+			{
+				if (boardArray.get(i).getOwner()==1)
+				{
+					num+=1;
+				}
+			}
+			return num;
+		}
   
   public Board() {
     //Basic Constructor that builds the board
@@ -87,6 +99,7 @@ class Board {
 		boardArray.add(space22);
 		boardArray.add(space23);
 		//This is ugly AF
+		
 		
 		
     }

@@ -11,6 +11,11 @@ class Player {
     private int position = 1;
     private char avatar;
     private int money;
+    private int numbersOfDice;
+    private String information0;
+    private String information1;
+    //private ComputerAI ai=new ComputerAI();
+   // private Gui gui=new Gui();
     //private ArrayList<Space> owns= new ArrayList<Space>();
 
     /* Getters */
@@ -20,9 +25,30 @@ class Player {
     public char getAvatar(){
         return avatar;
     }
+    public int getNumbersOfDice()
+    {
+    	return this.numbersOfDice;
+    }
     public int getMoney(){
         return money;
     }
+    public String getInformation0()
+    {
+    	return information0;
+    }
+    public String getInformation1()
+    {
+    	return information1;
+    }
+    public void setInformation0(String s)
+    {
+    	this.information0=s;
+    }
+    public void setInformation1(String s)
+    {
+    	this.information1=s;
+    }
+    
     /*manage the place*/
     /*public boolean buyPlace(String p){
         if (owns.contains(p))
@@ -99,71 +125,81 @@ class Player {
 	**/
 	public void takeTurn(Board board, ComputerAI comp) {
 		Scanner input = new Scanner(System.in);
+		
 		//Creates a new scanner
 
 		wait(250);
-		print("\nIt is your turn");
+		//*****print("\nIt is your turn");
 		int x = rollDie();
+		this.numbersOfDice=x;
 		wait(250);
-		print("You rolled a " + String.valueOf(x));
+		//*****print("You rolled a " + String.valueOf(x));
+
 		int oldPosition = this.getPosition();
 		this.setPosition(oldPosition + x);
 		if (this.getPosition() > board.getLength()) {
 			wait(250);
-			print("You passed GO and collected $200");
+			//*****print("You passed GO and collected $200");
+			
+			information0="You passed GO and collected $200";
 			this.setPosition(this.getPosition() - board.getLength());
 			this.setMoney(this.getMoney() + 200);
 			wait(250);
-			print("You now have $" + this.getMoney());
+			//*****print("You now have $" + this.getMoney());
+		}
+		else 
+		{
+			information0="";
 		}
 		
+		
+		
+			
+	}
+	public void buy(Board board,ComputerAI comp){
 		Space newSpace = board.getSpace(this.getPosition() - 1);
 		wait(250);
-		print("You landed on " + newSpace.getName());
+		//*****print("You landed on " + newSpace.getName());
 		
 		//If the space the player lands on is unowned
 		/**
 		*when a player comes to an unowned place, player will have the opinion to determine purchase this very place or not. 
 		*if player decide to own the place and have enough money, player will lose the amount of money and own this place.
 		**/
-		if (newSpace.getOwner() == 0) {
+		if (newSpace.getOwner() == 0) { 
 			wait(250);
-			print(newSpace.getName() + " is unowned. Would you like to purchase it for $" + String.valueOf(newSpace.getCost()) + "? (Value of $" + String.valueOf(newSpace.getValue()) + ")");
-			print("(y/n only please)");
-			char choice = ' ';
-			while (choice != 'y' && choice != 'n') {
-				choice = input.next().charAt(0);
-			}
-			if (choice == 'y') {
+			
+			//information1=newSpace.getName() + " is unowned. Would you like to purchase it for $" + String.valueOf(newSpace.getCost()) + "? (Value of $" + String.valueOf(newSpace.getValue()) + ")";
+
+			
 
 				wait(250);
 
 				//If the player has >= money to the spaces cost then they buy it
 				if (this.getMoney() >= newSpace.getCost()) {
-					print("Success");
+					information1="Success";
 					this.setMoney(this.getMoney() - newSpace.getCost());
 					newSpace.setOwner(1);
 					board.setSpace(this.getPosition() - 1, newSpace);
 				}
 				else {
-					print("You cannot afford this space");
+					information1="You cannot afford this space";
 				}
-			}		
+					
 		}
 		//If the player lands on a space they already own
 		else if (newSpace.getOwner() == 1) {
 			wait(250);
-			print("You own " + newSpace.getName());
+			information1="You own " + newSpace.getName();
 		}
 		
 		//If the player lands on a space owned by the AI
 		else if (newSpace.getOwner() == 2) {
 			wait(250);
-			print(newSpace.getName() + " is owned by the AI. You owe them $" + String.valueOf(newSpace.getValue()));
+			information1=newSpace.getName() + " is owned by AI. You owe $" + String.valueOf(newSpace.getValue());
 			this.setMoney(this.getMoney() - newSpace.getValue());
 			comp.setMoney(comp.getMoney() + newSpace.getValue());
 		}
-			
 	}
 
 }

@@ -7,15 +7,24 @@ class GameMain {
 	static ComputerAI computer = new ComputerAI();
 	
 	static Board board = new Board();
+	int turn = 0;
+	private static int numOfTurn=1;
+	private String gameStatus;
+
+	
+
 	
 	/**
 	*Method to roll a single 7 sided die
 	*@return result of the Dice
 	**/
-	
-	private static int rollDie() {
+	public static int rollDie() {
 		Random result = new Random();
 		return result.nextInt(7) + 1;
+
+	}
+	public String getStatus(){
+		return this.gameStatus;
 	}
 	
 	/**
@@ -41,10 +50,11 @@ class GameMain {
 	*Method to print a bunch of stuff at the start
 	*output the WELCOME MESSAGE
 	**/
-	
-	private static void gameStart() {
+	/*
+	public static void gameStart() {
 		print("Welcome to Mono-Poly!");
 	}
+	*/
 
 	/**
 	*Prints a bunch of info at the start of each round (like money and stuff)
@@ -52,13 +62,13 @@ class GameMain {
 	*@param turn
 	**/
 	
-	private static void roundStart(int turn) {
+	public static void roundStart(int turn) {
 		Player.wait(250);
-		print("\nTurn " + String.valueOf(turn));
+		//print("\nTurn " + String.valueOf(turn));
 		Player.wait(250);
-		print("Player:   $" + String.valueOf(player.getMoney()));
+		//print("Player:   $" + String.valueOf(player.getMoney()));
 		Player.wait(250);
-		print("Computer: $" + String.valueOf(computer.getMoney()));
+		//print("Computer: $" + String.valueOf(computer.getMoney()));
 		Player.wait(250);
 	}
 	
@@ -81,6 +91,10 @@ class GameMain {
 		else
 			return false;
 	}
+	public int getTurns()
+	{
+		return this.numOfTurn;
+	}
 	
     public static void main(String[] args) {
 		
@@ -91,9 +105,9 @@ class GameMain {
 		int turn = 0;
 		
 		//Reads the starting text
-		gameStart();
+		
 		//determine whether the game ends or not
-		while (endConditions(turn, player, computer) == false) {
+		if (endConditions(turn, player, computer) == false) {
 			roundStart(turn);
 			wait(250);
 				
@@ -101,6 +115,7 @@ class GameMain {
 			computer.takeTurn(board, player);
 
 			turn += 1;
+			numOfTurn+=1;
 		}
 		
 		//Once the game is over, figures out who won
@@ -110,5 +125,68 @@ class GameMain {
 			print("You Win!");
 		else if (turn > 500)
 			print("Its a Draw! (so far)");
+		
     }
+    public void playerBuy(){
+    	player.buy(board,computer);
+    }
+    public void playerrun(){
+    	Board board = new Board();
+        //Constructs a new board	
+		
+		//turn increases by 1 every round until it reaches 500
+		
+		
+		//Reads the starting text
+		
+		//determine whether the game ends or not
+		if (endConditions(turn, player, computer) == false) {
+			roundStart(turn);
+			wait(250);
+				
+			player.takeTurn(board, computer);
+			
+			
+	
+		}
+		
+		//Once the game is over, figures out who won
+		if (player.getMoney() < 0)
+			gameStatus="You Lose!";
+		else if (computer.getMoney() < 0)
+			gameStatus="You Win!";
+		else if (turn > 500)
+			gameStatus="Its a Draw! (so far)";
+    }
+    public void AIrun(){
+    	
+        //Constructs a new board	
+		
+		//turn increases by 1 every round until it reaches 500
+		
+		
+		//Reads the starting text
+		
+		//determine whether the game ends or not
+		if (endConditions(turn, player, computer) == false) {
+			roundStart(turn);
+			wait(250);
+				
+			computer.takeTurn(board, player);
+
+			turn += 1;
+			numOfTurn+=1;
+		}
+		
+		//Once the game is over, figures out who won
+		if (player.getMoney() < 0)
+			gameStatus="You Lose!";
+		else if (computer.getMoney() < 0)
+			
+			gameStatus="You Win!";
+
+		else if (turn > 500)
+			gameStatus="Its a Draw! (so far)";
+    }
+   
 }

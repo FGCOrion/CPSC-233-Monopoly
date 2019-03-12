@@ -57,6 +57,18 @@ class Space {
     public int getOwner() {
         return this.owner;
     }
+    public String getNameOfOwner(){
+        String n= "unowned";
+        if (getOwner()==1)
+        {
+            n="player";
+        }
+       else if (getOwner()==2)
+       {
+            n="AI";
+       }
+        return n;
+    }
 	
 	//A test method for Board to check every space in the boardArray
 	public String getInfo() {
