@@ -528,6 +528,24 @@ public class Gui extends Application {
         }
     }
   );
+  
+  
+  
+	Button btClose = new Button("Exit");
+	btClose.setMaxWidth(75);
+	btClose.setMaxHeight(75);
+	root.add(btClose,14,0);
+	btClose.setOnAction(new EventHandler<ActionEvent>()
+	{
+		@Override
+		public void handle(ActionEvent event) {
+			
+			primaryStage.close();
+		}
+	}
+	);
+	
+	
 
 
 
@@ -539,7 +557,7 @@ public class Gui extends Application {
 	//these are reference
 	
 	
-	primaryStage.setTitle("Monopoly");
+	primaryStage.setTitle("Mono-Poly");
 	primaryStage.setScene(new Scene(root, 1000, 600)); 
 	primaryStage.show();
 
