@@ -3,6 +3,9 @@ import java.util.ArrayList;
 
 
 class ComputerAI extends Player{
+	/**
+	*Declare the type of each instance variables
+	*/
 	private int position;
 	private char avatar;
 	private int money;
@@ -16,7 +19,10 @@ class ComputerAI extends Player{
 	private String information0;
 	
 
-
+	/**
+	*@return newMoeny, the money will update each time after the AI takes its turn
+	*@return newProperty, the total number of property will update each time after the AI takes its turn
+	*/
 	public int getNewMoney(){
 		return newMoney;
 	}
@@ -29,7 +35,14 @@ class ComputerAI extends Player{
         avatar = 'C';
         money = 1500;
 	}
-	
+	/**
+	*Class Gui will getting these 5 pieces of information via these getter
+	*@return information0, display a message after AI pass one round
+	*@return information1, display the result of this rolled
+	*@return information2, display the location of AI
+	*@return information3, display the information of the AI landed in this turn
+	*@return information4. display the message whether AI brought this land or not
+	*/
 	public String getInformation0(){
 		return information0;
 	}
@@ -46,13 +59,15 @@ class ComputerAI extends Player{
 		return information4;
 	}
 	
-
+	/**
+	*AI rolled the dice and move as the number of the dice, if AI have enough money, AI will purchase the land
+	*@param board , the board takes this game
+	*@param player , player that playing this game
+	*/
 	public void takeTurn(Board board, Player player) {
 		wait(250);
-		//print("\nIt is the computer's turn");
 		int x = rollDie();
 		wait(250);
-		//print("AI rolled a " + String.valueOf(x));
 		information1="AI rolled a " + String.valueOf(x);
 		int oldPosition = this.getPosition();
 		this.setPosition(oldPosition + x);
@@ -83,11 +98,12 @@ class ComputerAI extends Player{
 		**/
 		if (newSpace.getOwner() == 0) {
 			wait(250);
-			//print(newSpace.getName() + " is unowned and costs $" + String.valueOf(newSpace.getCost()) + ". (Value of $" + String.valueOf(newSpace.getValue()) + ")");
+			
 			information3=newSpace.getName() + " is unowned and costs $" + String.valueOf(newSpace.getCost()) + ". (Value of $" + String.valueOf(newSpace.getValue()) + ")";
-			//If the AI can afford the space, they buy it
+			/**
+			*If the AI can afford the space, they buy it
+			*/
 			if (this.getMoney() >= newSpace.getCost()) {
-				//print("AI bought " + newSpace.getName());
 				
 				information4="AI bought " + newSpace.getName();
 				newSpace.setOwner(2);
@@ -98,24 +114,27 @@ class ComputerAI extends Player{
 			}
 			else 
 			{
-				//print("They can't afford it");
+				
 				
 				information4="They can't afford it";
 			}
 		}
-		//If the player lands on a space they already own
+		/**
+		*If the player lands on a space they already own
+		*/
 		else if (newSpace.getOwner() == 2) {
 			wait(250);
-			//print("The AI already owns " + newSpace.getName());
-			
+						
 			information3="The AI already owns " + newSpace.getName();
 			information4="";
 		}
 		
-		//If the AI lands on a space owned by the player
+		/**
+		*If the AI lands on a space owned by the player
+		*/
 		else if (newSpace.getOwner() == 1) {
 			wait(250);
-			//print("You own " + newSpace.getName() + " The AI owes you $" + String.valueOf(newSpace.getValue()));
+			
 		
 			information3="You own " + newSpace.getName() + " The AI owes you $" + String.valueOf(newSpace.getValue());
 			information4="";

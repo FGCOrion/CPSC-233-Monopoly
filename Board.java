@@ -10,23 +10,35 @@ class Board {
 	public Space getSpace(int space) {
 		return boardArray.get(space);
 	}
-	
+	/**
+	*Getting the size of the Arraylist Board
+	*@return boardArray.size(), the size of ArrayList
+	*/
 	public int getLength() {
 		return boardArray.size();
 	}	
-  
+  	
+  	/**
+  	*Setting the information of the ArrayList.
+  	*/
 	public void setSpace(int number, Space space) {
 		boardArray.set(number, space);
 	}
 	
 	
-	//A method to print out every space and the ownership of that space to make sure things are working
+	/**
+	*A method to print out every space and the ownership of that space to make sure things are working
+	*/
+
 	public void returnBoard() {
 		for (int i = 0; i < boardArray.size(); i++) {
 			System.out.println(boardArray.get(i).getInfo());
 		}
 	}
-	//A method to output the number of the land that player holds. 
+	/**
+	*A method to output the number of the land that player holds. 
+	*/
+
 	public int getNumberOfLand(){
 			int num=0;
 			for(int i=1;i<boardArray.size();i++)
@@ -40,7 +52,9 @@ class Board {
 		}
   
   public Board() {
-    //Basic Constructor that builds the board
+   /**Basic Constructor that builds the board
+   *
+   */
     
 		boardArray = new ArrayList<Space>();
         //Sets every space as a space object to add to the array of the board
@@ -73,7 +87,9 @@ class Board {
 		Space space22 = new Space("Green 1", 900, 425);		//47.2%
 		Space space23 = new Space("Green 2", 1000, 500);	//50.0%  This one is intentionally skewed
 		
-		
+		/**
+		*Adding each of the land in the Arraylist boardArray
+		*/
 		boardArray.add(space0);
         boardArray.add(space1);
         boardArray.add(space2);

@@ -21,7 +21,9 @@ import javafx.scene.control.ChoiceBox ;
 
 
 
-
+/**
+*Instance Variables
+*/
 public class Gui extends Application {
 	private Player gameGui=new Player();
 	private Board numOfLand=new Board();
@@ -54,7 +56,10 @@ public class Gui extends Application {
 		Application.launch(args);
 		}
 	
-
+/**
+*Using GridPane to set positions.
+*The format for the GridPane is 10 row, 15 colomn.
+*/
 	@Override
 	public void start(Stage primaryStage) {
 		GridPane root = new GridPane();
@@ -70,8 +75,17 @@ public class Gui extends Application {
             rowConst.setPercentHeight(100.0 / numRows);
             root.getRowConstraints().add(rowConst);         
         }
+
+
+    /**
+    *Giving two labels different style of texts.
+    */
     Explanation.setFont(Font.font ("Verdana", 16));
     AIinformation.setFont(Font.font ("Verdana", 16));
+
+    /**
+    *setting the position of labels and button
+    */
     root.add(Explanation,0,3,2,3);
 	
     root.add(new Label(""), 4, 20);
@@ -104,6 +118,9 @@ public class Gui extends Application {
     //These are buttons
 
     //choiceBox
+    /**
+    *Create two buttons for player to make a choice: Whether wants the informations of this very land and buy it or not.
+    */
     Button positive=new Button("yes");
    
     root.add(positive,7,3);
@@ -114,12 +131,13 @@ public class Gui extends Application {
     root.add(negative,10,3);
     
 
-    /*choiceBox.getItems().add("Player");
-	choiceBox.getItems().add("Computer");
-	root.add(choiceBox,10,3,11,3);*/
-
-	//choiceBox.getValue().toString();
-
+  /**
+  *giving a button an event: Rolling the Dice
+  *The results of the Dice will outprint in the Gui.
+  *After rolling the dice, the other two button will be actviate
+  *player should decied which button to chose
+  *After that, the computerAI will take its move
+  */
 	Button roll = new Button("Dice");
 	roll.setMaxWidth(150);
 	roll.setMaxHeight(400);
@@ -130,12 +148,18 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
         
-        
+/**
+*the information of player will be shown in the screen.
+*the result of the Dice that player rolled
+*player's money;
+*player's total number of property
+*The total number of turns after the game is processing
+*/
         turns.playerrun();
       	resultOfDice.setText("You rolled :"+turns.player.getNumbersOfDice());
       	Pmoney.setText(("Your Money: "+turns.player.getMoney()));
-		Pproperty.setText(("Your property: "+numOfLand.getNumberOfLand()));
-		Pturn.setText(("Turn processing at: "+turns.getTurns()));
+		    Pproperty.setText(("Your property: "+numOfLand.getNumberOfLand()));
+		    Pturn.setText(("Turn processing at: "+turns.getTurns()));
         Pinformation0.setText(turns.player.getInformation0());
         text.setText("Do you interest in this Land?");
         
@@ -168,7 +192,18 @@ public class Gui extends Application {
       public void handle(ActionEvent event) {
        text.setText(turns.player.getInformation1());
        
-        //turns.setYes(0);
+      //turns.setYes(0);
+      /**
+      *After the player made their/his choice, the AI will roll the dice and take its move
+      *The information of AI will display at the bottom of the screen
+      *the information include:
+      *the dice's reust that computer rolled
+      *the total property of AI
+      *the money AI holds
+      *the informations of land that computer landed.
+      *Did AI borught a land or not ar this turn
+      */
+
 
         turns.AIrun();
         status.setText(turns.getStatus());
@@ -191,6 +226,10 @@ public class Gui extends Application {
         
         }
   );
+    /**
+    *Lands are made by these buttons with the type "Button".
+    *After the player click these lands, the information of the single land will displayer properly on the screen next to Explaination.
+    */
     Button bt01 = new Button("Jail");
     bt01.setMaxWidth(150);
 	bt01.setMaxHeight(400);
@@ -528,36 +567,21 @@ public class Gui extends Application {
         }
     }
   );
-  
-  
-  
-	Button btClose = new Button("Exit");
-	btClose.setMaxWidth(75);
-	btClose.setMaxHeight(75);
-	root.add(btClose,14,0);
-	btClose.setOnAction(new EventHandler<ActionEvent>()
-	{
-		@Override
-		public void handle(ActionEvent event) {
-			
-			primaryStage.close();
-		}
-	}
-	);
+
+
+
+
+
+
+
+
 	
+	/**
+  *Setting the size of screen to 1000,600;
+  *Setting the title as "Monopoly"
+  */
 	
-
-
-
-
-
-
-
-
-	//these are reference
-	
-	
-	primaryStage.setTitle("Mono-Poly");
+	primaryStage.setTitle("Monopoly");
 	primaryStage.setScene(new Scene(root, 1000, 600)); 
 	primaryStage.show();
 

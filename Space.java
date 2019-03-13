@@ -13,6 +13,11 @@ class Space {
     
     
     //Basic constructors for a space
+    /**
+    * @return name
+    * @return cost
+    * @return value
+    */
     public Space(String name,int cost, int value) {
         this.name = name;
         this.cost = cost;
@@ -34,6 +39,9 @@ class Space {
         this.owner = owner;
     }
     //setter method
+    /**
+    *@param owner
+    */
     public void setOwner(int owner) {
         this.owner = owner;
     }
@@ -57,6 +65,9 @@ class Space {
     public int getOwner() {
         return this.owner;
     }
+    /**
+    *@return n, n represent the name of owner.
+    */
     public String getNameOfOwner(){
         String n= "unowned";
         if (getOwner()==1)
@@ -71,6 +82,9 @@ class Space {
     }
 	
 	//A test method for Board to check every space in the boardArray
+    /**
+    *@return the information of owner
+    */
 	public String getInfo() {
 		return name + ":  " + String.valueOf(owner);
 	}

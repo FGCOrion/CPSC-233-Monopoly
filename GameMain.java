@@ -64,11 +64,11 @@ class GameMain {
 	
 	public static void roundStart(int turn) {
 		Player.wait(250);
-		//print("\nTurn " + String.valueOf(turn));
+		
 		Player.wait(250);
-		//print("Player:   $" + String.valueOf(player.getMoney()));
+		
 		Player.wait(250);
-		//print("Computer: $" + String.valueOf(computer.getMoney()));
+		
 		Player.wait(250);
 	}
 	
@@ -91,6 +91,9 @@ class GameMain {
 		else
 			return false;
 	}
+	/**
+	*@return numOfTurn, return the number of turns after game start
+	*/
 	public int getTurns()
 	{
 		return this.numOfTurn;
@@ -118,7 +121,9 @@ class GameMain {
 			numOfTurn+=1;
 		}
 		
-		//Once the game is over, figures out who won
+		/*
+		*Once the game is over, figures out who won
+		*/
 		if (player.getMoney() < 0)
 			print("You Lose!");
 		else if (computer.getMoney() < 0)
@@ -132,14 +137,16 @@ class GameMain {
     }
     public void playerrun(){
     	Board board = new Board();
-        //Constructs a new board	
+        /**
+        *Constructs a new board	
 		
-		//turn increases by 1 every round until it reaches 500
+		*turn increases by 1 every round until it reaches 500
 		
 		
-		//Reads the starting text
+		*Reads the starting text
 		
-		//determine whether the game ends or not
+		*determine whether the game ends or not
+		*/
 		if (endConditions(turn, player, computer) == false) {
 			roundStart(turn);
 			wait(250);
@@ -150,7 +157,9 @@ class GameMain {
 	
 		}
 		
-		//Once the game is over, figures out who won
+		/**
+		*Once the game is over, figures out who won
+		*/
 		if (player.getMoney() < 0)
 			gameStatus="You Lose!";
 		else if (computer.getMoney() < 0)
@@ -160,14 +169,16 @@ class GameMain {
     }
     public void AIrun(){
     	
-        //Constructs a new board	
+        /*
+        *Constructs a new board	
 		
-		//turn increases by 1 every round until it reaches 500
+		*turn increases by 1 every round until it reaches 500
 		
 		
-		//Reads the starting text
+		*Reads the starting text
 		
-		//determine whether the game ends or not
+		*determine whether the game ends or not
+		*/
 		if (endConditions(turn, player, computer) == false) {
 			roundStart(turn);
 			wait(250);
@@ -178,7 +189,9 @@ class GameMain {
 			numOfTurn+=1;
 		}
 		
-		//Once the game is over, figures out who won
+		/**
+		*Once the game is over, figures out who won
+		*/
 		if (player.getMoney() < 0)
 			gameStatus="You Lose!";
 		else if (computer.getMoney() < 0)

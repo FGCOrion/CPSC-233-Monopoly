@@ -169,7 +169,7 @@ class Player {
 		if (newSpace.getOwner() == 0) { 
 			wait(250);
 			
-			//information1=newSpace.getName() + " is unowned. Would you like to purchase it for $" + String.valueOf(newSpace.getCost()) + "? (Value of $" + String.valueOf(newSpace.getValue()) + ")";
+			
 
 			
 
