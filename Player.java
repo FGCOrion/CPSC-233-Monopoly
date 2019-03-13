@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
+import javafx.scene.control.Label;
 
 class Player {
     /**
@@ -12,6 +13,7 @@ class Player {
     private char avatar;
     private int money;
     private int playerNumber = 1;
+    private int propertiesOwned = 0;
     //private ArrayList<Space> owns= new ArrayList<Space>();
 
     /* Getters */
@@ -27,6 +29,9 @@ class Player {
     public int getPlayerNumber(){
     	return this.playerNumber;
     }
+    public int getPropertiesOwned(){
+    	return this.propertiesOwned;
+	}
     /*manage the place*/
     /*public boolean buyPlace(String p){
         if (owns.contains(p))
@@ -61,6 +66,9 @@ class Player {
     }
     public void setPlayerNumber(int newPlayerNumber){
     	this.playerNumber = newPlayerNumber;
+	}
+	public void setPropertiesOwned(int propertiesOwned){
+    	this.propertiesOwned = propertiesOwned;
 	}
     
    
@@ -181,4 +189,97 @@ class Player {
 			
 	}
 
+
+
+
+
+
+
+	public int takeTurnGui(Board board, Player comp, Label info0, Label info1, Label info2, Label info3, Label info4,
+							Label infomoney, Label infoMoneyOpp, int choiceFlag){
+		Scanner input = new Scanner(System.in);
+		//Creates a new scanner
+
+		wait(250);
+		info0.setText("\nIt is player " + this.getPlayerNumber() + "'s turn");
+		int x = rollDie();
+		wait(250);
+		info1.setText("You rolled a " + String.valueOf(x));
+		int oldPosition = this.getPosition();
+		this.setPosition(oldPosition + x);
+		if (this.getPosition() > board.getLength()) {
+			wait(250);
+			info2.setText("You passed GO and collected $200");
+			this.setPosition(this.getPosition() - board.getLength());
+			this.setMoney(this.getMoney() + 200);
+			wait(250);
+			infomoney.setText(" " + this.getMoney());
+		}
+
+		Space newSpace = board.getSpace(this.getPosition() - 1);
+		wait(250);
+		info3.setText("You landed on " + newSpace.getName());
+
+		//If the space the player lands on is unowned
+		/**
+		 *when a player comes to an unowned place, player will have the opinion to determine purchase this very place or not.
+		 *if player decide to own the place and have enough money, player will lose the amount of money and own this place.
+		 **/
+		if (newSpace.getOwner() == 0) {
+			wait(250);
+			info4.setText(newSpace.getName() + " is unowned. Would you like to purchase it \nfor $" +
+					String.valueOf(newSpace.getCost()) + "? (Value of $" + String.valueOf(newSpace.getValue()) + ")");
+			choiceFlag = 1;
+			//print("(y/n only please)");
+			/*char choice = ' ';
+			while (choice != 'y' && choice != 'n') {
+				choice = input.next().charAt(0);
+			}
+			if (choice == 'y') {
+
+				wait(250);
+
+				//If the player has >= money to the spaces cost then they buy it
+				if (this.getMoney() >= newSpace.getCost()) {
+					print("Success");
+					this.setMoney(this.getMoney() - newSpace.getCost());
+					newSpace.setOwner(this.getPlayerNumber());
+					board.setSpace(this.getPosition() - 1, newSpace);
+				}
+				else {
+					print("You cannot afford this space");
+				}
+			}*/
+		}
+		//If the player lands on a space they already own
+		else if (newSpace.getOwner() == getPlayerNumber()) {
+			wait(250);
+			info4.setText("You own " + newSpace.getName());
+		}
+
+		//If the player lands on a space owned by the AI
+		else if (newSpace.getOwner() != 0 && newSpace.getOwner() != getPlayerNumber() && newSpace.getOwner() != 3) {
+			wait(250);
+			info4.setText(newSpace.getName() + " is owned by player " + comp.getPlayerNumber() + ". \nYou owe them $" + String.valueOf(newSpace.getValue()));
+			this.setMoney(this.getMoney() - newSpace.getValue());
+			comp.setMoney(comp.getMoney() + newSpace.getValue());
+		}
+		infomoney.setText("Your Money: " + this.getMoney());
+		infoMoneyOpp.setText("AI's Money: " + comp.getMoney());
+		return choiceFlag;
+	}
+
+	public void purchase(Board board, Label info5){
+		Space newSpace = board.getSpace(this.getPosition() - 1);
+		if (this.getMoney() >= newSpace.getCost()) {
+			info5.setText("Success");
+			this.setMoney(this.getMoney() - newSpace.getCost());
+			newSpace.setOwner(this.getPlayerNumber());
+			board.setSpace(this.getPosition() - 1, newSpace);
+			this.setPropertiesOwned(this.getPropertiesOwned() + 1);
+		}
+		else {
+			info5.setText("You cannot afford this space");
+		}
+	}
 }

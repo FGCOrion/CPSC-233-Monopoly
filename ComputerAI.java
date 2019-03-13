@@ -26,6 +26,10 @@ class ComputerAI extends Player{
 		return playerNumber;
 	}
 
+	public boolean getIsPlayer(){
+		return isPlayer;
+	}
+
 	public void setIsPlayer(boolean newVal){
 		this.isPlayer = newVal;
 	}
