@@ -21,7 +21,6 @@ import javafx.scene.control.ChoiceBox ;
 
 
 
-
 public class Gui extends Application {
 	private Player gameGui=new Player();
 	private Board numOfLand=new Board();
@@ -35,11 +34,13 @@ public class Gui extends Application {
     private Label Pmoney=new Label("P1's Money: 1500");
     private Label Pproperty=new Label("P1's Property: 0");
     private Label Pturn=new Label("Turn processing at: ");
+	private Label Pavatar=new Label("A");
     private Label AImoney=new Label("P2's Money 1500: ");
     private Label AIproperty=new Label("P2's Property 0: ");
     private Label AIinformation = new Label("Display message: ");
     private Label Pposition = new Label("P1's Position: ");
     private Label AIposition = new Label ("P2's Position: ");
+	private Label AIavatar=new Label("B");
     private Label AIinformation2 = new Label(" "); // info about if go was passed
     private Label AIinformation3 = new Label(" "); // info about what space was landed on
     private Label AIinformation4 = new Label(" "); // info about price/rent
@@ -100,6 +101,9 @@ public class Gui extends Application {
         }
     Explanation.setFont(Font.font ("Verdana", 16));
     AIinformation.setFont(Font.font ("Verdana", 16));
+	Pavatar.setFont(Font.font ("Verdana", 25));
+	AIavatar.setFont(Font.font ("Verdana", 25));
+	
     root.add(Explanation,0,3,2,3);
 
     root.add(new Label(""), 4, 20);
@@ -151,7 +155,7 @@ public class Gui extends Application {
 
 	//choiceBox.getValue().toString();
 
-	Button roll = new Button("Dice");
+	Button roll = new Button("Roll\nDie");
 	roll.setMaxWidth(125);
 	roll.setMaxHeight(400);
     root.add(roll,9,3);
@@ -235,72 +239,7 @@ public class Gui extends Application {
         }
       }
     );
-    /*roll.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-
-
-        turns.playerrun();
-      	resultOfDice.setText("You rolled :"+turns.player.getNumbersOfDice());
-      	Pmoney.setText(("Your Money: "+turns.player.getMoney()));
-		Pproperty.setText(("Your property: "+numOfLand.getNumberOfLand()));
-		Pturn.setText(("Turn processing at: "+turns.getTurns()));
-        Pinformation0.setText(turns.player.getInformation0());
-        text.setText("Do you interest in this Land?");
-
-
-
-       positive.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-
-
-       // turns.setYes(1);
-        text.setText(turns.player.getInformation1());
-        turns.AIrun();
-        status.setText(turns.getStatus());
-        AImoney.setText(("AI's Money: "+turns.computer.getMoney()));
-        AIproperty.setText(("AI's property: "+turns.computer.getNewProperty()));
-        AIinformation0.setText(turns.computer.getInformation0());
-        AIinformation1.setText(turns.computer.getInformation1());
-        AIinformation2.setText(turns.computer.getInformation2());
-        AIinformation3.setText(turns.computer.getInformation3());
-        AIinformation4.setText(turns.computer.getInformation4());
-        turns.playerBuy();
-        }
-    }
-  );
-        negative.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-       text.setText(turns.player.getInformation1());
-
-        //turns.setYes(0);
-
-        turns.AIrun();
-        status.setText(turns.getStatus());
-        AImoney.setText(("AI's Money: "+turns.computer.getMoney()));
-        AIproperty.setText(("AI's property: "+turns.computer.getNewProperty()));
-        AIinformation0.setText(turns.computer.getInformation0());
-        AIinformation1.setText(turns.computer.getInformation1());
-        AIinformation2.setText(turns.computer.getInformation2());
-        AIinformation3.setText(turns.computer.getInformation3());
-        AIinformation4.setText(turns.computer.getInformation4());
-        }
-    }
-  );
-
-
-
-    }
-
-
-
-        }
-  );*/
+	
     Button bt01 = new Button("Jail");
     bt01.setMaxWidth(150);
 	bt01.setMaxHeight(400);
@@ -407,7 +346,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Receive a random amount of money between 0 and 500");
+        text.setText("Receive a random amount of money \nbetween 0 and 500");
         }
     }
   );
@@ -549,7 +488,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Receive a random amount of money between 0 and 500");
+        text.setText("Receive a random amount of money \nbetween 0 and 500");
         }
     }
   );
@@ -640,7 +579,7 @@ public class Gui extends Application {
   );
 
 
-
+	//Exit button
 	Button btClose = new Button("Exit");
 	btClose.setMaxWidth(75);
 	btClose.setMaxHeight(75);
@@ -655,18 +594,10 @@ public class Gui extends Application {
 	}
 	);
 
-
-
-
-
-
-
-
+	
 
 
 	//these are reference
-
-
 	primaryStage.setTitle("Mono-Poly");
 	primaryStage.setScene(new Scene(root, 1000, 600));
 	primaryStage.show();
