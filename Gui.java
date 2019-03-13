@@ -325,7 +325,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Blue 1");
+        text.setText("Blue 1, Cost 350, Value 150");
         }
     }
   );
@@ -339,7 +339,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Blue 2");
+        text.setText("Blue 2, Cost 400, Value 175");
         }
     }
   );
@@ -352,7 +352,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("This is Rail");
+        text.setText("Railroad, Cost 200, Value 100");
         }
     }
   );
@@ -366,7 +366,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Blue 3");
+        text.setText("Blue 3, Cost 450, Value 200");
         }
     }
   );
@@ -397,7 +397,7 @@ public class Gui extends Application {
     }
   );
     //vertical
-    Button bt11 = new Button("Draw\nCard");
+    Button bt11 = new Button("Chance");
     bt11.setMaxWidth(150);
 	bt11.setMaxHeight(400);
 
@@ -407,7 +407,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Draw a card");
+        text.setText("Receive a Random Amount of Money");
         }
     }
   );
@@ -421,7 +421,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Yellow3");
+        text.setText("Yellow 3, Cost 250, Value 100");
         }
     }
   );
@@ -435,7 +435,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Yellow2");
+        text.setText("Yellow 2, Cost 200, Value 75");
         }
     }
   );
@@ -449,7 +449,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("This is the rail");
+        text.setText("Railroad, Cost 200, Value 100");
         }
     }
   );
@@ -463,7 +463,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Yellow 1");
+        text.setText("Yellow 1, Cost 150, Value 50");
         }
     }
   );
@@ -492,7 +492,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Red 1");
+        text.setText("Red 1, Cost 550, Value 250");
         }
     }
   );
@@ -507,7 +507,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Red 2");
+        text.setText("Red 2, Cost 600, Value 275");
         }
     }
   );
@@ -521,7 +521,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("This is the rail");
+        text.setText("Railroad, Cost 200, Value 100");
         }
     }
   );
@@ -536,11 +536,11 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Red 3");
+        text.setText("Red 3, Cost 650, Value 300");
         }
     }
   );
-    Button bt57 = new Button("Draw\nCard");
+    Button bt57 = new Button("Chance");
     bt57.setMaxWidth(150);
 	bt57.setMaxHeight(400);
     root.add(bt57,12,5);
@@ -549,7 +549,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Draw a card");
+        text.setText("Receive a Random Amount of Money");
         }
     }
   );
@@ -563,7 +563,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Going to the jail");
+        text.setText("Sends you to Jail");
         }
     }
   );
@@ -579,7 +579,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Green 2");
+        text.setText("Green 2, Cost 1000, Value 500");
         }
     }
   );
@@ -593,7 +593,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Green 1");
+        text.setText("Green 1, Cost 900, Value 425");
         }
     }
   );
@@ -620,7 +620,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Orange 2");
+        text.setText("Orange 2, Cost 800, Value 375");
         }
     }
   );
@@ -634,7 +634,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Orange 1");
+        text.setText("Orange 1, Cost 750, Value 350");
         }
     }
   );
