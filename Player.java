@@ -11,6 +11,7 @@ class Player {
     private int position = 1;
     private char avatar;
     private int money;
+    private int playerNumber = 1;
     //private ArrayList<Space> owns= new ArrayList<Space>();
 
     /* Getters */
@@ -22,6 +23,9 @@ class Player {
     }
     public int getMoney(){
         return money;
+    }
+    public int getPlayerNumber(){
+    	return this.playerNumber;
     }
     /*manage the place*/
     /*public boolean buyPlace(String p){
@@ -55,6 +59,9 @@ class Player {
     public void setMoney(int newMoney){
         this.money = newMoney;
     }
+    public void setPlayerNumber(int newPlayerNumber){
+    	this.playerNumber = newPlayerNumber;
+	}
     
    
     /* constructor */
@@ -64,11 +71,19 @@ class Player {
         money = 1500;
     }
 
+    public Player(int playerNumber){
+		position = 0;
+		avatar = '@';
+		money = 1500;
+    	setPlayerNumber(playerNumber);
+	}
+
     public Player(Player otherPlayer)
     {
         position = otherPlayer.getPosition();
         avatar = otherPlayer.getAvatar();
         money = otherPlayer.getMoney();
+        playerNumber = otherPlayer.getPlayerNumber();
     }
 	
 	//Method to roll a single 7 sided die
@@ -97,12 +112,12 @@ class Player {
 	*giving user an output to show the value of dice they rolled, then player walks the equal step. Out put play's current loation.
 	*After a player pass the final position, player got 200$, this player's position will be recount.
 	**/
-	public void takeTurn(Board board, ComputerAI comp) {
+	public void takeTurn(Board board, Player comp) {
 		Scanner input = new Scanner(System.in);
 		//Creates a new scanner
 
 		wait(250);
-		print("\nIt is your turn");
+		print("\nIt is player " + this.getPlayerNumber() + "'s turn");
 		int x = rollDie();
 		wait(250);
 		print("You rolled a " + String.valueOf(x));
@@ -142,7 +157,7 @@ class Player {
 				if (this.getMoney() >= newSpace.getCost()) {
 					print("Success");
 					this.setMoney(this.getMoney() - newSpace.getCost());
-					newSpace.setOwner(1);
+					newSpace.setOwner(this.getPlayerNumber());
 					board.setSpace(this.getPosition() - 1, newSpace);
 				}
 				else {
@@ -151,15 +166,15 @@ class Player {
 			}		
 		}
 		//If the player lands on a space they already own
-		else if (newSpace.getOwner() == 1) {
+		else if (newSpace.getOwner() == getPlayerNumber()) {
 			wait(250);
 			print("You own " + newSpace.getName());
 		}
 		
 		//If the player lands on a space owned by the AI
-		else if (newSpace.getOwner() == 2) {
+		else if (newSpace.getOwner() != 0 && newSpace.getOwner() != getPlayerNumber() && newSpace.getOwner() != 3) {
 			wait(250);
-			print(newSpace.getName() + " is owned by the AI. You owe them $" + String.valueOf(newSpace.getValue()));
+			print(newSpace.getName() + " is owned by player " + comp.getPlayerNumber() + ". You owe them $" + String.valueOf(newSpace.getValue()));
 			this.setMoney(this.getMoney() - newSpace.getValue());
 			comp.setMoney(comp.getMoney() + newSpace.getValue());
 		}
