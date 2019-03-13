@@ -258,12 +258,44 @@ class Player {
 		}
 
 		//If the player lands on a space owned by the AI
-		else if (newSpace.getOwner() != 0 && newSpace.getOwner() != getPlayerNumber() && newSpace.getOwner() != 3) {
+		else if (newSpace.getOwner() != 0 && newSpace.getOwner() != getPlayerNumber() && newSpace.getOwner() < 10) {
 			wait(250);
 			info4.setText(newSpace.getName() + " is owned by player " + comp.getPlayerNumber() + ". \nYou owe them $" + String.valueOf(newSpace.getValue()));
 			this.setMoney(this.getMoney() - newSpace.getValue());
 			comp.setMoney(comp.getMoney() + newSpace.getValue());
 		}
+		
+		//If the player lands on chance
+		else if (newSpace.getOwner() == 11) {
+			wait(250);
+			Random chanceRandom = new Random();
+			int chanceValue = (chanceRandom.nextInt(550)) / 50;
+			chanceValue = chanceValue * 50;
+			info4.setText("You gained $" + Integer.toString(chanceValue));
+			this.setMoney(this.getMoney() + chanceValue);
+		}
+		
+		//If the player lands on Income Tax
+		else if (newSpace.getOwner() == 12) {
+			wait(250);
+			this.setMoney(this.getMoney() - 100);
+			info4.setText("You owe the bank $100");
+		}
+		
+		//If the player lands on community fund
+		else if (newSpace.getOwner() == 14) {
+			wait(250);
+			this.setMoney(this.getMoney() + 400);
+			info4.setText("You received $400");
+		}
+		
+		//If the player lands on Go to Jail
+		else if (newSpace.getOwner() == 15) {
+			wait(250);
+			this.setPosition(7);
+			info4.setText("You were sent back to jail");
+		}
+		
 		infomoney.setText("Your Money: " + this.getMoney());
 		infoMoneyOpp.setText("AI's Money: " + comp.getMoney());
 		return choiceFlag;

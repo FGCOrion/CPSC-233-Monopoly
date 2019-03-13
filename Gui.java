@@ -379,7 +379,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Pay the tax");
+        text.setText("Pay the bank a $100 tax");
         }
     }
   );
@@ -392,7 +392,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("You can park here for free");
+        text.setText("Receive a random amount of money");
         }
     }
   );
@@ -407,7 +407,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Receive a Random Amount of Money");
+        text.setText("Receive a random amount of money between 0 and 500");
         }
     }
   );
@@ -549,7 +549,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Receive a Random Amount of Money");
+        text.setText("Receive a random amount of money between 0 and 500");
         }
     }
   );
