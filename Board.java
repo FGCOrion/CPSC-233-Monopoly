@@ -36,7 +36,7 @@ class Board {
 		Space space0 = new Space("GO", 0, 0, 3);
 		
         Space space1 = new Space("Yellow 1", 150, 50); 			//33.3% income to cost
-        Space space2 = new Space("Railroad", 200, 100); 		
+        Space space2 = new Space("Railroad 1", 200, 100); 		
         Space space3 = new Space("Yellow 2", 200, 75);			//37.5%
         Space space4 = new Space("Yellow 3", 250, 100);			//40.0%
         Space space5 = new Space("Chance", 0, 0, 3);
@@ -44,13 +44,13 @@ class Board {
 		
 		Space space7 = new Space("Blue 1", 350, 150);		//42.9%
 		Space space8 = new Space("Blue 2", 400, 175);		//43.8%
-		Space space9 = new Space("Railroad", 200, 100);
+		Space space9 = new Space("Railroad 2", 200, 100);
 		Space space10 = new Space("Blue 3", 450, 200);		//44.4%
 		Space space11 = new Space("Income Tax", 0, 250, 4);
 		Space space12 = new Space("Free Parking", 0, 0, 5);
 		
 		Space space13 = new Space("Red 1", 550, 250);		//45.5%
-		Space space14 = new Space("Railroad", 200, 100);
+		Space space14 = new Space("Railroad 3", 200, 100);
 		Space space15 = new Space("Red 2", 600, 275);		//45.8%
 		Space space16 = new Space("Red 3", 650, 300);		//46.2%
 		Space space17 = new Space("Chance", 0, 0, 3);
