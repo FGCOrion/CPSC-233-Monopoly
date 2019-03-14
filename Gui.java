@@ -22,6 +22,14 @@ import javafx.scene.control.ChoiceBox ;
 
 
 public class Gui extends Application {
+	
+	/**
+	* Setup for labels in GUI that give information
+	* regarding each players total money, property,
+	* whose turn it is and general information about
+	* spaces on the board
+	* and instance variables
+	*/
 	//private Player gameGui=new Player();
 	private ComputerAI gameGui = new ComputerAI(1,false);
 	private Board numOfLand=new Board();
@@ -59,26 +67,55 @@ public class Gui extends Application {
 	String basicText = "";
 
 
+	/**
+	* sets the instance variable playerFlag
+	* which corresponds to either player 1 or player 2
+	* @param playerFlag
+	*/
   public void setPlayerFlag(int playerFlag) {
     this.playerFlag = playerFlag;
   }
 
+	/**
+	* sets the instance variable rollUnlocked
+	* and allows the player to use the roll button
+	* when rollUnlocked is set to 1
+	* @param rollUnlocked
+	*/
   public void setRollUnlocked(int rollUnlocked){
     this.rollUnlocked = rollUnlocked;
   }
 
+	/**
+	* sets the instance variable choiceUnlocked
+	* which allows the player to use "yes" and/or "no" button
+	* @param choiceUnlocked
+	*/
   public void setChoiceUnlocked(int choiceUnlocked){
     this.choiceUnlocked = choiceUnlocked;
   }
 
+	/**
+	* returns 1 if it is player 1's turn
+	* or 2 if it is player 2's turn
+	* @return playerFlag
+	*/
   public int getPlayerFlag(){
     return playerFlag;
   }
 
+	/**
+	* returns value of rollUnlocked
+	* @return rollUnlocked
+	*/
   public int getRollUnlocked(){
     return rollUnlocked;
   }
 
+	/**
+	* returns value of choiceUnlocked
+	* @return choiceUnlocked
+	*/
   public int getChoiceUnlocked(){
     return choiceUnlocked;
   }
@@ -142,30 +179,43 @@ public class Gui extends Application {
 
 
 
-    //These are buttons
-
-    //choiceBox
+		/**
+		* "Yes" button displayed beside "Roll Dice" button
+		* to affirm decision to purchase or sell property
+		*/
     Button positive=new Button("yes");
     positive.setMaxWidth(125);
     root.add(positive,8,3);
 
-
+		/**
+		* "No" button displayed beside "Roll Dice" button
+		* to decline decision to purchase or sell property
+		*/
     Button negative = new Button("no");
     negative.setMaxWidth(125);
     root.add(negative,10,3);
 
 
-    /*choiceBox.getItems().add("Player");
+    	/*choiceBox.getItems().add("Player");
 	choiceBox.getItems().add("Computer");
 	root.add(choiceBox,10,3,11,3);*/
 
 	//choiceBox.getValue().toString();
 
+		/**
+		* "Roll Dice" button which initiates
+		* a die roll when clicked on the players turn
+		*/
 	Button roll = new Button("Roll\nDie");
 	roll.setMaxWidth(125);
 	roll.setMaxHeight(400);
     root.add(roll,9,3);
 
+		/**
+		* Event Handler for roll button
+		* updates labels to represent players position, money, properties owned
+		* and total turns taken
+		*/
     roll.setOnAction(new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent event){
@@ -206,6 +256,13 @@ public class Gui extends Application {
     }
     );
 
+		
+		/**
+		* Event Handler for positive ("Yes") button
+		* updates labels to reflect the property purchased by player
+		* and updates players money to reflect the purchase of said property
+		* which is (players money - the price of property purchased)
+		*/
     positive.setOnAction(new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent event){
@@ -229,6 +286,12 @@ public class Gui extends Application {
       }
     );
 
+		
+		/**
+		* Event Handler for negative ("No") button
+		* declines purchase/sale of property and proceeds to next
+		* players turn
+		*/
     negative.setOnAction(new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent event){
@@ -246,6 +309,12 @@ public class Gui extends Application {
       }
     );
 	
+		
+		/**
+		* The remainder of this class is the setting up of buttons on the board
+		* to represent the spaces and action handlers to return information on each
+		* space when the user clicks on that particular space
+		*/
     Button bt01 = new Button("Jail");
     bt01.setMaxWidth(150);
 	bt01.setMaxHeight(400);
@@ -672,7 +741,10 @@ public class Gui extends Application {
   );
 
 
-	//Exit button
+	/**
+	* Exit/quit button to prematurely end game
+	* without meeting end conditions
+	*/
 	Button btClose = new Button("Exit");
 	btClose.setMaxWidth(75);
 	btClose.setMaxHeight(75);
@@ -709,7 +781,6 @@ public class Gui extends Application {
 	else
 		root.add(AIavatar, AIPos - 6, 6);*/
 
-	//these are reference
 	primaryStage.setTitle("Mono-Poly");
 	primaryStage.setScene(new Scene(root, 1000, 600));
 	primaryStage.show();
