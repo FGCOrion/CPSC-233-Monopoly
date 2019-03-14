@@ -75,9 +75,9 @@ class GameMain {
 		Player.wait(250);
 		print("\nTurn " + String.valueOf(turn));
 		Player.wait(250);
-		print("Player:   $" + String.valueOf(player1.getMoney()));
+		print("Player 1:   $" + String.valueOf(player1.getMoney()));
 		Player.wait(250);
-		print("Computer: $" + String.valueOf(player2.getMoney()));
+		print("Player 2: $" + String.valueOf(player2.getMoney()));
 		Player.wait(250);
 	}
 	
