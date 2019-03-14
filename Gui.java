@@ -182,7 +182,7 @@ public class Gui extends Application {
 		*/
     Button positive=new Button("yes");
     positive.setMaxWidth(125);
-    root.add(positive,8,3);
+    root.add(positive,8,4);
 
 		/**
 		* "No" button displayed beside "Roll Dice" button
@@ -190,7 +190,7 @@ public class Gui extends Application {
 		*/
     Button negative = new Button("no");
     negative.setMaxWidth(125);
-    root.add(negative,10,3);
+    root.add(negative,10,4);
 
 
     	/*choiceBox.getItems().add("Player");
@@ -206,7 +206,7 @@ public class Gui extends Application {
 	Button roll = new Button("Roll\nDie");
 	roll.setMaxWidth(125);
 	roll.setMaxHeight(400);
-    root.add(roll,9,3);
+    root.add(roll,9,4);
 
 		/**
 		* Event Handler for roll button
