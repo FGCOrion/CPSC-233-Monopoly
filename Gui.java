@@ -36,7 +36,7 @@ public class Gui extends Application {
     private Label Pturn=new Label("Turn processing at: ");
 	private Label Pavatar=new Label("A");
     private Label AImoney=new Label("P2's Money 1500: ");
-    private Label AIproperty=new Label("P2's Property 0: ");
+    private Label AIproperty=new Label("P2's Property: 0");
     private Label AIinformation = new Label("Display message: ");
     private Label Pposition = new Label("P1's Position: ");
     private Label AIposition = new Label ("P2's Position: ");
@@ -257,7 +257,8 @@ public class Gui extends Application {
     bt02.setMaxWidth(150);
 	bt02.setMaxHeight(400);
 	bt02.setStyle("-fx-background-color: #00F5FF");
-
+	if (numOfLand.getSpace(8).getOwner() == 1)
+		root.add(Pavatar,7,0);
     root.add(bt02,7,0);
     bt02.setOnAction(new EventHandler<ActionEvent>()
     {
@@ -346,7 +347,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Receive a random amount of money \nbetween 0 and 500");
+        text.setText("Receive a random amount of money \nbetween -300 and 250");
         }
     }
   );
@@ -488,7 +489,7 @@ public class Gui extends Application {
       @Override
       public void handle(ActionEvent event) {
 
-        text.setText("Receive a random amount of money \nbetween 0 and 500");
+        text.setText("Receive a random amount of money \nbetween -300 and 250");
         }
     }
   );
