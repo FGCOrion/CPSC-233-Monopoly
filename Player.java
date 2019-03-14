@@ -15,6 +15,7 @@ class Player {
     private int playerNumber = 1;
     private int propertiesOwned = 0;
     //private ArrayList<Space> owns= new ArrayList<Space>();
+	private ArrayList<Integer> owns = new ArrayList<Integer>();
 
     /* Getters */
     public int getPosition(){
@@ -31,6 +32,12 @@ class Player {
     }
     public int getPropertiesOwned(){
     	return this.propertiesOwned;
+	}
+	public boolean getSpaceOwned(int space){
+		boolean tf = false;
+		if (owns.contains(space))
+			tf = true;
+		return tf;
 	}
     /*manage the place*/
     /*public boolean buyPlace(String p){
@@ -70,6 +77,7 @@ class Player {
 	public void setPropertiesOwned(int propertiesOwned){
     	this.propertiesOwned = propertiesOwned;
 	}
+	
     
    
     /* constructor */
@@ -313,6 +321,7 @@ class Player {
 			newSpace.setOwner(this.getPlayerNumber());
 			board.setSpace(this.getPosition() - 1, newSpace);
 			this.setPropertiesOwned(this.getPropertiesOwned() + 1);
+			this.owns.add(this.getPosition() - 1);
 		}
 		else {
 			info5.setText("You cannot afford this space");
