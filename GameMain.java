@@ -3,9 +3,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 class GameMain {
-	static Player player = new Player();
-	static ComputerAI computer = new ComputerAI();
-	
+	static Player player1 = new Player();
+	static ComputerAI player2 = new ComputerAI(2, false);
 	static Board board = new Board();
 	
 	/**
@@ -23,9 +22,29 @@ class GameMain {
 	*Take text as a String parameter to output messages
 	*@param text
 	**/
-	
+
 	public static void print(String text) {
 		System.out.println(text);
+	}
+
+
+	public static void playerOrAI(){
+		Scanner playerOrAIScanner = new Scanner(System.in);
+		System.out.println("Would you like player 2 to be a (p)layer or a (c)omputer?");
+		char choice = ' ';
+		while(choice != 'p' && choice != 'c'){
+			choice = playerOrAIScanner.next().charAt(0);
+		}
+		if(choice == 'p'){
+			System.out.println("The game will have two human players");
+			//Player player2 = new Player(2);
+			player2.setIsPlayer(true);
+		}
+		else{
+			System.out.println("The game will have one human player and one AI player");
+			//ComputerAI player2 = new ComputerAI(2, true);
+			player2.setIsPlayer(false);
+		}
 	}
 
 	/**
@@ -56,9 +75,9 @@ class GameMain {
 		Player.wait(250);
 		print("\nTurn " + String.valueOf(turn));
 		Player.wait(250);
-		print("Player:   $" + String.valueOf(player.getMoney()));
+		print("Player:   $" + String.valueOf(player1.getMoney()));
 		Player.wait(250);
-		print("Computer: $" + String.valueOf(computer.getMoney()));
+		print("Computer: $" + String.valueOf(player2.getMoney()));
 		Player.wait(250);
 	}
 	
@@ -71,12 +90,12 @@ class GameMain {
 	*@param computer;
 	**/
 	
-	private static boolean endConditions(int turn, Player player, Player computer) {
+	private static boolean endConditions(int turn, Player player1, Player player2) {
 		if (turn > 500)
 			return true;
-		if (player.getMoney() < 0)
+		if (player1.getMoney() < 0)
 			return true;
-		if (computer.getMoney() < 0)
+		if (player2.getMoney() < 0)
 			return true;
 		else
 			return false;
@@ -91,23 +110,25 @@ class GameMain {
 		int turn = 0;
 		
 		//Reads the starting text
+		System.out.println(player2.getPlayerNumber());
+		playerOrAI();
 		gameStart();
 		//determine whether the game ends or not
-		while (endConditions(turn, player, computer) == false) {
+		while (endConditions(turn, player1, player2) == false) {
 			roundStart(turn);
 			wait(250);
 				
-			player.takeTurn(board, computer);
-			computer.takeTurn(board, player);
+			player1.takeTurn(board, player2);
+			player2.takeTurn(board, player1);
 
 			turn += 1;
 		}
 		
 		//Once the game is over, figures out who won
-		if (player.getMoney() < 0)
-			print("You Lose!");
-		else if (computer.getMoney() < 0)
-			print("You Win!");
+		if (player1.getMoney() < 0)
+			print("Player 2 Wins!");
+		else if (player2.getMoney() < 0)
+			print("Player 1 Wins!");
 		else if (turn > 500)
 			print("Its a Draw! (so far)");
     }
