@@ -90,6 +90,7 @@ class ComputerAI extends Player{
 				this.setMoney(this.getMoney() - newSpace.getValue());
 				player.setMoney(player.getMoney() + newSpace.getValue());
 			}
+			
 
 		}
 		else{

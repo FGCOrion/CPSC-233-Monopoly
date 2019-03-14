@@ -22,7 +22,8 @@ import javafx.scene.control.ChoiceBox ;
 
 
 public class Gui extends Application {
-	private Player gameGui=new Player();
+	//private Player gameGui=new Player();
+	private ComputerAI gameGui = new ComputerAI(1,false);
 	private Board numOfLand=new Board();
 	private Text informationOfBox = new Text();
 	private GameMain turns=new GameMain();
@@ -35,12 +36,14 @@ public class Gui extends Application {
     private Label Pproperty=new Label("P1's Property: 0");
     private Label Pturn=new Label("Turn processing at: ");
 	private Label Pavatar=new Label("A");
+	private Label Pcontrol=new Label("A");
     private Label AImoney=new Label("P2's Money 1500: ");
     private Label AIproperty=new Label("P2's Property: 0");
     private Label AIinformation = new Label("Display message: ");
     private Label Pposition = new Label("P1's Position: ");
     private Label AIposition = new Label ("P2's Position: ");
 	private Label AIavatar=new Label("B");
+	private Label AIcontrol=new Label("B");
     private Label AIinformation2 = new Label(" "); // info about if go was passed
     private Label AIinformation3 = new Label(" "); // info about what space was landed on
     private Label AIinformation4 = new Label(" "); // info about price/rent
@@ -53,6 +56,7 @@ public class Gui extends Application {
     private int playerFlag = 1;
     private int rollUnlocked = 1;
     private int choiceUnlocked = 0;
+	String basicText = "";
 
 
   public void setPlayerFlag(int playerFlag) {
@@ -103,6 +107,8 @@ public class Gui extends Application {
     AIinformation.setFont(Font.font ("Verdana", 16));
 	Pavatar.setFont(Font.font ("Verdana", 25));
 	AIavatar.setFont(Font.font ("Verdana", 25));
+	Pcontrol.setFont(Font.font ("Verdana", 8));
+	AIcontrol.setFont(Font.font ("Verdana", 8));
 	
     root.add(Explanation,0,3,2,3);
 
@@ -257,18 +263,27 @@ public class Gui extends Application {
     bt02.setMaxWidth(150);
 	bt02.setMaxHeight(400);
 	bt02.setStyle("-fx-background-color: #00F5FF");
-	if (numOfLand.getSpace(8).getOwner() == 1)
-		root.add(Pavatar,7,0);
-    root.add(bt02,7,0);
+	root.add(bt02,7,0);
+	if (gameGui.getSpaceOwned(7) == true)
+		root.add(Pcontrol,7,0);
+	if (AI.getSpaceOwned(7) == true)
+		root.add(AIcontrol,7,0);
     bt02.setOnAction(new EventHandler<ActionEvent>()
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Blue 1, Cost 350, Value 150");
+		  basicText = "Blue 1, Cost 350, Value 150";
+		if (gameGui.getSpaceOwned(7) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(7) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
+
+	
     Button bt03 = new Button();
     bt03.setMaxWidth(150);
 	bt03.setMaxHeight(400);
@@ -278,8 +293,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Blue 2, Cost 400, Value 175");
+        basicText = "Blue 2, Cost 400, Value 175";
+		if (gameGui.getSpaceOwned(8) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(8) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -291,8 +311,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Railroad, Cost 200, Value 100");
+        basicText = "Railroad, Cost 200, Value 100";
+		if (gameGui.getSpaceOwned(9) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(9) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -305,8 +330,14 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Blue 3, Cost 450, Value 200");
+        basicText = "Blue 3, Cost 450, Value 200";
+			
+		if (gameGui.getSpaceOwned(10) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(10) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -360,8 +391,14 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Yellow 3, Cost 250, Value 100");
+        basicText = "Yellow 3, Cost 250, Value 100";
+			
+		if (gameGui.getSpaceOwned(4) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(4) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -374,8 +411,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Yellow 2, Cost 200, Value 75");
+        basicText = "Yellow 2, Cost 200, Value 75";
+		if (gameGui.getSpaceOwned(3) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(3) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -388,8 +430,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
         text.setText("Railroad, Cost 200, Value 100");
+		if (gameGui.getSpaceOwned(2) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(2) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -402,8 +449,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Yellow 1, Cost 150, Value 50");
+        basicText = "Yellow 1, Cost 150, Value 50";
+		if (gameGui.getSpaceOwned(1) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(1) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -431,8 +483,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Red 1, Cost 550, Value 250");
+        basicText = "Red 1, Cost 550, Value 250";
+		if (gameGui.getSpaceOwned(13) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(13) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -446,8 +503,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Red 2, Cost 600, Value 275");
+        basicText = "Red 2, Cost 600, Value 275";
+		if (gameGui.getSpaceOwned(15) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(15) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -460,8 +522,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Railroad, Cost 200, Value 100");
+        basicText = "Railroad, Cost 200, Value 100";
+		if (gameGui.getSpaceOwned(14) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(14) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -475,8 +542,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Red 3, Cost 650, Value 300");
+        basicText = "Red 3, Cost 650, Value 300";
+		if (gameGui.getSpaceOwned(16) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(16) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -518,8 +590,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Green 2, Cost 1000, Value 500");
+        basicText = "Green 2, Cost 1000, Value 500";
+		if (gameGui.getSpaceOwned(23) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(23) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -532,8 +609,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Green 1, Cost 900, Value 425");
+		basicText = "Green 1, Cost 900, Value 425";
+		if (gameGui.getSpaceOwned(22) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(22) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -559,8 +641,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Orange 2, Cost 800, Value 375");
+        basicText = "Orange 2, Cost 800, Value 375";
+		if (gameGui.getSpaceOwned(20) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(20) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -573,8 +660,13 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-
-        text.setText("Orange 1, Cost 750, Value 350");
+        basicText = "Orange 1, Cost 750, Value 350";
+		if (gameGui.getSpaceOwned(19) == true)
+			text.setText(basicText + "\nOwned by Player 1");
+		else if (AI.getSpaceOwned(19) == true)
+			text.setText(basicText + "\nOwned by Player 2");
+		else
+			text.setText(basicText + "\nOwned by Nobody");
         }
     }
   );
@@ -596,7 +688,26 @@ public class Gui extends Application {
 	);
 
 	
-
+	/* CURRENTLY BROKEN
+	//The part that displays the characters avatar
+	int playerPos = gameGui.getPosition() - 1;
+	int AIPos = AI.getPosition() - 1;
+	if (playerPos <= 6) 
+		root.add(Pavatar, 6, 6 - playerPos);
+	else if (playerPos <= 12) 
+		root.add(Pavatar, playerPos, 0);
+	else if (playerPos <= 18)
+		root.add(Pavatar, 12, playerPos - 12);
+	else
+		root.add(Pavatar, playerPos - 6, 6);
+	if (AIPos <= 6) 
+		root.add(AIavatar, 6, 6 - AIPos);
+	else if (AIPos <= 12) 
+		root.add(AIavatar, AIPos, 0);
+	else if (AIPos <= 18)
+		root.add(AIavatar, 12, AIPos - 12);
+	else
+		root.add(AIavatar, AIPos - 6, 6);*/
 
 	//these are reference
 	primaryStage.setTitle("Mono-Poly");
