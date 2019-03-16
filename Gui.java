@@ -1,7 +1,7 @@
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.layout.GridPane;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,13 +19,17 @@ import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.control.ChoiceBox ;
 import javafx.scene.paint.Color;
+import javafx.stage.Popup;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+
 
 public class Gui extends Application {
 
 	/**
 	* setup for two human players and board set up
 	*/
-	private ComputerAI gameGui = new ComputerAI(1,false);
+	private Player gameGui = new Player(1);
 	private ComputerAI AI = new ComputerAI(2,false);
 	private Board numOfLand = new Board();
 	private GameMain turns = new GameMain();
@@ -33,6 +37,7 @@ public class Gui extends Application {
   private int rollUnlocked = 1;
   private int choiceUnlocked = 0;
 	private int nextTurnUnlocked = 0;
+
 
 	/**
 	* Setup for labels in GUI that give information regarding each players total money, property,
@@ -117,7 +122,8 @@ public class Gui extends Application {
   public static void main(String[] args) {
 		Application.launch(args);
 		}
-    int turnCount = 0;
+
+  int turnCount = 0;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -141,7 +147,6 @@ public class Gui extends Application {
 		AIcontrol.setFont(Font.font ("Verdana", 8));
 		playerTurn.setTextFill(Color.BLUE);
 
-    //root.add(new Label(""), 4, 20);
 		root.add(playerInfo, 1, 1, 4, 4);
 		root.add(GameInfo, 1, 6, 4, 4);
 		root.add(playerTurn, 2, 0, 2, 1);
@@ -730,8 +735,8 @@ public class Gui extends Application {
   );
 
 	/**
-	* Exit/quit button to prematurely end game
-	* without meeting end conditions
+	* Exit/quit button to prematurely end game without meeting end condition and pop up window to confirm
+	* if you'd like to quit or not
 	*/
 	Button btClose = new Button("Exit");
 	btClose.setMaxWidth(75);
@@ -741,36 +746,40 @@ public class Gui extends Application {
 	{
 		@Override
 		public void handle(ActionEvent event) {
-			primaryStage.close();
+			final Stage exitChoice = new Stage();
+			 exitChoice.initModality(Modality.APPLICATION_MODAL);
+			 exitChoice.initOwner(primaryStage);
+			 HBox exitBox = new HBox(20);
+			 Button close = new Button("Exit");
+			 Button doNotClose = new Button("Keep Playing");
+			 exitBox.setAlignment(Pos.CENTER);
+
+			 close.setOnAction(new EventHandler<ActionEvent>(){
+				 @Override
+				 public void handle(ActionEvent event){
+					 primaryStage.close();
+				 }
+			 });
+
+			 doNotClose.setOnAction(new EventHandler<ActionEvent>(){
+				 @Override
+				 public void handle(ActionEvent event){
+					 exitChoice.close();
+				 }
+			 });
+
+			 exitBox.getChildren().addAll(close, doNotClose);
+			 Scene exitScene = new Scene(exitBox, 300, 200);
+			 exitChoice.setScene(exitScene);
+			 exitChoice.show();
 		}
 	}
 	);
 
-	/* CURRENTLY BROKEN
-	//The part that displays the characters avatar
-	int playerPos = gameGui.getPosition() - 1;
-	int AIPos = AI.getPosition() - 1;
-	if (playerPos <= 6)
-		root.add(Pavatar, 6, 6 - playerPos);
-	else if (playerPos <= 12)
-		root.add(Pavatar, playerPos, 0);
-	else if (playerPos <= 18)
-		root.add(Pavatar, 12, playerPos - 12);
-	else
-		root.add(Pavatar, playerPos - 6, 6);
-	if (AIPos <= 6)
-		root.add(AIavatar, 6, 6 - AIPos);
-	else if (AIPos <= 12)
-		root.add(AIavatar, AIPos, 0);
-	else if (AIPos <= 18)
-		root.add(AIavatar, 12, AIPos - 12);
-	else
-		root.add(AIavatar, AIPos - 6, 6);*/
-
+	Scene gamePlay = new Scene(root, 1000, 600);
 	primaryStage.setTitle("Mono-Poly");
-	primaryStage.setScene(new Scene(root, 1000, 600));
+	primaryStage.setScene(gamePlay);
 	primaryStage.show();
 
 }
-
 }
