@@ -325,7 +325,7 @@ public class Gui extends Application {
 	    {
       @Override
       public void handle(ActionEvent event) {
-			  basicText = "Blue 1, Cost 350, Value 150";
+			  basicText = "Blue 1, Cost 350, Rent 150";
 				if (gameGui.getSpaceOwned(7) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(7) == true)
@@ -345,7 +345,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Blue 2, Cost 400, Value 175";
+        basicText = "Blue 2, Cost 400, Rent 175";
 				if (gameGui.getSpaceOwned(8) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(8) == true)
@@ -364,7 +364,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Railroad, Cost 200, Value 100";
+        basicText = "Railroad, Cost 200, Rent 100";
 				if (gameGui.getSpaceOwned(9) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(9) == true)
@@ -384,7 +384,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Blue 3, Cost 450, Value 200";
+        basicText = "Blue 3, Cost 450, Rent 200";
 				if (gameGui.getSpaceOwned(10) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(10) == true)
@@ -446,7 +446,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Yellow 3, Cost 250, Value 100";
+        basicText = "Yellow 3, Cost 250, Rent 100";
 				if (gameGui.getSpaceOwned(4) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(4) == true)
@@ -466,7 +466,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Yellow 2, Cost 200, Value 75";
+        basicText = "Yellow 2, Cost 200, Rent 75";
 				if (gameGui.getSpaceOwned(3) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(3) == true)
@@ -485,7 +485,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Railroad, Cost 200, Value 100";
+        basicText = "Railroad, Cost 200, Rent 100";
 				if (gameGui.getSpaceOwned(2) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(2) == true)
@@ -505,7 +505,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Yellow 1, Cost 150, Value 50";
+        basicText = "Yellow 1, Cost 150, Rent 50";
 				if (gameGui.getSpaceOwned(1) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(1) == true)
@@ -539,7 +539,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Red 1, Cost 550, Value 250";
+        basicText = "Red 1, Cost 550, Rent 250";
 				if (gameGui.getSpaceOwned(13) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(13) == true)
@@ -559,7 +559,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Red 2, Cost 600, Value 275";
+        basicText = "Red 2, Cost 600, Rent 275";
 				if (gameGui.getSpaceOwned(15) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(15) == true)
@@ -578,7 +578,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Railroad, Cost 200, Value 100";
+        basicText = "Railroad, Cost 200, Rent 100";
 				if (gameGui.getSpaceOwned(14) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(14) == true)
@@ -598,7 +598,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Red 3, Cost 650, Value 300";
+        basicText = "Red 3, Cost 650, Rent 300";
 				if (gameGui.getSpaceOwned(16) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(16) == true)
@@ -645,7 +645,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Green 2, Cost 1000, Value 500";
+        basicText = "Green 2, Cost 1000, Rent 500";
 				if (gameGui.getSpaceOwned(23) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(23) == true)
@@ -665,7 +665,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-				basicText = "Green 1, Cost 900, Value 425";
+				basicText = "Green 1, Cost 900, Rent 425";
 				if (gameGui.getSpaceOwned(22) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(22) == true)
@@ -698,7 +698,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Orange 2, Cost 800, Value 375";
+        basicText = "Orange 2, Cost 800, Rent 375";
 				if (gameGui.getSpaceOwned(20) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(20) == true)
@@ -718,7 +718,7 @@ public class Gui extends Application {
     {
       @Override
       public void handle(ActionEvent event) {
-        basicText = "Orange 1, Cost 750, Value 350";
+        basicText = "Orange 1, Cost 750, Rent 350";
 				if (gameGui.getSpaceOwned(19) == true)
 					spaceInfo.setText(basicText + "\nOwned by Player 1");
 				else if (AI.getSpaceOwned(19) == true)
