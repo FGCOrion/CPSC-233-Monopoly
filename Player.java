@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
@@ -203,6 +204,13 @@ class Player{
 
 
 
+
+
+
+
+
+
+
 	public int takeTurnGui(Board board, Player comp, TextArea GameInfo, int choiceFlag){
 		Scanner input = new Scanner(System.in);
 		//Creates a new scanner
@@ -311,4 +319,13 @@ class Player{
 			GameInfo.appendText("\nYou cannot afford this space");
 		}
 	}
+
+  public void sell(Board board, int location, TextArea GameInfo){
+    Space newSpace = board.getSpace(location);
+    this.setMoney(this.getMoney() + newSpace.getCost());
+    newSpace.setOwner(0);
+    board.setSpace(location, newSpace);
+    this.owns.remove(new Integer(location));
+    GameInfo.appendText("\nYou have sold your property.");
+  }
 }
