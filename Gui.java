@@ -21,7 +21,10 @@ import javafx.scene.control.ChoiceBox ;
 import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import java.util.ArrayList;
+
 
 
 public class Gui extends Application {
@@ -37,7 +40,6 @@ public class Gui extends Application {
   private int rollUnlocked = 1;
   private int choiceUnlocked = 0;
 	private int nextTurnUnlocked = 0;
-
 
 	/**
 	* Setup for labels in GUI that give information regarding each players total money, property,
@@ -118,12 +120,12 @@ public class Gui extends Application {
 		return nextTurnUnlocked;
 	}
 
-
   public static void main(String[] args) {
 		Application.launch(args);
 		}
 
   int turnCount = 0;
+
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -183,6 +185,88 @@ public class Gui extends Application {
 		roll.setMaxWidth(125);
 		roll.setMaxHeight(400);
 	   root.add(roll,9,4);
+
+		 /**
+		 * Sell property button to sell properties back to the bank for the cost originally paid
+		 */
+		 Button sell = new Button("Sell");
+		 sell.setMaxWidth(125);
+		 sell.setMaxHeight(400);
+		 root.add(sell, 9, 3);
+
+		 /**
+ 		* sell property
+ 		*/
+		sell.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event){
+				final Stage sellProperties = new Stage();
+				 sellProperties.initModality(Modality.APPLICATION_MODAL);
+				 sellProperties.initOwner(primaryStage);
+				 VBox sellBox = new VBox(20);
+				 ArrayList<Integer> locations = new ArrayList<Integer>();
+
+				if (getPlayerFlag() == 1){
+					 ArrayList<Button> buttons = new ArrayList<Button>();
+					 for (int i = 0; i < 24; i++){
+						 if (gameGui.getSpaceOwned(i) == true){
+							 buttons.add(new Button(numOfLand.getSpace(i).getName() + ": $" + numOfLand.getSpace(i).getCost()));
+							 locations.add(numOfLand.getSpace(i).getLocation());
+						 }
+					 }
+
+					 sellBox.getChildren().addAll(buttons);
+
+					 for (int i = 0; i < buttons.size(); i++){
+						 final Button myButton = buttons.get(i);
+						 final int location = locations.get(i);
+	           myButton.setOnAction(new EventHandler<ActionEvent>() {
+          	 		public void handle(ActionEvent event) {
+									gameGui.sell(numOfLand, location, GameInfo);
+									sellBox.getChildren().remove(myButton);
+									playerInfo.setText("Current position: " + (numOfLand.getSpace(gameGui.getPosition())).getName());
+	 	             	playerInfo.appendText("\nMoney: " + gameGui.getMoney());
+	 	 							playerInfo.appendText("\nProperties owned: " + gameGui.getPropertiesOwned());
+	 	 							playerInfo.appendText("\nCurrent Turn: " + turnCount);
+									myButton.setDisable(true);
+					}
+				});
+			 }
+		 }
+
+				 if (getPlayerFlag() == 2){
+					 ArrayList<Button> buttons = new ArrayList<Button>();
+					 for (int i = 0; i < 24; i++){
+						 if (AI.getSpaceOwned(i) == true){
+							 buttons.add(new Button(numOfLand.getSpace(i).getName() + ": $" + numOfLand.getSpace(i).getCost()));
+							 locations.add(numOfLand.getSpace(i).getLocation());
+						 }
+					 }
+
+					 sellBox.getChildren().addAll(buttons);
+
+					 for (int i = 0; i < buttons.size(); i++){
+						 final Button myButton = buttons.get(i);
+						 final int location = locations.get(i);
+	           myButton.setOnAction(new EventHandler<ActionEvent>() {
+          	 		public void handle(ActionEvent event) {
+									AI.sell(numOfLand, location, GameInfo);
+									sellBox.getChildren().remove(myButton);
+									playerInfo.setText("Current position: " + (numOfLand.getSpace(gameGui.getPosition())).getName());
+	 	             	playerInfo.appendText("\nMoney: " + gameGui.getMoney());
+	 	 							playerInfo.appendText("\nProperties owned: " + gameGui.getPropertiesOwned());
+	 	 							playerInfo.appendText("\nCurrent Turn: " + turnCount);
+									myButton.setDisable(true);
+					}
+				});
+			 }
+		 }
+					 sellBox.setAlignment(Pos.CENTER);
+					 Scene sellScene = new Scene(sellBox, 300, 200);
+					 sellProperties.setScene(sellScene);
+					 sellProperties.show();
+				 }
+			 });
 
 		/**
 		* Event Handler for roll button updates labels to represent players position, money, properties owned
@@ -735,7 +819,7 @@ public class Gui extends Application {
   );
 
 	/**
-	* Exit/quit button to prematurely end game without meeting end condition and pop up window to confirm
+	* Exit button to prematurely end game without meeting end condition and pop up window to confirm
 	* if you'd like to quit or not
 	*/
 	Button btClose = new Button("Exit");
@@ -775,6 +859,27 @@ public class Gui extends Application {
 		}
 	}
 	);
+
+	/* CURRENTLY BROKEN
+	//The part that displays the characters avatar
+	int playerPos = gameGui.getPosition() - 1;
+	int AIPos = AI.getPosition() - 1;
+	if (playerPos <= 6)
+		root.add(Pavatar, 6, 6 - playerPos);
+	else if (playerPos <= 12)
+		root.add(Pavatar, playerPos, 0);
+	else if (playerPos <= 18)
+		root.add(Pavatar, 12, playerPos - 12);
+	else
+		root.add(Pavatar, playerPos - 6, 6);
+	if (AIPos <= 6)
+		root.add(AIavatar, 6, 6 - AIPos);
+	else if (AIPos <= 12)
+		root.add(AIavatar, AIPos, 0);
+	else if (AIPos <= 18)
+		root.add(AIavatar, 12, AIPos - 12);
+	else
+		root.add(AIavatar, AIPos - 6, 6);*/
 
 	Scene gamePlay = new Scene(root, 1000, 600);
 	primaryStage.setTitle("Mono-Poly");
