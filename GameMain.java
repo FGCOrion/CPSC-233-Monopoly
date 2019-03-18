@@ -1,9 +1,10 @@
+
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 class GameMain {
-	
+
 	static Player player1 = new Player();
 	static ComputerAI player2 = new ComputerAI(2, false);
 	static Board board = new Board();

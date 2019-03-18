@@ -1,18 +1,20 @@
+
 import java.util.Random;
 
 
 class ComputerAI extends Player{
-	
+
 	private int position;
 	private char avatar;
 	private int money;
 	private int playerNumber = 2;
 	private boolean isPlayer = false;
 
+
 	public ComputerAI() {
 		position = 1;
-        avatar = 'C';
-        money = 1500;
+    avatar = 'C';
+    money = 1500;
 	}
 
 	public ComputerAI(int playerNumber, boolean isPlayer){
@@ -27,13 +29,6 @@ class ComputerAI extends Player{
 		return playerNumber;
 	}
 
-	public boolean getIsPlayer(){
-		return isPlayer;
-	}
-
-	public void setIsPlayer(boolean newVal){
-		this.isPlayer = newVal;
-	}
 
 	public void setPlayerNumber(int playerNumber){
 		this.playerNumber = playerNumber;

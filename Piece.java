@@ -1,3 +1,4 @@
+
 class Piece {
     /* Instance Variables */
     private int position = 0;
@@ -8,7 +9,7 @@ class Piece {
     *@return position
     *@return avatar
     **/
-    
+
     public int getPosition(){
         return position;
     }
@@ -16,8 +17,8 @@ class Piece {
         return avatar;
     }
 
-    /* 
-    *Setters 
+    /*
+    *Setters
     */
     public void setPosition(int newPosition){
         position = newPosition;
