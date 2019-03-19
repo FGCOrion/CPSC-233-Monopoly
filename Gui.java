@@ -38,7 +38,6 @@ public class Gui extends Application{
   private Label totalPlayersPlaying = new Label("Total players: " + totalPlayers);
 	ArrayList<Player> allPlayers = new ArrayList<Player>();
 
-
   //buttons to choose how many human players in start menu
   private Button player1 = new Button("1");
   private Button player2 = new Button("2");
@@ -55,10 +54,9 @@ public class Gui extends Application{
   private Button begin = new Button("Start Game!");
 
   /**
-	* setup for two human players and board set up
+	* board set up variables
 	*/
 	private Board numOfLand = new Board();
-	private GameMain turns = new GameMain();
 	private int playerFlag = 1;
   private int rollUnlocked = 1;
   private int choiceUnlocked = 0;
@@ -195,15 +193,6 @@ public class Gui extends Application{
 		return nextTurnUnlocked;
 	}
 
-
-	public static GridPane getPane(){
-		return root;
-	}
-
-	public Scene getScene(){
-		return gamePlay;
-	}
-
   public static void main(String[] args){
     Application.launch(args);
   }
@@ -241,16 +230,18 @@ public class Gui extends Application{
     		/**
     		* "Yes" button displayed beside "Roll Dice" button to affirm decision to purchase property
     		*/
-        Button positive = new Button("yes");
+        Button positive = new Button("Yes");
         positive.setMaxWidth(125);
-        root.add(positive,8,4);
+        positive.setMaxHeight(400);
+        root.add(positive, 8, 4);
 
     		/**
     		* "No" button displayed beside "Roll Dice" button to decline decision to purchase property
     		*/
-        Button negative = new Button("no");
+        Button negative = new Button("No");
         negative.setMaxWidth(125);
-        root.add(negative,10,4);
+        negative.setMaxHeight(600);
+        root.add(negative, 10, 4);
 
     		/**
     		* next turn button to switch tur to other player
@@ -266,7 +257,7 @@ public class Gui extends Application{
     		Button roll = new Button("Roll\nDie");
     		roll.setMaxWidth(125);
     		roll.setMaxHeight(400);
-    	   root.add(roll,9,4);
+    	   root.add(roll, 9, 4);
 
     		 /**
     		 * Sell property button to sell properties back to the bank for the cost originally paid
@@ -300,7 +291,6 @@ public class Gui extends Application{
     					 }
 
     					 sellBox.getChildren().addAll(buttons);
-
     					 for (int i = 0; i < buttons.size(); i++){
     						 final Button myButton = buttons.get(i);
     						 final int location = locations.get(i);
@@ -308,10 +298,8 @@ public class Gui extends Application{
               	 		public void handle(ActionEvent event) {
     									allPlayers.get(0).sell(numOfLand, location, GameInfo);
     									sellBox.getChildren().remove(myButton);
-    									playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(0).getPosition())).getName());
-    	 	             	playerInfo.appendText("\nMoney: " + allPlayers.get(0).getMoney());
-    	 	 							playerInfo.appendText("\nProperties owned: " + allPlayers.get(0).getPropertiesOwned());
-    	 	 							playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                      final Player currentPlayer = allPlayers.get(0);
+                      currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
     									myButton.setDisable(true);
     					}
     				});
@@ -328,7 +316,6 @@ public class Gui extends Application{
     					 }
 
     					 sellBox.getChildren().addAll(buttons);
-
     					 for (int i = 0; i < buttons.size(); i++){
     						 final Button myButton = buttons.get(i);
     						 final int location = locations.get(i);
@@ -336,10 +323,8 @@ public class Gui extends Application{
               	 		public void handle(ActionEvent event) {
     									allPlayers.get(1).sell(numOfLand, location, GameInfo);
     									sellBox.getChildren().remove(myButton);
-    									playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(1).getPosition())).getName());
-    	 	             	playerInfo.appendText("\nMoney: " + allPlayers.get(1).getMoney());
-    	 	 							playerInfo.appendText("\nProperties owned: " + allPlayers.get(1).getPropertiesOwned());
-    	 	 							playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                      final Player currentPlayer = allPlayers.get(1);
+                      currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
     									myButton.setDisable(true);
     					}
     				});
@@ -356,7 +341,6 @@ public class Gui extends Application{
 						}
 
 						sellBox.getChildren().addAll(buttons);
-
 						for (int i = 0; i < buttons.size(); i++){
 							final Button myButton = buttons.get(i);
 							final int location = locations.get(i);
@@ -364,10 +348,8 @@ public class Gui extends Application{
 								 public void handle(ActionEvent event) {
 									 allPlayers.get(2).sell(numOfLand, location, GameInfo);
 									 sellBox.getChildren().remove(myButton);
-									 playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(2).getPosition())).getName());
-									 playerInfo.appendText("\nMoney: " + allPlayers.get(2).getMoney());
-									 playerInfo.appendText("\nProperties owned: " + allPlayers.get(2).getPropertiesOwned());
-									 playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                   final Player currentPlayer = allPlayers.get(2);
+                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
 									 myButton.setDisable(true);
 					 }
 				 });
@@ -385,7 +367,6 @@ public class Gui extends Application{
 				 }
 
 				 sellBox.getChildren().addAll(buttons);
-
 				 for (int i = 0; i < buttons.size(); i++){
 					 final Button myButton = buttons.get(i);
 					 final int location = locations.get(i);
@@ -393,10 +374,8 @@ public class Gui extends Application{
 							public void handle(ActionEvent event) {
 								allPlayers.get(3).sell(numOfLand, location, GameInfo);
 								sellBox.getChildren().remove(myButton);
-								playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(3).getPosition())).getName());
-								playerInfo.appendText("\nMoney: " + allPlayers.get(3).getMoney());
-								playerInfo.appendText("\nProperties owned: " + allPlayers.get(3).getPropertiesOwned());
-								playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                final Player currentPlayer = allPlayers.get(3);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
 								myButton.setDisable(true);
 				}
 			});
@@ -426,10 +405,7 @@ public class Gui extends Application{
                 if(getChoiceUnlocked() == 0){
     							setNextTurnUnlocked(1);
                 }
-                playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(0).getPosition())).getName());
-    						playerInfo.appendText("\nMoney: " + allPlayers.get(0).getMoney());
-    	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(0).getPropertiesOwned());
-    	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
 							else if (getPlayerFlag() == 2){
                 if (allPlayers.get(1).getIsPlayer() == true){
@@ -438,10 +414,7 @@ public class Gui extends Application{
                   if (getChoiceUnlocked() == 0) {
       							setNextTurnUnlocked(1);
                   }
-                  playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(1).getPosition())).getName());
-      						playerInfo.appendText("\nMoney: " + allPlayers.get(1).getMoney());
-      	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(1).getPropertiesOwned());
-      	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
             }
 							else if (getPlayerFlag() == 3){
@@ -451,10 +424,7 @@ public class Gui extends Application{
                 if (getChoiceUnlocked() == 0) {
     							setNextTurnUnlocked(1);
                 }
-                playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(2).getPosition())).getName());
-    						playerInfo.appendText("\nMoney: " + allPlayers.get(2).getMoney());
-    	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(2).getPropertiesOwned());
-    	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
             }
 							else if (getPlayerFlag() == 4){
@@ -464,10 +434,7 @@ public class Gui extends Application{
                 if (getChoiceUnlocked() == 0) {
     								setNextTurnUnlocked(1);
                 }
-                playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(3).getPosition())).getName());
-    						playerInfo.appendText("\nMoney: " + allPlayers.get(3).getMoney());
-    	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(3).getPropertiesOwned());
-    	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
             }
           }
@@ -486,119 +453,91 @@ public class Gui extends Application{
     					if (getPlayerFlag() == 1){
     						playerTurn.setText("Player 2's Turn");
     						playerTurn.setTextFill(Color.RED);
-
                 if (allPlayers.get(1).getIsPlayer() == true){
-
+                  final Player currentPlayer = allPlayers.get(1);
       						setRollUnlocked(1);
       						setNextTurnUnlocked(0);
       						setPlayerFlag(2);
-      						playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(1).getPosition())).getName());
-      						playerInfo.appendText("\nMoney: " + allPlayers.get(1).getMoney());
-      	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(1).getPropertiesOwned());
-      	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
     					}
                else if (allPlayers.get(1).getIsPlayer() == false){
-
                 setRollUnlocked(0);
                 final Player currentPlayer = allPlayers.get(1);
                 allPlayers.get(1).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                 setNextTurnUnlocked(1);
                 setPlayerFlag(2);
               }
             }
-
     					else if (getPlayerFlag() == 2){
 								if (totalPlayers > 2){
                   playerTurn.setText("Player 3's Turn");
       						playerTurn.setTextFill(Color.ORANGE);
-
                   if (allPlayers.get(2).getIsPlayer() == true){
-
+                    final Player currentPlayer = allPlayers.get(2);
         						setRollUnlocked(1);
         						setNextTurnUnlocked(0);
       							setPlayerFlag(3);
-                    playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(2).getPosition())).getName());
-        						playerInfo.appendText("\nMoney: " + allPlayers.get(2).getMoney());
-        	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(2).getPropertiesOwned());
-        	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
-
+                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                 } else if (allPlayers.get(2).getIsPlayer() == false){
-
                   setRollUnlocked(0);
                   final Player currentPlayer = allPlayers.get(2);
                   allPlayers.get(2).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                   setNextTurnUnlocked(1);
                   setPlayerFlag(3);
                 }
-
 								} else {
                   playerTurn.setText("Player 1's Turn");
       						playerTurn.setTextFill(Color.BLUE);
       						setRollUnlocked(1);
       						setNextTurnUnlocked(0);
 									setPlayerFlag(1);
-                  playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(0).getPosition())).getName());
-      						playerInfo.appendText("\nMoney: " + allPlayers.get(0).getMoney());
-      	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(0).getPropertiesOwned());
-      	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                  final Player currentPlayer = allPlayers.get(0);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
 								}
-
     					}
 							else if (getPlayerFlag() == 3){
 								if (totalPlayers > 3){
                   playerTurn.setText("Player 4's Turn");
       						playerTurn.setTextFill(Color.PURPLE);
-
                   if (allPlayers.get(3).getIsPlayer() == true){
-
+                  final Player currentPlayer = allPlayers.get(3);
       						setRollUnlocked(1);
       						setNextTurnUnlocked(0);
     							setPlayerFlag(4);
-                  playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(3).getPosition())).getName());
-      						playerInfo.appendText("\nMoney: " + allPlayers.get(3).getMoney());
-      	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(3).getPropertiesOwned());
-      	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
 
                 } else if (allPlayers.get(3).getIsPlayer() == false){
-
                   setRollUnlocked(0);
                   final Player currentPlayer = allPlayers.get(3);
                   allPlayers.get(3).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                   setNextTurnUnlocked(1);
                   setPlayerFlag(4);
                 }
-
-								} else {
-                  playerTurn.setText("Player 1's Turn");
-      						playerTurn.setTextFill(Color.BLUE);
-      						setRollUnlocked(1);
-      						setNextTurnUnlocked(0);
-									setPlayerFlag(1);
-                  playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(0).getPosition())).getName());
-      						playerInfo.appendText("\nMoney: " + allPlayers.get(0).getMoney());
-      	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(0).getPropertiesOwned());
-      	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
+							} else {
+                playerTurn.setText("Player 1's Turn");
+      					playerTurn.setTextFill(Color.BLUE);
+      					setRollUnlocked(1);
+      					setNextTurnUnlocked(0);
+								setPlayerFlag(1);
+                final Player currentPlayer = allPlayers.get(0);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
 								}
 
-    					}
-							else if (getPlayerFlag() == 4){
+							} else if (getPlayerFlag() == 4){
     						playerTurn.setText("Player 1's Turn");
-    						playerTurn.setTextFill(Color.RED);
+    						playerTurn.setTextFill(Color.BLUE);
     						setRollUnlocked(1);
     						setNextTurnUnlocked(0);
     						setPlayerFlag(1);
-								System.out.println(playerFlag);
-    						playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(3).getPosition())).getName());
-    						playerInfo.appendText("\nMoney: " + allPlayers.get(3).getMoney());
-    	          playerInfo.appendText("\nProperties owned: " + allPlayers.get(3).getPropertiesOwned());
-    	          playerInfo.appendText("\nCurrent Turn: " + turnCount);
-    					}
+                final Player currentPlayer = allPlayers.get(0);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
     				}
     			}
+        }
     		});
-
-
-
 
     		/**
     		* Event Handler for positive ("Yes") button updates labels to reflect the property purchased by player
@@ -610,31 +549,23 @@ public class Gui extends Application{
             if(getChoiceUnlocked() == 1) {
               if (getPlayerFlag() == 1) {
                 allPlayers.get(0).purchase(numOfLand, GameInfo);
-    						playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(0).getPosition())).getName());
-                playerInfo.appendText("\nMoney: " + allPlayers.get(0).getMoney());
-    						playerInfo.appendText("\nProperties owned: " + allPlayers.get(0).getPropertiesOwned());
-    						playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                final Player currentPlayer = allPlayers.get(0);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
               else if (getPlayerFlag() == 2) {
                 allPlayers.get(1).purchase(numOfLand, GameInfo);
-    						playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(1).getPosition())).getName());
-                playerInfo.appendText("\nMoney: " + allPlayers.get(1).getMoney());
-    						playerInfo.appendText("\nProperties owned: " + allPlayers.get(1).getPropertiesOwned());
-    						playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                final Player currentPlayer = allPlayers.get(1);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
 							else if (getPlayerFlag() == 3) {
                 allPlayers.get(2).purchase(numOfLand, GameInfo);
-    						playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(2).getPosition())).getName());
-                playerInfo.appendText("\nMoney: " + allPlayers.get(2).getMoney());
-    						playerInfo.appendText("\nProperties owned: " + allPlayers.get(2).getPropertiesOwned());
-    						playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                final Player currentPlayer = allPlayers.get(2);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
 							else if (getPlayerFlag() == 4) {
                 allPlayers.get(3).purchase(numOfLand, GameInfo);
-    						playerInfo.setText("Current position: " + (numOfLand.getSpace(allPlayers.get(3).getPosition())).getName());
-                playerInfo.appendText("\nMoney: " + allPlayers.get(3).getMoney());
-    						playerInfo.appendText("\nProperties owned: " + allPlayers.get(3).getPropertiesOwned());
-    						playerInfo.appendText("\nCurrent Turn: " + turnCount);
+                final Player currentPlayer = allPlayers.get(3);
+                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
               setChoiceUnlocked(0);
               setNextTurnUnlocked(1);
@@ -670,7 +601,6 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
-
             spaceInfo.setText("Sends the player to jail");
           }
         }
@@ -681,21 +611,13 @@ public class Gui extends Application{
     		bt02.setMaxHeight(400);
     		bt02.setStyle("-fx-background-color: #00F5FF");
     		root.add(bt02,7,1);
-    	    bt02.setOnAction(new EventHandler<ActionEvent>()
+    	  bt02.setOnAction(new EventHandler<ActionEvent>()
     	    {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(7);
     			  basicText = "Blue 1, Cost 350, Rent 150";
-						if (allPlayers.get(0).getSpaceOwned(7) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(7) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(7) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(7) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+						newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -709,17 +631,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(8);
             basicText = "Blue 2, Cost 400, Rent 175";
-    				if (allPlayers.get(0).getSpaceOwned(8) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(8) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(8) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(8) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -732,17 +646,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(9);
             basicText = "Railroad, Cost 200, Rent 100";
-						if (allPlayers.get(0).getSpaceOwned(9) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(9) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(9) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(9) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -756,17 +662,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(10);
             basicText = "Blue 3, Cost 450, Rent 200";
-						if (allPlayers.get(0).getSpaceOwned(10) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(10) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(10) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(10) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -822,17 +720,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(4);
             basicText = "Yellow 3, Cost 250, Rent 100";
-						if (allPlayers.get(0).getSpaceOwned(4) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(4) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(4) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(4) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -846,17 +736,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(3);
             basicText = "Yellow 2, Cost 200, Rent 75";
-						if (allPlayers.get(0).getSpaceOwned(3) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(3) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(3) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(3) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -869,17 +751,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(2);
             basicText = "Railroad, Cost 200, Rent 100";
-						if (allPlayers.get(0).getSpaceOwned(2) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(2) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(2) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(2) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -893,17 +767,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(1);
             basicText = "Yellow 1, Cost 150, Rent 50";
-						if (allPlayers.get(0).getSpaceOwned(1) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(1) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(1) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(1) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -931,17 +797,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(13);
             basicText = "Red 1, Cost 550, Rent 250";
-						if (allPlayers.get(0).getSpaceOwned(13) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(13) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(13) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(13) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -955,17 +813,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(15);
             basicText = "Red 2, Cost 600, Rent 275";
-						if (allPlayers.get(0).getSpaceOwned(15) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(15) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(15) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(15) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -978,17 +828,10 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(14);
             basicText = "Railroad, Cost 200, Rent 100";
-						if (allPlayers.get(0).getSpaceOwned(14) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(14) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(14) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(14) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
+
           }
         }
       );
@@ -1002,17 +845,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(16);
             basicText = "Red 3, Cost 650, Rent 300";
-						if (allPlayers.get(0).getSpaceOwned(16) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(16) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(16) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(16) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -1053,17 +888,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(23);
             basicText = "Green 2, Cost 1000, Rent 500";
-						if (allPlayers.get(0).getSpaceOwned(23) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(23) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(23) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(23) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -1077,17 +904,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(22);
     				basicText = "Green 1, Cost 900, Rent 425";
-						if (allPlayers.get(0).getSpaceOwned(22) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(22) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(22) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(22) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -1115,16 +934,8 @@ public class Gui extends Application{
           @Override
           public void handle(ActionEvent event) {
             basicText = "Orange 2, Cost 800, Rent 375";
-						if (allPlayers.get(0).getSpaceOwned(20) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(20) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(20) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(20) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            Space newSpace = numOfLand.getSpace(20);
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );
@@ -1138,17 +949,9 @@ public class Gui extends Application{
         {
           @Override
           public void handle(ActionEvent event) {
+            Space newSpace = numOfLand.getSpace(19);
             basicText = "Orange 1, Cost 750, Rent 350";
-						if (allPlayers.get(0).getSpaceOwned(19) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 1");
-    				else if (allPlayers.get(1).getSpaceOwned(19) == true)
-    					spaceInfo.setText(basicText + "\nOwned by Player 2");
-						else if (allPlayers.get(2).getSpaceOwned(19) == true)
-	    					spaceInfo.setText(basicText + "\nOwned by Player 3");
-						else if (allPlayers.get(3).getSpaceOwned(19) == true)
-		    			spaceInfo.setText(basicText + "\nOwned by Player 4");
-    				else
-    					spaceInfo.setText(basicText + "\nOwned by Nobody");
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
         }
       );

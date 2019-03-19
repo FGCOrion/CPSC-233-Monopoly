@@ -1,3 +1,4 @@
+import javafx.scene.control.TextArea;
 
 class Space {
     //The name of the space
@@ -13,7 +14,6 @@ class Space {
     public int owner;
 
     public int location;
-
 
     /**
     *constructor with the owner
@@ -33,11 +33,7 @@ class Space {
     public void setOwner(int owner) {
         this.owner = owner;
     }
-    /**
-    *@return name
-    *@return cost
-    *@return value
-    **/
+
     public String getName() {
         return this.name;
     }
@@ -62,5 +58,18 @@ class Space {
 	public String getInfo() {
 		return name + ":  " + String.valueOf(owner);
 	}
+
+  public void setSpaceInfo(Space newSpace, TextArea spaceInfo, String basicText){
+    if (newSpace.getOwner() == 1)
+      spaceInfo.setText(basicText + "\nOwned by Player 1");
+    else if (newSpace.getOwner() == 2)
+      spaceInfo.setText(basicText + "\nOwned by Player 2");
+    else if (newSpace.getOwner() == 3)
+        spaceInfo.setText(basicText + "\nOwned by Player 3");
+    else if (newSpace.getOwner() == 4)
+      spaceInfo.setText(basicText + "\nOwned by Player 4");
+    else
+      spaceInfo.setText(basicText + "\nUnowned");
+  }
 
 }
