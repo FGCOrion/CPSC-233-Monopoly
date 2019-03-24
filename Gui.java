@@ -16,7 +16,6 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
-import javafx.scene.control.ChoiceBox ;
 import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.scene.layout.HBox;
@@ -61,6 +60,7 @@ public class Gui extends Application{
   private int rollUnlocked = 1;
   private int choiceUnlocked = 0;
 	private int nextTurnUnlocked = 0;
+  private int forceSale = 0;
 
 	/**
 	* Setup for labels in GUI that give information regarding each players total money, property,
@@ -79,8 +79,8 @@ public class Gui extends Application{
 	private TextArea spaceInfo = new TextArea("Click a space on the board for more information");
 	private static GridPane root;
 	private static Scene gamePlay;
-	String basicText = "";
-	int turnCount = 0;
+	private String basicText = "";
+	private int turnCount = 0;
 
   // Accessor Methods
   /**
@@ -162,6 +162,10 @@ public class Gui extends Application{
 		this.nextTurnUnlocked = turnUnlocked;
 	}
 
+  public void setForceSale(int forceSale){
+    this.forceSale = forceSale;
+  }
+
 	/**
 	* returns 1 if it is player 1's turn or 2 if it is player 2's turn
 	* @return playerFlag
@@ -192,6 +196,10 @@ public class Gui extends Application{
 	public int getNextTurnUnlocked(){
 		return nextTurnUnlocked;
 	}
+
+  public int getForceSale(){
+    return forceSale;
+  }
 
   public static void main(String[] args){
     Application.launch(args);
@@ -301,6 +309,9 @@ public class Gui extends Application{
                       final Player currentPlayer = allPlayers.get(0);
                       currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
     									myButton.setDisable(true);
+                      if (allPlayers.get(0).getMoney() > 0){
+                        setNextTurnUnlocked(1);
+                      }
     					}
     				});
     			 }
@@ -326,6 +337,9 @@ public class Gui extends Application{
                       final Player currentPlayer = allPlayers.get(1);
                       currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
     									myButton.setDisable(true);
+                      if (allPlayers.get(1).getMoney() > 0){
+                        setNextTurnUnlocked(1);
+                      }
     					}
     				});
     			 }
@@ -351,6 +365,9 @@ public class Gui extends Application{
                    final Player currentPlayer = allPlayers.get(2);
                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
 									 myButton.setDisable(true);
+                   if (allPlayers.get(2).getMoney() > 0){
+                     setNextTurnUnlocked(1);
+                   }
 					 }
 				 });
 				}
@@ -377,8 +394,11 @@ public class Gui extends Application{
                 final Player currentPlayer = allPlayers.get(3);
                 currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
 								myButton.setDisable(true);
-				}
-			});
+                if (allPlayers.get(3).getMoney() > 0){
+                  setNextTurnUnlocked(1);
+                }
+				  }
+			 });
 		 }
 	 }
  }
@@ -401,18 +421,24 @@ public class Gui extends Application{
               if (getPlayerFlag() == 1){
 								final Player currentPlayer = allPlayers.get(0);
                 turnCount += 1;
-                setChoiceUnlocked(allPlayers.get(0).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers));
-                if(getChoiceUnlocked() == 0){
+                setChoiceUnlocked(allPlayers.get(0).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
+                if (getChoiceUnlocked() == 0 && getForceSale() == 0){
     							setNextTurnUnlocked(1);
+                }
+                else if (getForceSale() == 1){
+                  setNextTurnUnlocked(0);
                 }
                 currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
 							else if (getPlayerFlag() == 2){
                 if (allPlayers.get(1).getIsPlayer() == true){
   								final Player currentPlayer = allPlayers.get(1);
-                  setChoiceUnlocked(allPlayers.get(1).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers));
-                  if (getChoiceUnlocked() == 0) {
+                  setChoiceUnlocked(allPlayers.get(1).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
+                  if (getChoiceUnlocked() == 0 && getForceSale() == 0){
       							setNextTurnUnlocked(1);
+                  }
+                  else if (getForceSale() == 1){
+                    setNextTurnUnlocked(0);
                   }
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
@@ -420,9 +446,12 @@ public class Gui extends Application{
 							else if (getPlayerFlag() == 3){
                 if (allPlayers.get(2).getIsPlayer() == true){
 								final Player currentPlayer = allPlayers.get(2);
-                setChoiceUnlocked(allPlayers.get(2).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers));
-                if (getChoiceUnlocked() == 0) {
+                setChoiceUnlocked(allPlayers.get(2).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
+                if (getChoiceUnlocked() == 0 && getForceSale() == 0){
     							setNextTurnUnlocked(1);
+                }
+                else if (getForceSale() == 1){
+                  setNextTurnUnlocked(0);
                 }
                 currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
@@ -430,9 +459,12 @@ public class Gui extends Application{
 							else if (getPlayerFlag() == 4){
                 if (allPlayers.get(3).getIsPlayer() == true){
 								final Player currentPlayer = allPlayers.get(3);
-                setChoiceUnlocked(allPlayers.get(3).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers));
-                if (getChoiceUnlocked() == 0) {
+                setChoiceUnlocked(allPlayers.get(3).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
+                if (getChoiceUnlocked() == 0 && getForceSale() == 0){
     								setNextTurnUnlocked(1);
+                }
+                else if (getForceSale() == 1){
+                  setNextTurnUnlocked(0);
                 }
                 currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
@@ -571,8 +603,7 @@ public class Gui extends Application{
               setNextTurnUnlocked(1);
               }
             }
-          }
-        );
+          });
 
     		/**
     		* Event Handler for negative ("No") button declines purchase/sale of property and proceeds to next players turn
@@ -585,9 +616,7 @@ public class Gui extends Application{
     					setNextTurnUnlocked(1);
               }
             }
-          }
-        );
-
+          });
 
     		/**
     		* The remainder of this class is the setting up of buttons on the board to represent the spaces and action handlers
@@ -597,195 +626,169 @@ public class Gui extends Application{
         bt01.setMaxWidth(150);
     	bt01.setMaxHeight(400);
         root.add(bt01,6,1);
-        bt01.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt01.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             spaceInfo.setText("Sends the player to jail");
           }
-        }
-      );
+        });
 
         Button bt02 = new Button();
         bt02.setMaxWidth(150);
     		bt02.setMaxHeight(400);
     		bt02.setStyle("-fx-background-color: #00F5FF");
     		root.add(bt02,7,1);
-    	  bt02.setOnAction(new EventHandler<ActionEvent>()
-    	    {
+    	  bt02.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(7);
     			  basicText = "Blue 1, Cost 350, Rent 150";
 						newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt03 = new Button();
         bt03.setMaxWidth(150);
     		bt03.setMaxHeight(400);
     		bt03.setStyle("-fx-background-color: #00E5EE");
         root.add(bt03,8,1);
-        bt03.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt03.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(8);
             basicText = "Blue 2, Cost 400, Rent 175";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt04 = new Button("Rail\nRoad 2");
         bt04.setMaxWidth(150);
     		bt04.setMaxHeight(400);
         root.add(bt04,9,1);
-        bt04.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt04.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(9);
             basicText = "Railroad, Cost 200, Rent 100";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt05 = new Button();
         bt05.setMaxWidth(150);
     		bt05.setMaxHeight(400);
     		bt05.setStyle("-fx-background-color: #00F5FF");
         root.add(bt05,10,1);
-        bt05.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt05.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(10);
             basicText = "Blue 3, Cost 450, Rent 200";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt06 = new Button("Tax");
         bt06.setMaxWidth(150);
     		bt06.setMaxHeight(400);
         root.add(bt06,11,1);
-        bt06.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt06.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             spaceInfo.setText("Pay the bank a $100 tax");
           }
-        }
-      );
+        });
 
         Button bt07 = new Button("Free\nPark");
         bt07.setMaxWidth(150);
     		bt07.setMaxHeight(400);
         root.add(bt07,12,1);
-        bt07.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt07.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
 
             spaceInfo.setText("Receive a random amount of money");
           }
-        }
-      );
+        });
 
         //vertical
         Button bt11 = new Button("Chance");
         bt11.setMaxWidth(150);
     		bt11.setMaxHeight(400);
         root.add(bt11,6,2);
-        bt11.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt11.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
 
             spaceInfo.setText("Receive a random amount of money \nbetween -300 and 250");
           }
-        }
-      );
+        });
 
         Button bt21 = new Button();
         bt21.setMaxWidth(150);
     		bt21.setMaxHeight(400);
     		bt21.setStyle("-fx-background-color: #FFFF00");
         root.add(bt21,6,3);
-        bt21.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt21.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(4);
             basicText = "Yellow 3, Cost 250, Rent 100";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt31 = new Button();
         bt31.setMaxWidth(150);
     		bt31.setMaxHeight(400);
     		bt31.setStyle("-fx-background-color: #EEEE00");
         root.add(bt31,6,4);
-        bt31.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt31.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(3);
             basicText = "Yellow 2, Cost 200, Rent 75";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt41 = new Button("Rail\nRoad 1");
         bt41.setMaxWidth(150);
     		bt41.setMaxHeight(400);
         root.add(bt41,6,5);
-        bt41.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt41.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(2);
             basicText = "Railroad, Cost 200, Rent 100";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt51 = new Button();
         bt51.setMaxWidth(150);
     		bt51.setMaxHeight(400);
         root.add(bt51,6,6);
         bt51.setStyle("-fx-background-color: #FFFF00");
-        bt51.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt51.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(1);
             basicText = "Yellow 1, Cost 150, Rent 50";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt61 = new Button("Go");
         bt61.setMaxWidth(150);
     		bt61.setMaxHeight(400);
         root.add(bt61,6,7);
-        bt61.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt61.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             spaceInfo.setText("Game starts from here");
           }
-        }
-      );
+        });
 
         //vertical
         Button bt17 = new Button();
@@ -793,39 +796,34 @@ public class Gui extends Application{
     		bt17.setMaxHeight(200);
     		bt17.setStyle("-fx-background-color: #FF0000");
         root.add(bt17,12,2);
-        bt17.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt17.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(13);
             basicText = "Red 1, Cost 550, Rent 250";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt27 = new Button();
         bt27.setMaxWidth(150);
     		bt27.setMaxHeight(400);
     		bt27.setStyle("-fx-background-color: #EE0000");
         root.add(bt27,12,3);
-        bt27.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt27.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(15);
             basicText = "Red 2, Cost 600, Rent 275";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt37 = new Button("Rail\nRoad 3");
         bt37.setMaxWidth(150);
     		bt37.setMaxHeight(400);
         root.add(bt37,12,4);
-        bt37.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt37.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(14);
@@ -833,50 +831,43 @@ public class Gui extends Application{
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
 
           }
-        }
-      );
+        });
 
         Button bt47 = new Button();
         bt47.setMaxWidth(150);
     		bt47.setMaxHeight(400);
     		bt47.setStyle("-fx-background-color: #FF0000");
         root.add(bt47,12,5);
-        bt47.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt47.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(16);
             basicText = "Red 3, Cost 650, Rent 300";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt57 = new Button("Chance");
         bt57.setMaxWidth(150);
     		bt57.setMaxHeight(400);
         root.add(bt57,12,6);
-        bt57.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt57.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
           	spaceInfo.setText("Receive a random amount of money \nbetween -300 and 250");
           }
-        }
-      );
+        });
 
         Button bt67 = new Button("Go To\nJail");
         bt67.setMaxWidth(150);
     		bt67.setMaxHeight(400);
         root.add(bt67,12,7);
-        bt67.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt67.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             spaceInfo.setText("Sends you to Jail");
           }
-        }
-      );
+        });
         //horizontal
 
         Button bt72 = new Button();
@@ -884,39 +875,34 @@ public class Gui extends Application{
     		bt72.setMaxHeight(400);
     		bt72.setStyle("-fx-background-color: #7CFC00");
         root.add(bt72,7,7);
-        bt72.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt72.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(23);
             basicText = "Green 2, Cost 1000, Rent 500";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt73 = new Button();
         bt73.setMaxWidth(150);
     		bt73.setMaxHeight(400);
         root.add(bt73,8,7);
         bt73.setStyle("-fx-background-color: #00FA9A");
-        bt73.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt73.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(22);
     				basicText = "Green 1, Cost 900, Rent 425";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt74 = new Button("Comm\nFund");
         bt74.setMaxWidth(150);
     		bt74.setMaxHeight(400);
         root.add(bt74,9,7);
-        bt74.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt74.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             spaceInfo.setText("Funding here");
@@ -929,32 +915,28 @@ public class Gui extends Application{
     		bt75.setMaxHeight(400);
     		bt75.setStyle("-fx-background-color: #FFD700");
         root.add(bt75,10,7);
-        bt75.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt75.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             basicText = "Orange 2, Cost 800, Rent 375";
             Space newSpace = numOfLand.getSpace(20);
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
         Button bt76 = new Button();
         bt76.setMaxWidth(150);
     		bt76.setMaxHeight(400);
     		bt76.setStyle("-fx-background-color: #EEC900");
         root.add(bt76,11,7);
-        bt76.setOnAction(new EventHandler<ActionEvent>()
-        {
+        bt76.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event) {
             Space newSpace = numOfLand.getSpace(19);
             basicText = "Orange 1, Cost 750, Rent 350";
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }
-        }
-      );
+        });
 
     	/**
     	* Exit button to prematurely end game without meeting end condition and pop up window to confirm
@@ -964,11 +946,10 @@ public class Gui extends Application{
     	btClose.setMaxWidth(75);
     	btClose.setMaxHeight(75);
     	root.add(btClose,14,0);
-    	btClose.setOnAction(new EventHandler<ActionEvent>()
-    	{
+    	btClose.setOnAction(new EventHandler<ActionEvent>(){
     		@Override
     		public void handle(ActionEvent event) {
-    			final Stage exitChoice = new Stage();
+    			 final Stage exitChoice = new Stage();
     			 exitChoice.initModality(Modality.APPLICATION_MODAL);
     			 exitChoice.initOwner(primaryStage);
     			 HBox exitBox = new HBox(20);
@@ -994,9 +975,8 @@ public class Gui extends Application{
     			 Scene exitScene = new Scene(exitBox, 300, 200);
     			 exitChoice.setScene(exitScene);
     			 exitChoice.show();
-    		}
-    	}
-    	);
+    		   }
+    	   });
 
       //Set up for menu screen (LAYOUT ONE)
       GridPane start = new GridPane();
@@ -1035,8 +1015,7 @@ public class Gui extends Application{
           start.add(begin, 5, 5, 2, 1);
           start.add(totalPlayersPlaying, 5, 4, 2, 1);
 
-          //Event handlers for all buttons, set the amount of players in game
-          //in accordance with buttons clicked
+          //Event handlers for all buttons, set the amount of players in game in accordance with buttons clicked
           player1.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -1047,7 +1026,6 @@ public class Gui extends Application{
               computer1.setDisable(false);
               computer2.setDisable(false);
               computer3.setDisable(false);
-
             }
           });
 
