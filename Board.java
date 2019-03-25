@@ -20,7 +20,6 @@ class Board {
 		boardArray.set(number, space);
 	}
 
-
 	//A method to print out every space and the ownership of that space to make sure things are working
 	public void returnBoard() {
 		for (int i = 0; i < boardArray.size(); i++) {

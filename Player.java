@@ -18,9 +18,9 @@ class Player extends Gui{
     private int propertiesOwned = 0;
     private boolean inJail = false;
     private boolean isPlayer;
-
-    //private ArrayList<Space> owns= new ArrayList<Space>();
 	  private ArrayList<Integer> owns = new ArrayList<Integer>();
+    ArrayList<Player> allPlayers = new ArrayList<Player>();
+
 
     /* Getters */
     public int getPosition(){
@@ -113,6 +113,8 @@ class Player extends Gui{
         inJail = otherPlayer.getInJail();
     }
 
+
+
   	//Method to roll a single 7 sided die
   	public static int rollDie() {
   		Random result = new Random();
@@ -123,7 +125,6 @@ class Player extends Gui{
   	public static void print(String text) {
   		System.out.println(text);
   	}
-
 
   	/**
   	 * Method to make the program wait x amount of milliseconds, so I don't have to write the code every time
@@ -210,7 +211,6 @@ class Player extends Gui{
       			this.setMoney(this.getMoney() + 200);
       		}
 
-
       		Space newSpace = board.getSpace(this.getPosition());
       		GameInfo.appendText("\nYou landed on " + newSpace.getName());
 
@@ -222,7 +222,6 @@ class Player extends Gui{
       			GameInfo.appendText("\n" + newSpace.getName() + " is unowned. \nWould you like to purchase it for $" +
       					String.valueOf(newSpace.getCost()) + "? \n(Rent of $" + String.valueOf(newSpace.getValue()) + ")");
       			choiceFlag = 1;
-
 
       		}
       		//If the player lands on a space they already own
@@ -325,9 +324,7 @@ class Player extends Gui{
           GameInfo.appendText("\nTry again next turn");
         }
         }
-
     		return choiceFlag;
-
     }
 
     public void takeTurnAI(Board board, Player player, TextArea GameInfo, ArrayList<Player> allPlayers){
@@ -360,7 +357,6 @@ class Player extends Gui{
             this.setPropertiesOwned(this.getPropertiesOwned() + 1);
             this.owns.add(this.getPosition());
             this.setMoney(this.getMoney() - newSpace.getCost());
-
 
             //Computer does not buy the property if they do not have enough money
           } else {
@@ -440,12 +436,12 @@ class Player extends Gui{
   			board.setSpace(this.getPosition(), newSpace);
   			this.setPropertiesOwned(this.getPropertiesOwned() + 1);
   			this.owns.add(this.getPosition());
-
   		}
   		else {
   			GameInfo.appendText("\nYou cannot afford this space");
   		}
   	}
+
 
     /**
     * sells selected property

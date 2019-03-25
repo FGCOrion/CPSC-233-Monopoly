@@ -56,7 +56,7 @@ class Space {
 
 	//A test method for Board to check every space in the boardArray
 	public String getInfo() {
-		return name + ":  " + String.valueOf(owner);
+		return this.getName() + ", Cost " + this.getCost() + ", Rent " + this.getValue();
 	}
 
   public void setSpaceInfo(Space newSpace, TextArea spaceInfo, String basicText){
