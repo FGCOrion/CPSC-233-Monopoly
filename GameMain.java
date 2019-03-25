@@ -1,22 +1,24 @@
+
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 class GameMain {
+
 	static Player player1 = new Player();
 	static ComputerAI player2 = new ComputerAI(2, false);
 	static Board board = new Board();
-	
+
 	/**
 	*Method to roll a single 7 sided die
 	*@return result of the Dice
 	**/
-	
+
 	private static int rollDie() {
 		Random result = new Random();
 		return result.nextInt(7) + 1;
 	}
-	
+
 	/**
 	*Method to print text so I don't have to write System.out.print every single time
 	*Take text as a String parameter to output messages
@@ -60,7 +62,7 @@ class GameMain {
 	*Method to print a bunch of stuff at the start
 	*output the WELCOME MESSAGE
 	**/
-	
+
 	private static void gameStart() {
 		print("Welcome to Mono-Poly!");
 	}
@@ -70,7 +72,7 @@ class GameMain {
 	*take turn as a parameter, will output the information of the player in each turn
 	*@param turn
 	**/
-	
+
 	private static void roundStart(int turn) {
 		Player.wait(250);
 		print("\nTurn " + String.valueOf(turn));
@@ -80,7 +82,7 @@ class GameMain {
 		print("Player 2: $" + String.valueOf(player2.getMoney()));
 		Player.wait(250);
 	}
-	
+
 	/**
 	*Figures out if the game has ended or not
 	*take turn,player,computer as a parameter
@@ -89,7 +91,7 @@ class GameMain {
 	*@param player;
 	*@param computer;
 	**/
-	
+
 	private static boolean endConditions(int turn, Player player1, Player player2) {
 		if (turn > 500)
 			return true;
@@ -100,15 +102,15 @@ class GameMain {
 		else
 			return false;
 	}
-	
+
     public static void main(String[] args) {
-		
+
         Board board = new Board();
-        //Constructs a new board	
-		
+        //Constructs a new board
+
 		//turn increases by 1 every round until it reaches 500
 		int turn = 0;
-		
+
 		//Reads the starting text
 		System.out.println(player2.getPlayerNumber());
 		playerOrAI();
@@ -117,13 +119,13 @@ class GameMain {
 		while (endConditions(turn, player1, player2) == false) {
 			roundStart(turn);
 			wait(250);
-				
+
 			player1.takeTurn(board, player2);
 			player2.takeTurn(board, player1);
 
 			turn += 1;
 		}
-		
+
 		//Once the game is over, figures out who won
 		if (player1.getMoney() < 0)
 			print("Player 2 Wins!");
