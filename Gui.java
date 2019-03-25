@@ -247,6 +247,7 @@ public class Gui extends Application{
     				 VBox sellBox = new VBox(5);
     				 ArrayList<Integer> locations = new ArrayList<Integer>();
     				 ArrayList<Button> buttons = new ArrayList<Button>();
+
     				 for (int i = 0; i < 24; i++){
     					if (allPlayers.get(getPlayerFlag() - 1).getSpaceOwned(i) == true){
     						buttons.add(new Button(numOfLand.getSpace(i).getName() + ": $" + numOfLand.getSpace(i).getSaleValue()));
@@ -288,60 +289,24 @@ public class Gui extends Application{
           public void handle(ActionEvent event){
             if(getRollUnlocked() == 1){
               setRollUnlocked(0);
+							final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
+              setChoiceUnlocked(currentPlayer.takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
+
+              if (getChoiceUnlocked() == 0 && getForceSale() == 0){
+    							setNextTurnUnlocked(1);
+                }
+              else if (getForceSale() == 1){
+                  setNextTurnUnlocked(0);
+                }
+              currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+              }
+
               if (getPlayerFlag() == 1){
-								final Player currentPlayer = allPlayers.get(0);
                 turnCount += 1;
-                setChoiceUnlocked(allPlayers.get(0).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
-                if (getChoiceUnlocked() == 0 && getForceSale() == 0){
-    							setNextTurnUnlocked(1);
-                }
-                else if (getForceSale() == 1){
-                  setNextTurnUnlocked(0);
-                }
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
-							else if (getPlayerFlag() == 2){
-                if (allPlayers.get(1).getIsPlayer() == true){
-  								final Player currentPlayer = allPlayers.get(1);
-                  setChoiceUnlocked(allPlayers.get(1).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
-                  if (getChoiceUnlocked() == 0 && getForceSale() == 0){
-      							setNextTurnUnlocked(1);
-                  }
-                  else if (getForceSale() == 1){
-                    setNextTurnUnlocked(0);
-                  }
-                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
             }
-							else if (getPlayerFlag() == 3){
-                if (allPlayers.get(2).getIsPlayer() == true){
-								final Player currentPlayer = allPlayers.get(2);
-                setChoiceUnlocked(allPlayers.get(2).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
-                if (getChoiceUnlocked() == 0 && getForceSale() == 0){
-    							setNextTurnUnlocked(1);
-                }
-                else if (getForceSale() == 1){
-                  setNextTurnUnlocked(0);
-                }
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-              }
-            }
-							else if (getPlayerFlag() == 4){
-                if (allPlayers.get(3).getIsPlayer() == true){
-								final Player currentPlayer = allPlayers.get(3);
-                setChoiceUnlocked(allPlayers.get(3).takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
-                if (getChoiceUnlocked() == 0 && getForceSale() == 0){
-    								setNextTurnUnlocked(1);
-                }
-                else if (getForceSale() == 1){
-                  setNextTurnUnlocked(0);
-                }
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-              }
-            }
-          }
-        }
-      });
+      );
 
     		/**
     		* Event Handler for "Nex Turn" button after a players turn is done, the player must click the next turn button
@@ -448,32 +413,16 @@ public class Gui extends Application{
         positive.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event){
+
             if(getChoiceUnlocked() == 1) {
-              if (getPlayerFlag() == 1) {
-                allPlayers.get(0).purchase(numOfLand, GameInfo);
-                final Player currentPlayer = allPlayers.get(0);
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-              }
-              else if (getPlayerFlag() == 2) {
-                allPlayers.get(1).purchase(numOfLand, GameInfo);
-                final Player currentPlayer = allPlayers.get(1);
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-              }
-							else if (getPlayerFlag() == 3) {
-                allPlayers.get(2).purchase(numOfLand, GameInfo);
-                final Player currentPlayer = allPlayers.get(2);
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-              }
-							else if (getPlayerFlag() == 4) {
-                allPlayers.get(3).purchase(numOfLand, GameInfo);
-                final Player currentPlayer = allPlayers.get(3);
+              final Player currentPlayer = allPlayers.get(getPlayerFlag()-1);
+                currentPlayer.purchase(numOfLand, GameInfo);
                 currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
               setChoiceUnlocked(0);
               setNextTurnUnlocked(1);
               }
-            }
-          });
+            });
 
     		/**
     		* Event Handler for negative ("No") button declines purchase/sale of property and proceeds to next players turn
