@@ -211,7 +211,7 @@ public class Gui extends Application{
         root.add(negative, 10, 4);
 
     		/**
-    		* next turn button to switch tur to other player
+    		* next turn button to switch turn to other player
     		*/
     		Button nextTurn = new Button("Next\nTurn");
     		nextTurn.setMaxWidth(125);
@@ -224,7 +224,7 @@ public class Gui extends Application{
     		Button roll = new Button("Roll\nDie");
     		roll.setMaxWidth(125);
     		roll.setMaxHeight(400);
-    	   root.add(roll, 9, 4);
+    	  root.add(roll, 9, 4);
 
     		 /**
     		 * Sell property button to sell properties back to the bank for the cost originally paid
@@ -246,13 +246,11 @@ public class Gui extends Application{
     				 sellProperties.initOwner(primaryStage);
     				 VBox sellBox = new VBox(5);
     				 ArrayList<Integer> locations = new ArrayList<Integer>();
-
-    				if (getPlayerFlag() == 1){
-    					 ArrayList<Button> buttons = new ArrayList<Button>();
-    					 for (int i = 0; i < 24; i++){
-    						 if (allPlayers.get(0).getSpaceOwned(i) == true){
-    							 buttons.add(new Button(numOfLand.getSpace(i).getName() + ": $" + numOfLand.getSpace(i).getSaleValue()));
-    							 locations.add(numOfLand.getSpace(i).getLocation());
+    				 ArrayList<Button> buttons = new ArrayList<Button>();
+    				 for (int i = 0; i < 24; i++){
+    					if (allPlayers.get(getPlayerFlag() - 1).getSpaceOwned(i) == true){
+    						buttons.add(new Button(numOfLand.getSpace(i).getName() + ": $" + numOfLand.getSpace(i).getSaleValue()));
+    						locations.add(numOfLand.getSpace(i).getLocation());
     						 }
     					 }
 
@@ -260,106 +258,20 @@ public class Gui extends Application{
     					 for (int i = 0; i < buttons.size(); i++){
     						 final Button myButton = buttons.get(i);
     						 final int location = locations.get(i);
+
     	           myButton.setOnAction(new EventHandler<ActionEvent>() {
               	 		public void handle(ActionEvent event) {
-    									allPlayers.get(0).sell(numOfLand, location, GameInfo);
+    									allPlayers.get(getPlayerFlag() - 1).sell(numOfLand, location, GameInfo);
     									sellBox.getChildren().remove(myButton);
-                      final Player currentPlayer = allPlayers.get(0);
+                      final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
                       currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
     									myButton.setDisable(true);
-                      if (allPlayers.get(0).getMoney() > 0){
+                      if (allPlayers.get(getPlayerFlag() - 1).getMoney() > 0){
                         setNextTurnUnlocked(1);
                       }
-    					}
-    				});
+    					     }
+    				   });
     			 }
-    		 }
-
-    				 if (getPlayerFlag() == 2){
-    					 ArrayList<Button> buttons = new ArrayList<Button>();
-    					 for (int i = 0; i < 24; i++){
-    						 if (allPlayers.get(1).getSpaceOwned(i) == true){
-    							 buttons.add(new Button(numOfLand.getSpace(i).getName() + ": $" + numOfLand.getSpace(i).getCost()));
-    							 locations.add(numOfLand.getSpace(i).getLocation());
-    						 }
-    					 }
-
-    					 sellBox.getChildren().addAll(buttons);
-    					 for (int i = 0; i < buttons.size(); i++){
-    						 final Button myButton = buttons.get(i);
-    						 final int location = locations.get(i);
-    	           myButton.setOnAction(new EventHandler<ActionEvent>() {
-              	 		public void handle(ActionEvent event) {
-    									allPlayers.get(1).sell(numOfLand, location, GameInfo);
-    									sellBox.getChildren().remove(myButton);
-                      final Player currentPlayer = allPlayers.get(1);
-                      currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-    									myButton.setDisable(true);
-                      if (allPlayers.get(1).getMoney() > 0){
-                        setNextTurnUnlocked(1);
-                }
-    					}
-    				});
-    			 }
-    		 }
-				 if (totalPlayers >= 3){
-				 if (getPlayerFlag() == 3){
-						ArrayList<Button> buttons = new ArrayList<Button>();
-						for (int i = 0; i < 24; i++){
-							if (allPlayers.get(2).getSpaceOwned(i) == true){
-								buttons.add(new Button(numOfLand.getSpace(i).getName() + ": $" + numOfLand.getSpace(i).getCost()));
-								locations.add(numOfLand.getSpace(i).getLocation());
-							}
-						}
-
-						sellBox.getChildren().addAll(buttons);
-						for (int i = 0; i < buttons.size(); i++){
-							final Button myButton = buttons.get(i);
-							final int location = locations.get(i);
-							myButton.setOnAction(new EventHandler<ActionEvent>() {
-								 public void handle(ActionEvent event) {
-									 allPlayers.get(2).sell(numOfLand, location, GameInfo);
-									 sellBox.getChildren().remove(myButton);
-                   final Player currentPlayer = allPlayers.get(2);
-                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-									 myButton.setDisable(true);
-                   if (allPlayers.get(2).getMoney() > 0){
-                     setNextTurnUnlocked(1);
-                   }
-					 }
-				 });
-				}
-			}
-		}
-			if (totalPlayers >= 4){
-			if (getPlayerFlag() == 4){
-				 ArrayList<Button> buttons = new ArrayList<Button>();
-				 for (int i = 0; i < 24; i++){
-					 if (allPlayers.get(3).getSpaceOwned(i) == true){
-						 buttons.add(new Button(numOfLand.getSpace(i).getName() + ": $" + numOfLand.getSpace(i).getCost()));
-						 locations.add(numOfLand.getSpace(i).getLocation());
-					 }
-				 }
-
-				 sellBox.getChildren().addAll(buttons);
-				 for (int i = 0; i < buttons.size(); i++){
-					 final Button myButton = buttons.get(i);
-					 final int location = locations.get(i);
-					 myButton.setOnAction(new EventHandler<ActionEvent>() {
-							public void handle(ActionEvent event) {
-								allPlayers.get(3).sell(numOfLand, location, GameInfo);
-								sellBox.getChildren().remove(myButton);
-                final Player currentPlayer = allPlayers.get(3);
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-								myButton.setDisable(true);
-                if (allPlayers.get(3).getMoney() > 0){
-                  setNextTurnUnlocked(1);
-                }
-				  }
-			 });
-		 }
-	 }
- }
     					 sellBox.setAlignment(Pos.CENTER);
     					 Scene sellScene = new Scene(sellBox, 300, 200);
     					 sellProperties.setScene(sellScene);
