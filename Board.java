@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 class Board {
@@ -6,7 +5,7 @@ class Board {
     * Instance Variables: "spaces" of type ArrayList
     * Setters and Getters for instance variables
     */
-	ArrayList<Space> boardArray;
+	private ArrayList<Space> boardArray = new ArrayList<Space>();
 
 	public Space getSpace(int space) {
 		return boardArray.get(space);
@@ -28,11 +27,12 @@ class Board {
 	}
 
   public Board() {
+
     //Basic Constructor that builds the board
-		boardArray = new ArrayList<Space>();
 		//Ownership: 0: unowned, Default, 1-2: Player 1 and 2, -1: GO
 		//Special Spaces: 11: Chance, 12: Income Tax, 13: Free Parking, 14: Community Fund, 15: Go to Jail, 16: Free Parking
     //Sets every space as a space object to add to the array of the board
+
 		Space space0 = new Space("GO", 0, 0, 0, -1, 0);
 
     Space space1 = new Space("Yellow 1", 150, 50, 75, 0, 1); 			//33.3% income to cost
@@ -86,7 +86,5 @@ class Board {
 		boardArray.add(space21);
 		boardArray.add(space22);
 		boardArray.add(space23);
-		//This is ugly AF
-    }
-
+  }
 }

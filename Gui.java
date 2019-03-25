@@ -241,6 +241,7 @@ public class Gui extends Application{
     		sell.setOnAction(new EventHandler<ActionEvent>(){
     			@Override
     			public void handle(ActionEvent event){
+            if (allPlayers.get(getPlayerFlag() - 1).getIsPlayer() == true){
     				final Stage sellProperties = new Stage();
     				 sellProperties.initModality(Modality.APPLICATION_MODAL);
     				 sellProperties.initOwner(primaryStage);
@@ -278,6 +279,7 @@ public class Gui extends Application{
     					 sellProperties.setScene(sellScene);
     					 sellProperties.show();
     				 }
+           }
     			 });
 
     		/**
@@ -415,7 +417,7 @@ public class Gui extends Application{
           public void handle(ActionEvent event){
 
             if(getChoiceUnlocked() == 1) {
-              final Player currentPlayer = allPlayers.get(getPlayerFlag()-1);
+              final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
                 currentPlayer.purchase(numOfLand, GameInfo);
                 currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               }
@@ -745,8 +747,7 @@ public class Gui extends Application{
               else if (totalPlayers < 2 || totalPlayers > 4){
                 errorMessage.setText("Choose between 1 - 4 Players");
               }
-            }
-          });
+            }});
 
         Scene menu = new Scene(start, 1000, 600);
       	primaryStage.setTitle("Mono-Poly");

@@ -1,23 +1,13 @@
 import javafx.scene.control.TextArea;
 
 class Space {
-    //The name of the space
-    public String name;
 
-    //How much money the space costs to buy
-    public int cost;
-
-    //How much money it costs to land on the space
-    public int value;
-
-    //Who controls the space, 0=unowned, 1=player, 2=AI
-    public int owner;
-
-    //where the space is on the board
-    public int location;
-
-    //how much the property is worth to sell
-    public int saleValue;
+    private String name;
+    private int cost;
+    private int value;
+    private int owner;
+    private int location;
+    private int saleValue;
 
     /**
     *constructor with the owner
@@ -68,6 +58,7 @@ class Space {
 		return this.getName() + ", Cost " + this.getCost() + ", Rent " + this.getValue();
 	}
 
+  
   public void setSpaceInfo(Space newSpace, TextArea spaceInfo, String basicText){
     if (newSpace.getOwner() == 1)
       spaceInfo.setText(basicText + "\nOwned by Player 1");
