@@ -31,7 +31,7 @@ class Board {
     //Basic Constructor that builds the board
 		boardArray = new ArrayList<Space>();
 		//Ownership: 0: unowned, Default, 1-2: Player 1 and 2, -1: GO
-		//Special Spaces: 11: Chance, 12: Income Tax, 13: Free Parking, 14: Community Fund, 15: Go to Jail
+		//Special Spaces: 11: Chance, 12: Income Tax, 13: Free Parking, 14: Community Fund, 15: Go to Jail, 16: Free Parking
         //Sets every space as a space object to add to the array of the board
 		Space space0 = new Space("GO", 0, 0, -1, 0);
 
@@ -47,7 +47,7 @@ class Board {
 		Space space9 = new Space("Railroad 2", 200, 100, 0, 9);
 		Space space10 = new Space("Blue 3", 450, 200, 0, 10);		//44.4%
 		Space space11 = new Space("Income Tax", 0, 250, 12, 11);
-		Space space12 = new Space("Free Parking", 0, 0, 11, 12); //FOR NOW FREE PARKING IS JUST ANOTHER CHANCE
+		Space space12 = new Space("Free Parking", 0, 0, 11, 16); 
 
 		Space space13 = new Space("Red 1", 550, 250, 0, 13);		//45.5%
 		Space space14 = new Space("Railroad 3", 200, 100, 0, 14);

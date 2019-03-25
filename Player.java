@@ -409,6 +409,15 @@ class Player extends Gui{
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " was sent to jail");
           this.setInJail(true);
         }
+		
+		//If the player lands on Free Parking
+        else if (newSpace.getOwner() == 16) {
+          Random parkingRandom = new Random();
+		  int parkingValue = (parkingRandom.nextInt(350)) / 50;
+		  parkingValue = parkingValue * 50;
+		  this.setMoney(this.getMoney() + parkingValue);
+          GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " gained $" + Integer.toString(parkingValue));
+        }
 
       } else if (this.getInJail()){
           int x = rollDie();
