@@ -254,6 +254,7 @@ class Player extends Gui{
             else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
               GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou have been eliminated.");
               this.setEliminated(true);
+              nextTurn.setDisable(false);
             } else {
               nextTurn.setDisable(false);
             }
@@ -541,6 +542,7 @@ class Player extends Gui{
         else if (leftToSell == 0 && this.getMoney() < 0){
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money and has no properties to sell.\nThey lose.");
           this.setEliminated(true);
+          nextTurn.setDisable(false);
         }}}
 
     public void updatePlayerStandings(TextArea playerStandings, ArrayList<Player> allPlayers, Board board){
