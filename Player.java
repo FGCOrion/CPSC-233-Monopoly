@@ -246,12 +246,12 @@ class Player extends Gui{
             GameInfo.appendText("\nYour new balance is: $" + this.getMoney());
             nextTurn.setDisable(true);
 
-            if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
+            if (this.getMoney() < 0 && this.getPropertiesOwned() > 0){
               GameInfo.appendText("\nYou are out of money\nSell a property or you will forfeit the game.");
               setForceSale(1);
               nextTurn.setDisable(true);
             }
-            else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
+            else if (this.getMoney() < 0 && this.getPropertiesOwned() == 0){
               GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou have been eliminated.");
               this.setEliminated(true);
               nextTurn.setDisable(false);
@@ -272,12 +272,12 @@ class Player extends Gui{
       				GameInfo.appendText("\nYou lost $" + Integer.toString(chanceValue));
       			this.setMoney(this.getMoney() + chanceValue);
 
-            if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
+            if (this.getMoney() < 0 && this.getPropertiesOwned() > 0){
               GameInfo.appendText("\nYou are out of money.\nSell a property or you will forfeit the game.");
               nextTurn.setDisable(true);
               setForceSale(1);
             }
-            else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
+            else if (this.getMoney() < 0 && this.getPropertiesOwned() == 0){
               GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou lose.");
               this.setEliminated(true);
               nextTurn.setDisable(false);
@@ -290,12 +290,12 @@ class Player extends Gui{
       		else if (newSpace.getOwner() == 12) {
       			this.setMoney(this.getMoney() - 100);
       			GameInfo.appendText("\nYou owe the bank $100");
-            if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
+            if (this.getMoney() < 0 && this.getPropertiesOwned() > 0){
               GameInfo.appendText("\nYou are out of money.\nSell a property or you will forfeit the game.");
               setForceSale(1);
               nextTurn.setDisable(true);
             }
-            else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
+            else if (this.getMoney() < 0 && this.getPropertiesOwned() == 0){
               GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou lose.");
               this.setEliminated(true);
               nextTurn.setDisable(false);
@@ -395,7 +395,7 @@ class Player extends Gui{
           GameInfo.appendText("\nPlayer " + newSpace.getOwner() + "'s new balance: $" + allPlayers.get(newSpace.getOwner() - 1).getMoney());
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + "'s new balance is: $" + this.getMoney());
 
-          if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
+          if (this.getMoney() < 0 && this.getPropertiesOwned() > 0){
             GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money.\nThey must sell a property or forfeit the game.");
             player.forceAISale(board, GameInfo, allPlayers);
           }
