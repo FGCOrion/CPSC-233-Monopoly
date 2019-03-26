@@ -287,7 +287,7 @@ public class Gui extends Application{
               }
 
               //If player two has been eliminated
-              else if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == true){
+              else if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == true && totalPlayers == 2){
                 GameInfo.setText("Player 2 has been eliminated\nPlayer 1 is the winner!");
                 roll.setDisable(true);
                 nextTurn.setDisable(true);

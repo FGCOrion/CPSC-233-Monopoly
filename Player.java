@@ -394,10 +394,16 @@ class Player extends Gui{
           allPlayers.get(newSpace.getOwner() - 1).setMoney(allPlayers.get(newSpace.getOwner() - 1).getMoney() + newSpace.getValue());
           GameInfo.appendText("\nPlayer " + newSpace.getOwner() + "'s new balance: $" + allPlayers.get(newSpace.getOwner() - 1).getMoney());
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + "'s new balance is: $" + this.getMoney());
+
           if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
             GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money.\nThey must sell a property or forfeit the game.");
             player.forceAISale(board, GameInfo, allPlayers);
           }
+          if (this.getMoney() < 0 && this.getPropertiesOwned() == 0){
+            GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money and has no properties to sell.\nThey lose.");
+            this.setEliminated(true);
+          }
+        }
 
 
         //If the computer lands on chance
@@ -415,6 +421,11 @@ class Player extends Gui{
           if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
             GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money.\nThey must sell a property or forfeit the game.");
             player.forceAISale(board, GameInfo, allPlayers);
+            }
+
+          if (this.getMoney() < 0 && this.getPropertiesOwned() == 0){
+            GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money and has no properties to sell.\nThey lose.");
+            this.setEliminated(true);
           }
         }
 
@@ -428,6 +439,10 @@ class Player extends Gui{
             GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money.\nThey must sell a property or forfeit the game.");
             player.forceAISale(board, GameInfo, allPlayers);
         }
+          if (this.getMoney() < 0 && this.getPropertiesOwned() == 0){
+            GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money and has no properties to sell.\nThey lose.");
+            this.setEliminated(true);
+          }
         }
 
         //If the player lands on community fund
@@ -454,17 +469,17 @@ class Player extends Gui{
       } else if (this.getInJail()){
           int y = rollDie();
           if (y == 6){
-        	GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " rolled a " + String.valueOf(x));
+        	GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " rolled a " + String.valueOf(y));
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " has been released from jail!");
           this.setInJail(false);
         } else {
-          GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " rolled a " + String.valueOf(x));
+          GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " rolled a " + String.valueOf(y));
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " must roll a 6 to be\nreleased from jail.");
           GameInfo.appendText("\nTry again next turn");
         }
       }
     }
-  }
+
 
     /**
     * purchases property player is on when positive button is clicked in Gui
