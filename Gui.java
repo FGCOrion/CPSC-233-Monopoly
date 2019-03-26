@@ -58,9 +58,6 @@ public class Gui extends Application{
 	*/
 	private Board numOfLand = new Board();
 	private int playerFlag = 1;
-  private int rollUnlocked = 1;
-  private int choiceUnlocked = 0;
-	private int nextTurnUnlocked = 0;
   private int forceSale = 0;
 
 	/**
@@ -74,6 +71,7 @@ public class Gui extends Application{
 	private TextArea playerInfo = new TextArea("Information about each player\nwill be displayed here");
 	private TextArea GameInfo = new TextArea("Information about each turn\nwill be displayed here");
 	private TextArea spaceInfo = new TextArea("Click a space on the board for more information");
+  private TextArea playerStandings = new TextArea("Player standings will be\ndisplayed here");
 	private String basicText = "";
 	private int turnCount = 0;
 
@@ -94,37 +92,13 @@ public class Gui extends Application{
     return totalComputerPlayers;
   }
 
-
   /**
-	* sets the instance variable playerFlag which corresponds to either player 1 or player 2
+	* sets the instance variable playerFlag which corresponds to each player
 	* @param playerFlag
 	*/
   public void setPlayerFlag(int playerFlag) {
     this.playerFlag = playerFlag;
   }
-
-	/**
-	* sets the instance variable rollUnlocked
-	* @param rollUnlocked
-	*/
-  public void setRollUnlocked(int rollUnlocked){
-    this.rollUnlocked = rollUnlocked;
-  }
-
-	/**
-	* sets the instance variable choiceUnlocked which allows the player to use "yes" and/or "no" button
-	* @param choiceUnlocked
-	*/
-  public void setChoiceUnlocked(int choiceUnlocked){
-    this.choiceUnlocked = choiceUnlocked;
-  }
-
-	/**
-	* locks or unlocked the nextTurn button
-	*/
-	public void setNextTurnUnlocked(int turnUnlocked){
-		this.nextTurnUnlocked = turnUnlocked;
-	}
 
   public void setForceSale(int forceSale){
     this.forceSale = forceSale;
@@ -138,29 +112,6 @@ public class Gui extends Application{
     return playerFlag;
   }
 
-	/**
-	* returns value of rollUnlocked
-	* @return rollUnlocked
-	*/
-  public int getRollUnlocked(){
-    return rollUnlocked;
-  }
-
-	/**
-	* returns value of choiceUnlocked
-	* @return choiceUnlocked
-	*/
-  public int getChoiceUnlocked(){
-    return choiceUnlocked;
-  }
-
-	/**
-	* returns value of nextTurnUnlocked
-	*/
-	public int getNextTurnUnlocked(){
-		return nextTurnUnlocked;
-	}
-
   public int getForceSale(){
     return forceSale;
   }
@@ -173,7 +124,7 @@ public class Gui extends Application{
   public void start(Stage primaryStage){
 
         GridPane root = new GridPane();
-        		final int numCols = 15 ;
+        		final int numCols = 18 ;
             final int numRows = 11 ;
             for (int i = 0; i < numCols; i++) {
                 ColumnConstraints colConst = new ColumnConstraints();
@@ -193,6 +144,7 @@ public class Gui extends Application{
     		root.add(gameInfo, 2, 5, 2, 1);
     		root.add(spaceInfo, 7, 9, 5, 1);
     		root.add(SpaceInfo, 9, 8, 2, 1);
+        root.add(playerStandings, 14, 1, 3, 9);
 
     		/**
     		* "Yes" button displayed beside "Roll Dice" button to affirm decision to purchase property
@@ -201,6 +153,7 @@ public class Gui extends Application{
         positive.setMaxWidth(125);
         positive.setMaxHeight(400);
         root.add(positive, 8, 4);
+        positive.setDisable(true);
 
     		/**
     		* "No" button displayed beside "Roll Dice" button to decline decision to purchase property
@@ -209,6 +162,7 @@ public class Gui extends Application{
         negative.setMaxWidth(125);
         negative.setMaxHeight(400);
         root.add(negative, 10, 4);
+        negative.setDisable(true);
 
     		/**
     		* next turn button to switch turn to other player
@@ -217,6 +171,7 @@ public class Gui extends Application{
     		nextTurn.setMaxWidth(125);
     		nextTurn.setMaxHeight(400);
     		root.add(nextTurn, 9, 5);
+        nextTurn.setDisable(true);
 
     		/**
     		* "Roll Dice" button which initiates a die roll when clicked on the players turn
@@ -226,13 +181,13 @@ public class Gui extends Application{
     		roll.setMaxHeight(400);
     	  root.add(roll, 9, 4);
 
-    		 /**
-    		 * Sell property button to sell properties back to the bank for the cost originally paid
-    		 */
-    		 Button sell = new Button("Sell");
-    		 sell.setMaxWidth(125);
-    		 sell.setMaxHeight(400);
-    		 root.add(sell, 9, 3);
+    		/**
+    		* Sell property button to sell properties back to the bank for the cost originally paid
+    		*/
+    		Button sell = new Button("Sell");
+    		sell.setMaxWidth(125);
+    		sell.setMaxHeight(400);
+    		root.add(sell, 9, 3);
 
 
     		 /**
@@ -269,18 +224,15 @@ public class Gui extends Application{
                       currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
     									myButton.setDisable(true);
                       if (allPlayers.get(getPlayerFlag() - 1).getMoney() > 0){
-                        setNextTurnUnlocked(1);
-                      }
-    					     }
-    				   });
-    			 }
+                        nextTurn.setDisable(false);
+                  }}});
+                }
+
     					 sellBox.setAlignment(Pos.CENTER);
     					 Scene sellScene = new Scene(sellBox, 300, 200);
     					 sellProperties.setScene(sellScene);
     					 sellProperties.show();
-    				 }
-           }
-    			 });
+    				 }}});
 
     		/**
     		* Event Handler for roll button updates labels to represent players position, money, properties owned
@@ -289,26 +241,14 @@ public class Gui extends Application{
         roll.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event){
-            if(getRollUnlocked() == 1){
-              setRollUnlocked(0);
+              roll.setDisable(true);
 							final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
-              setChoiceUnlocked(currentPlayer.takeTurnGui(numOfLand, currentPlayer, GameInfo, choiceUnlocked, allPlayers, forceSale));
-
-              if (getChoiceUnlocked() == 0 && getForceSale() == 0){
-    							setNextTurnUnlocked(1);
-                }
-              else if (getForceSale() == 1){
-                  setNextTurnUnlocked(0);
-                }
+              currentPlayer.takeTurnGui(numOfLand, currentPlayer, GameInfo, positive, negative, nextTurn, allPlayers, forceSale);
               currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-              }
 
               if (getPlayerFlag() == 1){
                 turnCount += 1;
-              }
-              }
-            }
-      );
+              }}});
 
     		/**
     		* Event Handler for "Next Turn" button after a players turn is done, the player must click the next turn button
@@ -318,7 +258,6 @@ public class Gui extends Application{
     		nextTurn.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event){
-            if (getNextTurnUnlocked() == 1){
 
               //If it is player ones turn and player two is not eliminated
               if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == false){
@@ -328,19 +267,21 @@ public class Gui extends Application{
                 //If player two is a human player
                 if (allPlayers.get(1).getIsPlayer() == true){
                   final Player currentPlayer = allPlayers.get(1);
-                  setRollUnlocked(1);
-                  setNextTurnUnlocked(0);
+                  roll.setDisable(false);
+                  nextTurn.setDisable(true);
                   setPlayerFlag(2);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                 }
 
                 //If player two is a computer player
                 else if (allPlayers.get(1).getIsPlayer() == false){
-                  setRollUnlocked(0);
+                  roll.setDisable(true);
                   final Player currentPlayer = allPlayers.get(1);
                   allPlayers.get(1).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-                  setNextTurnUnlocked(1);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                  nextTurn.setDisable(false);
                   setPlayerFlag(2);
                 }
               }
@@ -348,8 +289,8 @@ public class Gui extends Application{
               //If player two has been eliminated
               else if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == true){
                 GameInfo.setText("Player 2 has been eliminated\nPlayer 1 is the winner!");
-                setRollUnlocked(0);
-                setNextTurnUnlocked(0);
+                roll.setDisable(true);
+                nextTurn.setDisable(true);
               }
 
               //If it is player two turn and player one has not been eliminated
@@ -358,18 +299,19 @@ public class Gui extends Application{
                 if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == false){
                   playerTurn.setText("Player 1's Turn");
                   playerTurn.setTextFill(Color.BLUE);
-                  setRollUnlocked(1);
-                  setNextTurnUnlocked(0);
+                  roll.setDisable(false);
+                  nextTurn.setDisable(true);
                   setPlayerFlag(1);
                   final Player currentPlayer = allPlayers.get(0);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
               }
 
                 //If player one has been eliminated in a two player game, player 2 wins
                 else if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == true){
                   GameInfo.setText("Player 1 has been eliminated\nPlayer 2 is the winner!");
-                  setRollUnlocked(0);
-                  setNextTurnUnlocked(0);
+                  roll.setDisable(true);
+                  nextTurn.setDisable(true);
               }
 
                 //If there are more than 2 players in a game and player 3 is not eliminated
@@ -380,19 +322,21 @@ public class Gui extends Application{
                   //If player three is a human player
                   if (allPlayers.get(2).getIsPlayer() == true){
                     final Player currentPlayer = allPlayers.get(2);
-                    setRollUnlocked(1);
-                    setNextTurnUnlocked(0);
+                    roll.setDisable(false);
+                    nextTurn.setDisable(true);
                     setPlayerFlag(3);
                     currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                    currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                   }
 
                   //If player three is a computer player
                   else if (allPlayers.get(2).getIsPlayer() == false){
-                    setRollUnlocked(0);
+                    roll.setDisable(true);
                     final Player currentPlayer = allPlayers.get(2);
                     allPlayers.get(2).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
                     currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-                    setNextTurnUnlocked(1);
+                    currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                    nextTurn.setDisable(false);
                     setPlayerFlag(3);
                   }
                 }
@@ -400,8 +344,8 @@ public class Gui extends Application{
                 //If there are more than 2 players in a game and player 3 has been eliminated
                 else if (totalPlayers > 2 && allPlayers.get(2).getEliminated() == true){
                   GameInfo.setText("Player 3 has been eliminated\nPress Next Turn to continue play");
-                    setRollUnlocked(0);
-                    setNextTurnUnlocked(1);
+                    roll.setDisable(true);
+                    nextTurn.setDisable(false);
                     setPlayerFlag(3);
                 }
               }
@@ -411,18 +355,19 @@ public class Gui extends Application{
                 if (totalPlayers == 3 && allPlayers.get(0).getEliminated() == false){
                   playerTurn.setText("Player 1's Turn");
                   playerTurn.setTextFill(Color.BLUE);
-                  setRollUnlocked(1);
-                  setNextTurnUnlocked(0);
+                  roll.setDisable(false);
+                  nextTurn.setDisable(true);
                   setPlayerFlag(1);
                   final Player currentPlayer = allPlayers.get(0);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                 }
 
                 //if in a three player game player one is eliminated
                 else if (totalPlayers == 3 && allPlayers.get(0).getEliminated() == true){
                   GameInfo.setText("Player 1 has been eliminated\nPress Next Turn to continue play");
-                  setRollUnlocked(0);
-                  setNextTurnUnlocked(1);
+                  roll.setDisable(true);
+                  nextTurn.setDisable(false);
                   setPlayerFlag(1);
                 }
 
@@ -434,19 +379,21 @@ public class Gui extends Application{
                   //If player four is a human player
                   if (allPlayers.get(3).getIsPlayer() == true){
                     final Player currentPlayer = allPlayers.get(3);
-                    setRollUnlocked(1);
-                    setNextTurnUnlocked(0);
+                    roll.setDisable(false);
+                    nextTurn.setDisable(true);
                     setPlayerFlag(4);
                     currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                    currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                   }
 
                   //If player four is a computer player
                   else if (allPlayers.get(3).getIsPlayer() == false){
-                    setRollUnlocked(0);
+                    roll.setDisable(true);
                     final Player currentPlayer = allPlayers.get(3);
                     allPlayers.get(3).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
                     currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-                    setNextTurnUnlocked(1);
+                    currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                    nextTurn.setDisable(false);
                     setPlayerFlag(4);
                   }
                 }
@@ -454,8 +401,8 @@ public class Gui extends Application{
                 //if in a four player game, player four is eliminated
                 else if (totalPlayers == 4 && allPlayers.get(3).getEliminated() == true){
                   GameInfo.setText("Player 4 has been eliminated\nPress Next Turn to continue play");
-                  setRollUnlocked(0);
-                  setNextTurnUnlocked(1);
+                  roll.setDisable(true);
+                  nextTurn.setDisable(false);
                   setPlayerFlag(4);
                 }
               }
@@ -464,22 +411,20 @@ public class Gui extends Application{
                 if (allPlayers.get(0).getEliminated() == false){
                   playerTurn.setText("Player 1's Turn");
                   playerTurn.setTextFill(Color.BLUE);
-                  setRollUnlocked(1);
-                  setNextTurnUnlocked(0);
+                  roll.setDisable(false);
+                  nextTurn.setDisable(true);
                   setPlayerFlag(1);
                   final Player currentPlayer = allPlayers.get(0);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                 }
 
                 else if (allPlayers.get(0).getEliminated() == true){
                   GameInfo.setText("Player 1 has been eliminated\nPlease press Next Turn button to advance play");
-                  setRollUnlocked(0);
-                  setNextTurnUnlocked(1);
+                  roll.setDisable(true);
+                  nextTurn.setDisable(false);
                   setPlayerFlag(1);
-                }
-              }
-            }
-          }
+                }}}
         });
 
     		/**
@@ -489,14 +434,12 @@ public class Gui extends Application{
         positive.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event){
-
-            if(getChoiceUnlocked() == 1) {
               final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
-                currentPlayer.purchase(numOfLand, GameInfo);
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-              }
-              setChoiceUnlocked(0);
-              setNextTurnUnlocked(1);
+              currentPlayer.purchase(numOfLand, GameInfo);
+              currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+              positive.setDisable(true);
+              negative.setDisable(true);
+              nextTurn.setDisable(false);
               }
             });
 
@@ -506,11 +449,10 @@ public class Gui extends Application{
         negative.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event){
-            if(getChoiceUnlocked() == 1) {
-              setChoiceUnlocked(0);
-    					setNextTurnUnlocked(1);
+              negative.setDisable(true);
+              positive.setDisable(true);
+    					nextTurn.setDisable(false);
               }
-            }
           });
 
     		/**
@@ -645,7 +587,7 @@ public class Gui extends Application{
     	Button btClose = new Button("Exit");
     	btClose.setMaxWidth(75);
     	btClose.setMaxHeight(75);
-    	root.add(btClose,14,0);
+    	root.add(btClose, 17, 0);
     	btClose.setOnAction(new EventHandler<ActionEvent>(){
     		@Override
     		public void handle(ActionEvent event) {
@@ -821,7 +763,7 @@ public class Gui extends Application{
   								allPlayers.get(i).setPlayerNumber(i + 1);
   							}
 
-                Scene gamePlay = new Scene(root, 1000, 600);
+                Scene gamePlay = new Scene(root, 1200, 600);
                 primaryStage.setTitle("Mono-Poly");
                 primaryStage.setScene(gamePlay);
                 primaryStage.show();
@@ -831,7 +773,7 @@ public class Gui extends Application{
               }
             }});
 
-        Scene menu = new Scene(start, 1000, 600);
+        Scene menu = new Scene(start, 1200, 600);
       	primaryStage.setTitle("Mono-Poly");
       	primaryStage.setScene(menu);
       	primaryStage.show();

@@ -3,13 +3,10 @@ import java.util.Scanner;
 import java.util.Random;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Button;
 
 class Player extends Gui{
 
-    /**
-     * Instance variables: "piece" of type Piece, more to follow.
-     * Setters and Getters for instance variables
-     */
     //instance variables
     private int position = 1;
     private char avatar;
@@ -116,16 +113,6 @@ class Player extends Gui{
       setIsPlayer(isPlayer);
 	  }
 
-    public Player(Player otherPlayer){
-        position = otherPlayer.getPosition();
-        avatar = otherPlayer.getAvatar();
-        money = otherPlayer.getMoney();
-        playerNumber = otherPlayer.getPlayerNumber();
-        inJail = otherPlayer.getInJail();
-    }
-
-
-
   	//Method to roll a single 7 sided die
   	public static int rollDie() {
   		Random result = new Random();
@@ -207,7 +194,7 @@ class Player extends Gui{
   		}
   	}
 
-  	public int takeTurnGui(Board board, Player comp, TextArea GameInfo, int choiceFlag, ArrayList<Player> allPlayers, int forceSale){
+  	public void takeTurnGui(Board board, Player comp, TextArea GameInfo, Button positive, Button negative, Button nextTurn, ArrayList<Player> allPlayers, int forceSale){
   		Scanner input = new Scanner(System.in);
   		//Creates a new scanner
     		GameInfo.setText("It is player " + this.getPlayerNumber() + "'s turn");
@@ -216,10 +203,12 @@ class Player extends Gui{
       		GameInfo.appendText("\nYou rolled a " + String.valueOf(x));
       		int oldPosition = this.getPosition();
       		this.setPosition(oldPosition + x);
+
       		if (this.getPosition() >= board.getLength()) {
       			GameInfo.appendText("\nYou passed GO and collected $200");
       			this.setPosition(this.getPosition() - board.getLength());
       			this.setMoney(this.getMoney() + 200);
+            nextTurn.setDisable(false);
       		}
 
       		Space newSpace = board.getSpace(this.getPosition());
@@ -232,12 +221,20 @@ class Player extends Gui{
       		if (newSpace.getOwner() == 0) {
       			GameInfo.appendText("\n" + newSpace.getName() + " is unowned. \nWould you like to purchase it for $" +
       					String.valueOf(newSpace.getCost()) + "? \n(Rent of $" + String.valueOf(newSpace.getValue()) + ")");
-      			choiceFlag = 1;
-
+                positive.setDisable(false);
+                negative.setDisable(false);
+                nextTurn.setDisable(true);
       		}
+
+          //If the player lands on Jail
+          else if (newSpace.getOwner() == -1){
+            nextTurn.setDisable(false);
+          }
+
       		//If the player lands on a space they already own
       		else if (newSpace.getOwner() == getPlayerNumber()) {
       			GameInfo.appendText("\nYou own " + newSpace.getName());
+            nextTurn.setDisable(false);
       		}
 
       		//If the player lands on a space owned by another player
@@ -247,14 +244,18 @@ class Player extends Gui{
             allPlayers.get(newSpace.getOwner() - 1).setMoney(allPlayers.get(newSpace.getOwner() - 1).getMoney() + newSpace.getValue());
             GameInfo.appendText("\nPlayer " + newSpace.getOwner() + "'s new balance: $" + allPlayers.get(newSpace.getOwner() - 1).getMoney());
             GameInfo.appendText("\nYour new balance is: $" + this.getMoney());
+            nextTurn.setDisable(true);
 
             if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
               GameInfo.appendText("\nYou are out of money\nSell a property or you will forfeit the game.");
               setForceSale(1);
+              nextTurn.setDisable(true);
             }
             else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
               GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou have been eliminated.");
               this.setEliminated(true);
+            } else {
+              nextTurn.setDisable(false);
             }
       		}
 
@@ -269,13 +270,18 @@ class Player extends Gui{
       			if (chanceValue < 0)
       				GameInfo.appendText("\nYou lost $" + Integer.toString(chanceValue));
       			this.setMoney(this.getMoney() + chanceValue);
+
             if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
               GameInfo.appendText("\nYou are out of money.\nSell a property or you will forfeit the game.");
+              nextTurn.setDisable(true);
               setForceSale(1);
             }
             else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
               GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou lose.");
               this.setEliminated(true);
+              nextTurn.setDisable(false);
+            } else {
+              nextTurn.setDisable(false);
             }
       		}
 
@@ -286,11 +292,14 @@ class Player extends Gui{
             if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
               GameInfo.appendText("\nYou are out of money.\nSell a property or you will forfeit the game.");
               setForceSale(1);
+              nextTurn.setDisable(true);
             }
             else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
               GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou lose.");
               this.setEliminated(true);
-
+              nextTurn.setDisable(false);
+            } else {
+              nextTurn.setDisable(false);
             }
       		}
 
@@ -298,6 +307,7 @@ class Player extends Gui{
       		else if (newSpace.getOwner() == 14) {
       			this.setMoney(this.getMoney() + 200);
       			GameInfo.appendText("\nYou received $200");
+            nextTurn.setDisable(false);
       		}
 
       		//If the player lands on Go to Jail
@@ -305,6 +315,7 @@ class Player extends Gui{
       			this.setPosition(6);
       			GameInfo.appendText("\nYou were sent back jail");
             this.setInJail(true);
+            nextTurn.setDisable(false);
       		}
 
           //If the player lands on Free Parking
@@ -314,6 +325,7 @@ class Player extends Gui{
 		        parkingValue = parkingValue * 50;
 		        this.setMoney(this.getMoney() + parkingValue);
             GameInfo.appendText("\nYou gained $" + Integer.toString(parkingValue));
+            nextTurn.setDisable(false);
         }
 
         } else if (this.getInJail()){
@@ -322,13 +334,14 @@ class Player extends Gui{
       		GameInfo.appendText("\nYou rolled a " + String.valueOf(x));
           GameInfo.appendText("\nYou have been released from jail!");
           this.setInJail(false);
+          nextTurn.setDisable(false);
         } else {
           GameInfo.appendText("\nYou rolled a " + String.valueOf(x));
           GameInfo.appendText("\nYou must roll a 6 to be\nreleased from jail.");
           GameInfo.appendText("\nTry again next turn");
+          nextTurn.setDisable(false);
         }
         }
-    		return choiceFlag;
     }
 
     public void takeTurnAI(Board board, Player player, TextArea GameInfo, ArrayList<Player> allPlayers){
@@ -528,8 +541,13 @@ class Player extends Gui{
         else if (leftToSell == 0 && this.getMoney() < 0){
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money and has no properties to sell.\nThey lose.");
           this.setEliminated(true);
+        }}}
 
-        }
-      }
-    }
+    public void updatePlayerStandings(TextArea playerStandings, ArrayList<Player> allPlayers, Board board){
+        playerStandings.setText("Player Standings");
+      for (int i = 0; i < allPlayers.size(); i++){
+        playerStandings.appendText("\n\nPlayer " + allPlayers.get(i).getPlayerNumber() + " :");
+        playerStandings.appendText("\nCurrent Position: " + board.getSpace(allPlayers.get(i).getPosition()).getName());
+        playerStandings.appendText("\nMoney: $" + allPlayers.get(i).getMoney() + "\nProperties owned: " + allPlayers.get(i).getPropertiesOwned());
+      }}
   }
