@@ -18,6 +18,7 @@ class Player extends Gui{
     private int propertiesOwned = 0;
     private boolean inJail = false;
     private boolean isPlayer;
+    private boolean eliminated = false;
 	  private ArrayList<Integer> owns = new ArrayList<Integer>();
     private ArrayList<Player> allPlayers = new ArrayList<Player>();
 
@@ -39,6 +40,10 @@ class Player extends Gui{
       return isPlayer;
     }
 
+    public boolean getEliminated(){
+      return this.eliminated;
+    }
+
     public int getPlayerNumber(){
     	return this.playerNumber;
     }
@@ -53,6 +58,10 @@ class Player extends Gui{
   			tf = true;
   		return tf;
 	   }
+
+    public void setEliminated(boolean isEliminated){
+       eliminated = isEliminated;
+     }
 
     public void setIsPlayer(boolean newIsPlayer){
       this.isPlayer = newIsPlayer;
@@ -94,6 +103,7 @@ class Player extends Gui{
       avatar = '@';
       money = 1500;
       inJail = false;
+      eliminated = false;
     }
 
     public Player(int playerNumber, boolean isPlayer){
@@ -101,6 +111,7 @@ class Player extends Gui{
   		avatar = '@';
   		money = 1500;
       inJail = false;
+      eliminated = false;
       setPlayerNumber(playerNumber);
       setIsPlayer(isPlayer);
 	  }
@@ -238,18 +249,12 @@ class Player extends Gui{
             GameInfo.appendText("\nYour new balance is: $" + this.getMoney());
 
             if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
-              GameInfo.appendText("\nYou are out of money.\nSell a property or you will forfeit the game.");
+              GameInfo.appendText("\nYou are out of money\nSell a property or you will forfeit the game.");
               setForceSale(1);
             }
             else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
-              GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou lose.");
-              allPlayers.remove(this.getPlayerNumber() - 1);
-              if (allPlayers.size() == 1){
-                GameInfo.appendText("Congratulations Player " + allPlayers.get(0).getPlayerFlag() + "\nYou are the winner!");
-                setNextTurnUnlocked(0);
-                setChoiceUnlocked(0);
-                setRollUnlocked(0);
-              }
+              GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou have been eliminated.");
+              this.setEliminated(true);
             }
       		}
 
@@ -270,13 +275,7 @@ class Player extends Gui{
             }
             else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
               GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou lose.");
-              allPlayers.remove(this.getPlayerNumber() - 1);
-              if (allPlayers.size() == 1){
-                GameInfo.setText("Congratulations Player " + allPlayers.get(0).getPlayerFlag() + "\nYou are the winner!");
-                setNextTurnUnlocked(0);
-                setChoiceUnlocked(0);
-                setRollUnlocked(0);
-              }
+              this.setEliminated(true);
             }
       		}
 
@@ -290,13 +289,8 @@ class Player extends Gui{
             }
             else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
               GameInfo.appendText("\nYou are out of money and have no properties to sell.\nYou lose.");
-              allPlayers.remove(this.getPlayerNumber() - 1);
-              if (allPlayers.size() == 1){
-                GameInfo.setText("Congratulations Player " + allPlayers.get(0).getPlayerFlag() + "\nYou are the winner!");
-                setNextTurnUnlocked(0);
-                setChoiceUnlocked(0);
-                setRollUnlocked(0);
-              }
+              this.setEliminated(true);
+
             }
       		}
 
@@ -386,32 +380,11 @@ class Player extends Gui{
           allPlayers.get(newSpace.getOwner() - 1).setMoney(allPlayers.get(newSpace.getOwner() - 1).getMoney() + newSpace.getValue());
           GameInfo.appendText("\nPlayer " + newSpace.getOwner() + "'s new balance: $" + allPlayers.get(newSpace.getOwner() - 1).getMoney());
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + "'s new balance is: $" + this.getMoney());
-
           if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
-            GameInfo.appendText("\nPlayer " + this.getPlayerFlag() + " is out of money.\nThey must sell a property or forfeit the game.");
-
-            ArrayList<Integer> locations = new ArrayList<Integer>();
-            for (int i = 0; i < 24; i++){
-            if (allPlayers.get(getPlayerFlag() - 1).getSpaceOwned(i) == true){
-              locations.add(board.getSpace(i).getLocation());
-            }
-          }
-          final int location = locations.get(0);
-          allPlayers.get(getPlayerFlag() - 1).sell(board, location, GameInfo);
+            GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money.\nThey must sell a property or forfeit the game.");
+            player.forceAISale(board, GameInfo, allPlayers);
           }
 
-          else if (this.getMoney() < 0 && this.getPropertiesOwned() <= 0){
-            GameInfo.appendText("\nPlayer " +this.getPlayerFlag() + " is out of money and have no properties to sell.\nThey lose.");
-            allPlayers.remove(this.getPlayerNumber() - 1);
-
-            if (allPlayers.size() == 1){
-              GameInfo.appendText("Congratulations Player " + allPlayers.get(0).getPlayerFlag() + "\nYou are the winner!");
-              setNextTurnUnlocked(0);
-              setChoiceUnlocked(0);
-              setRollUnlocked(0);
-            }
-          }
-        }
 
         //If the computer lands on chance
         else if (newSpace.getOwner() == 11) {
@@ -424,12 +397,23 @@ class Player extends Gui{
           if (chanceValue < 0)
             GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " lost $" + Integer.toString(chanceValue));
           this.setMoney(this.getMoney() + chanceValue);
+
+          if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
+            GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money.\nThey must sell a property or forfeit the game.");
+            player.forceAISale(board, GameInfo, allPlayers);
+          }
         }
+
 
         //If the  computer player lands on Income Tax
         else if (newSpace.getOwner() == 12) {
           this.setMoney(this.getMoney() - 100);
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " owes the bank $100");
+
+          if (this.getMoney() < 0 && this.getPropertiesOwned() >= 1){
+            GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money.\nThey must sell a property or forfeit the game.");
+            player.forceAISale(board, GameInfo, allPlayers);
+        }
         }
 
         //If the player lands on community fund
@@ -454,8 +438,8 @@ class Player extends Gui{
         }
 
       } else if (this.getInJail()){
-          int x = rollDie();
-          if (x == 6){
+          int y = rollDie();
+          if (y == 6){
         	GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " rolled a " + String.valueOf(x));
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " has been released from jail!");
           this.setInJail(false);
@@ -466,24 +450,35 @@ class Player extends Gui{
         }
       }
     }
+  }
 
     /**
     * purchases property player is on when positive button is clicked in Gui
     */
   	public void purchase(Board board, TextArea GameInfo){
-  		Space newSpace = board.getSpace(this.getPosition());
-  		if (this.getMoney() >= newSpace.getCost()) {
-  			GameInfo.appendText("\nSuccess");
-  			this.setMoney(this.getMoney() - newSpace.getCost());
-  			newSpace.setOwner(this.getPlayerNumber());
-  			board.setSpace(this.getPosition(), newSpace);
-  			this.setPropertiesOwned(this.getPropertiesOwned() + 1);
-  			this.owns.add(this.getPosition());
-  		}
-  		else {
-  			GameInfo.appendText("\nYou cannot afford this space");
-  		}
-  	}
+      if (board.getAllSpacesOwned() == false){
+    		Space newSpace = board.getSpace(this.getPosition());
+    		if (this.getMoney() >= newSpace.getCost()) {
+    			GameInfo.appendText("\nSuccess");
+    			this.setMoney(this.getMoney() - newSpace.getCost());
+    			newSpace.setOwner(this.getPlayerNumber());
+    			board.setSpace(this.getPosition(), newSpace);
+    			this.setPropertiesOwned(this.getPropertiesOwned() + 1);
+    			this.owns.add(this.getPosition());
+
+          int unowned = 0;
+          for (int i = 0; i < 24; i++){
+            if (board.getSpace(i).getOwner() == 0)
+            unowned++;
+          }
+
+          if (unowned == 0){
+            GameInfo.setText("All spaces on the board are owned.\nGame Over.");
+          }}
+
+  		  else {
+  			 GameInfo.appendText("\nYou cannot afford this space");
+  		}}}
 
 
     /**
@@ -495,14 +490,14 @@ class Player extends Gui{
       newSpace.setOwner(0);
       board.setSpace(location, newSpace);
       this.owns.remove(new Integer(location));
+      this.setPropertiesOwned(getPropertiesOwned() - 1);
+
       if (this.getIsPlayer() == true){
-      GameInfo.appendText("\nYou have sold your property.");
-    } else {
-      GameInfo.appendText("\nPlayer" + this.getPlayerFlag() + "has sold " + board.getSpace(location));
-
-
-    }
-    }
+        GameInfo.appendText("\nYou have sold your property.");
+      }
+     else if (this.getIsPlayer()== false) {
+      GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " has sold " + board.getSpace(location).getName());
+    }}
 
     /**
     * updates player info in TextArea in Gui
@@ -514,4 +509,27 @@ class Player extends Gui{
       playerInfo.appendText("\nCurrent Turn: " + turnCount);
     }
 
+
+    public void forceAISale(Board board, TextArea GameInfo, ArrayList<Player> allPlayers){
+      ArrayList<Integer> locations = new ArrayList<Integer>();
+      for (int i = 0; i < 24; i++){
+        if (this.getSpaceOwned(i) == true){
+          locations.add(board.getSpace(i).getLocation());
+        }
+      }
+
+      int leftToSell = locations.size();
+      while (this.getMoney() < 0){
+        if (leftToSell > 0){
+          int location = locations.get(leftToSell - 1);
+          this.sell(board, location, GameInfo);
+          leftToSell--;
+        }
+        else if (leftToSell == 0 && this.getMoney() < 0){
+          GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money and has no properties to sell.\nThey lose.");
+          this.setEliminated(true);
+
+        }
+      }
+    }
   }

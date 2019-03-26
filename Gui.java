@@ -311,102 +311,176 @@ public class Gui extends Application{
       );
 
     		/**
-    		* Event Handler for "Nex Turn" button after a players turn is done, the player must click the next turn button
+    		* Event Handler for "Next Turn" button after a players turn is done, the player must click the next turn button
     		* to change turn to other player this changes the player information to update to the current players information
     		* updates label to display whose turn it is
     		*/
     		nextTurn.setOnAction(new EventHandler<ActionEvent>(){
-    			@Override
-    			public void handle(ActionEvent event){
-    				if (getNextTurnUnlocked() == 1){
-    					if (getPlayerFlag() == 1){
-    						playerTurn.setText("Player 2's Turn");
-    						playerTurn.setTextFill(Color.RED);
+          @Override
+          public void handle(ActionEvent event){
+            if (getNextTurnUnlocked() == 1){
+
+              //If it is player ones turn and player two is not eliminated
+              if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == false){
+                playerTurn.setText("Player 2's Turn");
+                playerTurn.setTextFill(Color.RED);
+
+                //If player two is a human player
                 if (allPlayers.get(1).getIsPlayer() == true){
                   final Player currentPlayer = allPlayers.get(1);
-      						setRollUnlocked(1);
-      						setNextTurnUnlocked(0);
-      						setPlayerFlag(2);
+                  setRollUnlocked(1);
+                  setNextTurnUnlocked(0);
+                  setPlayerFlag(2);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-    					}
-               else if (allPlayers.get(1).getIsPlayer() == false){
-                setRollUnlocked(0);
-                final Player currentPlayer = allPlayers.get(1);
-                allPlayers.get(1).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-                setNextTurnUnlocked(1);
-                setPlayerFlag(2);
-              }
-            }
-    					else if (getPlayerFlag() == 2){
-								if (totalPlayers > 2){
-                  playerTurn.setText("Player 3's Turn");
-      						playerTurn.setTextFill(Color.ORANGE);
-                  if (allPlayers.get(2).getIsPlayer() == true){
-                    final Player currentPlayer = allPlayers.get(2);
-        						setRollUnlocked(1);
-        						setNextTurnUnlocked(0);
-      							setPlayerFlag(3);
-                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-                } else if (allPlayers.get(2).getIsPlayer() == false){
+                }
+
+                //If player two is a computer player
+                else if (allPlayers.get(1).getIsPlayer() == false){
                   setRollUnlocked(0);
-                  final Player currentPlayer = allPlayers.get(2);
-                  allPlayers.get(2).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                  final Player currentPlayer = allPlayers.get(1);
+                  allPlayers.get(1).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                   setNextTurnUnlocked(1);
-                  setPlayerFlag(3);
+                  setPlayerFlag(2);
                 }
-								} else {
+              }
+
+              //If player two has been eliminated
+              else if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == true){
+                GameInfo.setText("Player 2 has been eliminated\nPlayer 1 is the winner!");
+                setRollUnlocked(0);
+                setNextTurnUnlocked(0);
+              }
+
+              //If it is player two turn and player one has not been eliminated
+              //Player one is always human, so we don't need to worry about an AI situation
+              else if (getPlayerFlag() == 2){
+                if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == false){
                   playerTurn.setText("Player 1's Turn");
-      						playerTurn.setTextFill(Color.BLUE);
-      						setRollUnlocked(1);
-      						setNextTurnUnlocked(0);
-									setPlayerFlag(1);
+                  playerTurn.setTextFill(Color.BLUE);
+                  setRollUnlocked(1);
+                  setNextTurnUnlocked(0);
+                  setPlayerFlag(1);
                   final Player currentPlayer = allPlayers.get(0);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-								}
-    					}
-							else if (getPlayerFlag() == 3){
-								if (totalPlayers > 3){
-                  playerTurn.setText("Player 4's Turn");
-      						playerTurn.setTextFill(Color.PURPLE);
-                  if (allPlayers.get(3).getIsPlayer() == true){
-                  final Player currentPlayer = allPlayers.get(3);
-      						setRollUnlocked(1);
-      						setNextTurnUnlocked(0);
-    							setPlayerFlag(4);
-                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+              }
 
-                } else if (allPlayers.get(3).getIsPlayer() == false){
+                //If player one has been eliminated in a two player game, player 2 wins
+                else if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == true){
+                  GameInfo.setText("Player 1 has been eliminated\nPlayer 2 is the winner!");
                   setRollUnlocked(0);
-                  final Player currentPlayer = allPlayers.get(3);
-                  allPlayers.get(3).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                  setNextTurnUnlocked(0);
+              }
+
+                //If there are more than 2 players in a game and player 3 is not eliminated
+                else if (totalPlayers > 2 && allPlayers.get(2).getEliminated() == false){
+                  playerTurn.setText("Player 3's Turn");
+                  playerTurn.setTextFill(Color.ORANGE);
+
+                  //If player three is a human player
+                  if (allPlayers.get(2).getIsPlayer() == true){
+                    final Player currentPlayer = allPlayers.get(2);
+                    setRollUnlocked(1);
+                    setNextTurnUnlocked(0);
+                    setPlayerFlag(3);
+                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  }
+
+                  //If player three is a computer player
+                  else if (allPlayers.get(2).getIsPlayer() == false){
+                    setRollUnlocked(0);
+                    final Player currentPlayer = allPlayers.get(2);
+                    allPlayers.get(2).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                    setNextTurnUnlocked(1);
+                    setPlayerFlag(3);
+                  }
+                }
+
+                //If there are more than 2 players in a game and player 3 has been eliminated
+                else if (totalPlayers > 2 && allPlayers.get(2).getEliminated() == true){
+                  GameInfo.setText("Player 3 has been eliminated\nPress Next Turn to continue play");
+                    setRollUnlocked(0);
+                    setNextTurnUnlocked(1);
+                    setPlayerFlag(3);
+                }
+              }
+
+              else if (getPlayerFlag() == 3){
+                //if in a three player game, player one is not eliminated
+                if (totalPlayers == 3 && allPlayers.get(0).getEliminated() == false){
+                  playerTurn.setText("Player 1's Turn");
+                  playerTurn.setTextFill(Color.BLUE);
+                  setRollUnlocked(1);
+                  setNextTurnUnlocked(0);
+                  setPlayerFlag(1);
+                  final Player currentPlayer = allPlayers.get(0);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                }
+
+                //if in a three player game player one is eliminated
+                else if (totalPlayers == 3 && allPlayers.get(0).getEliminated() == true){
+                  GameInfo.setText("Player 1 has been eliminated\nPress Next Turn to continue play");
+                  setRollUnlocked(0);
+                  setNextTurnUnlocked(1);
+                  setPlayerFlag(1);
+                }
+
+                //if in a four player game , player four is not eliminated
+                else if (totalPlayers == 4 && allPlayers.get(3).getEliminated() == false){
+                  playerTurn.setText("Player 4's Turn");
+                  playerTurn.setTextFill(Color.PURPLE);
+
+                  //If player four is a human player
+                  if (allPlayers.get(3).getIsPlayer() == true){
+                    final Player currentPlayer = allPlayers.get(3);
+                    setRollUnlocked(1);
+                    setNextTurnUnlocked(0);
+                    setPlayerFlag(4);
+                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  }
+
+                  //If player four is a computer player
+                  else if (allPlayers.get(3).getIsPlayer() == false){
+                    setRollUnlocked(0);
+                    final Player currentPlayer = allPlayers.get(3);
+                    allPlayers.get(3).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                    setNextTurnUnlocked(1);
+                    setPlayerFlag(4);
+                  }
+                }
+
+                //if in a four player game, player four is eliminated
+                else if (totalPlayers == 4 && allPlayers.get(3).getEliminated() == true){
+                  GameInfo.setText("Player 4 has been eliminated\nPress Next Turn to continue play");
+                  setRollUnlocked(0);
                   setNextTurnUnlocked(1);
                   setPlayerFlag(4);
                 }
-							} else {
-                playerTurn.setText("Player 1's Turn");
-      					playerTurn.setTextFill(Color.BLUE);
-      					setRollUnlocked(1);
-      					setNextTurnUnlocked(0);
-								setPlayerFlag(1);
-                final Player currentPlayer = allPlayers.get(0);
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-								}
+              }
 
-							} else if (getPlayerFlag() == 4){
-    						playerTurn.setText("Player 1's Turn");
-    						playerTurn.setTextFill(Color.BLUE);
-    						setRollUnlocked(1);
-    						setNextTurnUnlocked(0);
-    						setPlayerFlag(1);
-                final Player currentPlayer = allPlayers.get(0);
-                currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
-    				}
-    			}
-        }
-    		});
+              else if (getPlayerFlag() == 4){
+                if (allPlayers.get(0).getEliminated() == false){
+                  playerTurn.setText("Player 1's Turn");
+                  playerTurn.setTextFill(Color.BLUE);
+                  setRollUnlocked(1);
+                  setNextTurnUnlocked(0);
+                  setPlayerFlag(1);
+                  final Player currentPlayer = allPlayers.get(0);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                }
+
+                else if (allPlayers.get(0).getEliminated() == true){
+                  GameInfo.setText("Player 1 has been eliminated\nPlease press Next Turn button to advance play");
+                  setRollUnlocked(0);
+                  setNextTurnUnlocked(1);
+                  setPlayerFlag(1);
+                }
+              }
+            }
+          }
+        });
 
     		/**
     		* Event Handler for positive ("Yes") button updates labels to reflect the property purchased by player
@@ -488,6 +562,7 @@ public class Gui extends Application{
           public void handle(ActionEvent event) {
             spaceInfo.setText("Players start game here");
             }});
+
         } else if (i==6){
           boardButtons.get(i).setText(spaceName);
           boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
@@ -495,6 +570,7 @@ public class Gui extends Application{
           public void handle(ActionEvent event) {
             spaceInfo.setText("Player is sent here when\nthey land on go to jail");
             }});
+
         } else if (i==2||i==9||i==15){
           final int spaceCost = numOfLand.getSpace(i).getCost();
           final int spaceRent = numOfLand.getSpace(i).getValue();
@@ -505,6 +581,7 @@ public class Gui extends Application{
             basicText = spaceName + ", Cost " + spaceCost + ", Rent " + spaceRent;
             newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
           }});
+
         } else if (i==5||i==17){
           boardButtons.get(i).setText(spaceName);
           boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
@@ -512,6 +589,7 @@ public class Gui extends Application{
           public void handle(ActionEvent event) {
             spaceInfo.setText("Receive a random amount of money\nbetween -300 and 250");
         }});
+
         } else if (i==11){
           boardButtons.get(i).setText("Income\nTax");
           boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
@@ -519,6 +597,7 @@ public class Gui extends Application{
           public void handle(ActionEvent event) {
             spaceInfo.setText("Pay the bank $100");
           }});
+
         } else if (i==12){
           boardButtons.get(i).setText("Free\nParking");
           boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
@@ -526,6 +605,7 @@ public class Gui extends Application{
           public void handle(ActionEvent event) {
             spaceInfo.setText("Receive a random amount of money");
           }});
+
         } else if (i==18){
           boardButtons.get(i).setText("Go to\nJail");
           boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
@@ -533,6 +613,7 @@ public class Gui extends Application{
           public void handle(ActionEvent event) {
             spaceInfo.setText("Sends you to jail");
           }});
+
         } else if (i==21){
           boardButtons.get(i).setText("Comm\nFund");
           boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
@@ -541,6 +622,7 @@ public class Gui extends Application{
             spaceInfo.setText("Funding here");
           }});
         }
+
         //Sets the colours of buyables spaces to match their names
         boardButtons.get(1).setStyle("-fx-background-color: #FFFF00");
         boardButtons.get(3).setStyle("-fx-background-color: #EEEE00");

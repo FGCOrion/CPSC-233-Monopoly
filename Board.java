@@ -6,6 +6,7 @@ class Board {
     * Setters and Getters for instance variables
     */
 	private ArrayList<Space> boardArray = new ArrayList<Space>();
+	private boolean allSpacesOwned = false;
 
 	public Space getSpace(int space) {
 		return boardArray.get(space);
@@ -15,8 +16,16 @@ class Board {
 		return boardArray.size();
 	}
 
+	public boolean getAllSpacesOwned(){
+		return allSpacesOwned;
+	}
+
 	public void setSpace(int number, Space space) {
 		boardArray.set(number, space);
+	}
+
+	public void setAllSpacesOwned(boolean ifAllSpacesOwned){
+		allSpacesOwned = ifAllSpacesOwned;
 	}
 
 	//A method to print out every space and the ownership of that space to make sure things are working
