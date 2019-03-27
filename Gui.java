@@ -22,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Gui extends Application{
 
@@ -58,7 +59,6 @@ public class Gui extends Application{
 	*/
 	private Board numOfLand = new Board();
 	private int playerFlag = 1;
-  private int forceSale = 0;
 
 	/**
 	* Setup for labels in GUI that give information regarding each players total money, property,
@@ -100,20 +100,12 @@ public class Gui extends Application{
     this.playerFlag = playerFlag;
   }
 
-  public void setForceSale(int forceSale){
-    this.forceSale = forceSale;
-  }
-
 	/**
 	* returns 1 if it is player 1's turn or 2 if it is player 2's turn
 	* @return playerFlag
 	*/
   public int getPlayerFlag(){
     return playerFlag;
-  }
-
-  public int getForceSale(){
-    return forceSale;
   }
 
   public static void main(String[] args){
@@ -201,6 +193,7 @@ public class Gui extends Application{
     				 sellProperties.initModality(Modality.APPLICATION_MODAL);
     				 sellProperties.initOwner(primaryStage);
     				 VBox sellBox = new VBox(5);
+
     				 ArrayList<Integer> locations = new ArrayList<Integer>();
     				 ArrayList<Button> buttons = new ArrayList<Button>();
 
@@ -229,7 +222,7 @@ public class Gui extends Application{
                 }
 
     					 sellBox.setAlignment(Pos.CENTER);
-    					 Scene sellScene = new Scene(sellBox, 300, 200);
+    					 Scene sellScene = new Scene(sellBox, 300, 500);
     					 sellProperties.setScene(sellScene);
     					 sellProperties.show();
     				 }}});
@@ -243,7 +236,7 @@ public class Gui extends Application{
           public void handle(ActionEvent event){
               roll.setDisable(true);
 							final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
-              currentPlayer.takeTurnGui(numOfLand, currentPlayer, GameInfo, positive, negative, nextTurn, allPlayers, forceSale);
+              currentPlayer.takeTurnGui(numOfLand, currentPlayer, GameInfo, positive, negative, nextTurn, allPlayers);
               currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
 
               if (getPlayerFlag() == 1){
@@ -278,7 +271,7 @@ public class Gui extends Application{
                 else if (allPlayers.get(1).getIsPlayer() == false){
                   roll.setDisable(true);
                   final Player currentPlayer = allPlayers.get(1);
-                  allPlayers.get(1).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                  allPlayers.get(1).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers, nextTurn);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                   currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                   nextTurn.setDisable(false);
@@ -293,7 +286,14 @@ public class Gui extends Application{
                 nextTurn.setDisable(true);
               }
 
-              //If it is player two turn and player one has not been eliminated
+              else if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == true && totalPlayers > 2){
+                GameInfo.setText("Player 2 has been eliminated\nPress Next Turn to continue play");
+                  roll.setDisable(true);
+                  nextTurn.setDisable(false);
+                  setPlayerFlag(2);
+              }
+
+              //If it is player twos turn and player one has not been eliminated
               //Player one is always human, so we don't need to worry about an AI situation
               else if (getPlayerFlag() == 2){
                 if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == false){
@@ -312,6 +312,7 @@ public class Gui extends Application{
                   GameInfo.setText("Player 1 has been eliminated\nPlayer 2 is the winner!");
                   roll.setDisable(true);
                   nextTurn.setDisable(true);
+                  turnCount++;
               }
 
                 //If there are more than 2 players in a game and player 3 is not eliminated
@@ -333,7 +334,7 @@ public class Gui extends Application{
                   else if (allPlayers.get(2).getIsPlayer() == false){
                     roll.setDisable(true);
                     final Player currentPlayer = allPlayers.get(2);
-                    allPlayers.get(2).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                    allPlayers.get(2).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers, nextTurn);
                     currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                     currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                     nextTurn.setDisable(false);
@@ -369,6 +370,7 @@ public class Gui extends Application{
                   roll.setDisable(true);
                   nextTurn.setDisable(false);
                   setPlayerFlag(1);
+                  turnCount++;
                 }
 
                 //if in a four player game , player four is not eliminated
@@ -390,7 +392,7 @@ public class Gui extends Application{
                   else if (allPlayers.get(3).getIsPlayer() == false){
                     roll.setDisable(true);
                     final Player currentPlayer = allPlayers.get(3);
-                    allPlayers.get(3).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                    allPlayers.get(3).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers, nextTurn);
                     currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                     currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                     nextTurn.setDisable(false);
@@ -424,6 +426,7 @@ public class Gui extends Application{
                   roll.setDisable(true);
                   nextTurn.setDisable(false);
                   setPlayerFlag(1);
+                  turnCount++;
                 }}}
         });
 
@@ -439,7 +442,7 @@ public class Gui extends Application{
               currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               positive.setDisable(true);
               negative.setDisable(true);
-              nextTurn.setDisable(false);
+              currentPlayer.checkBoardSoldOut(numOfLand, GameInfo, nextTurn);
               }
             });
 
@@ -483,7 +486,7 @@ public class Gui extends Application{
           }
         }
 
-        //Set up of event handlers to eturn information about each spaces when clicked/selected
+        //Set up of event handlers to return information about each spaces when clicked/selected
         for (int i = 0; i < 24; i++){
           final Space newSpace = numOfLand.getSpace(i);
           final String spaceName = numOfLand.getSpace(i).getName();
@@ -580,45 +583,103 @@ public class Gui extends Application{
         boardButtons.get(22).setStyle("-fx-background-color: #00FA9A");
         boardButtons.get(23).setStyle("-fx-background-color: #7CFC00");
 
-    	/**
-    	* Exit button to prematurely end game without meeting end condition and pop up window to confirm
-    	* if you'd like to quit or not
-    	*/
-    	Button btClose = new Button("Exit");
-    	btClose.setMaxWidth(75);
-    	btClose.setMaxHeight(75);
-    	root.add(btClose, 17, 0);
-    	btClose.setOnAction(new EventHandler<ActionEvent>(){
-    		@Override
-    		public void handle(ActionEvent event) {
-    			 final Stage exitChoice = new Stage();
-    			 exitChoice.initModality(Modality.APPLICATION_MODAL);
-    			 exitChoice.initOwner(primaryStage);
-    			 HBox exitBox = new HBox(20);
-    			 Button close = new Button("Exit");
-    			 Button doNotClose = new Button("Keep Playing");
-    			 exitBox.setAlignment(Pos.CENTER);
+        /**
+      	* Exit button to prematurely end game without meeting end condition and pop up window to confirm
+      	* if you'd like to quit or not
+      	*/
+      	Button btClose = new Button("Exit");
+      	btClose.setMaxWidth(75);
+      	btClose.setMaxHeight(75);
+      	root.add(btClose, 17, 0);
+      	btClose.setOnAction(new EventHandler<ActionEvent>(){
+      		@Override
+      		public void handle(ActionEvent event) {
+      			 final Stage exitChoice = new Stage();
+      			 exitChoice.initModality(Modality.APPLICATION_MODAL);
+      			 exitChoice.initOwner(primaryStage);
+      			 HBox exitBox = new HBox(20);
+      			 Button close = new Button("Exit");
+      			 Button doNotClose = new Button("Keep Playing");
+      			 exitBox.setAlignment(Pos.CENTER);
 
-    			 close.setOnAction(new EventHandler<ActionEvent>(){
-    				 @Override
-    				 public void handle(ActionEvent event){
-    					 primaryStage.close();
-    				 }
-    			 });
+      			 close.setOnAction(new EventHandler<ActionEvent>(){
+      				 @Override
+      				 public void handle(ActionEvent event){
+      					 primaryStage.close();
+  						 //displays player stands
+  						 final Stage endGameBox = new Stage();
+  						 final HBox endGame = new HBox(50);
+  						 endGameBox.initModality(Modality.APPLICATION_MODAL);
+  						 endGameBox.initOwner(primaryStage);
+  						 endGameBox.setTitle("Game Over!");
 
-    			 doNotClose.setOnAction(new EventHandler<ActionEvent>(){
-    				 @Override
-    				 public void handle(ActionEvent event){
-    					 exitChoice.close();
-    				 }
-    			 });
+  						 /**
+  						 * Determines who the winner is (most money for the honeys)
+  						 * This is in NO WAY efficient and may not even be right
+  						 * getNetWorth() method is in Player at the deadass bottom
+  						 *Goes from line 622 to 666
+  						 *getNetWorth is in Player at the deadass bottom
+  						 */
+  						 //basically player standings but worse
+  						 TextArea playerStats = new TextArea();
+  						 playerStats.appendText("Player Stats: ");
 
-    			 exitBox.getChildren().addAll(close, doNotClose);
-    			 Scene exitScene = new Scene(exitBox, 300, 200);
-    			 exitChoice.setScene(exitScene);
-    			 exitChoice.show();
-    		   }
-    	   });
+  						 ArrayList<Integer> netWorths = new ArrayList<Integer>(); //used for the ranks and shit (uses the for loop below to add to it
+
+  						 for (int i = 0; i < allPlayers.size(); i++){
+  							playerStats.appendText("\n\nPlayer " + allPlayers.get(i).getPlayerNumber() + " :");
+  							playerStats.appendText("\nMoney: $" + allPlayers.get(i).getMoney() + "\nProperties owned: " + allPlayers.get(i).getPropertiesOwned());
+  							playerStats.appendText("\nNetworth: $" + allPlayers.get(i).getNetWorth(numOfLand));
+  							netWorths.add(allPlayers.get(i).getNetWorth(numOfLand));
+  						 }
+
+  						 Collections.sort(netWorths); //sorts the array from lowest to highest (imported Collections)
+
+  						 //finds which players networth matches the array index (could be more optimized?)
+  						 ArrayList<Player> ranks = new ArrayList<Player>();
+  						 for (int i = 0; i < netWorths.size(); i++) {
+  							 for (int x = 0; x < allPlayers.size(); x++) {
+  								 if (netWorths.get(i) == allPlayers.get(x).getNetWorth(numOfLand)) {
+  									 ranks.add(allPlayers.get(x));
+  								 }
+  							 }
+  						 }
+
+  						 //tells who wins
+  						 TextArea whoWon = new TextArea();
+  						 whoWon.appendText("Who won?");
+  						 if (ranks.size() >= 1) {
+  							whoWon.appendText("\n\nPlayer " + ranks.get(3).getPlayerNumber() + " wins first place!\n with a networth of " + ranks.get(3).getNetWorth(numOfLand));
+  						 }
+  						 if(ranks.size() >= 2) {
+  							whoWon.appendText("\n\nPlayer " + ranks.get(2).getPlayerNumber() + " comes in second!\n with a networth of " + ranks.get(2).getNetWorth(numOfLand));
+  						 }
+  						 if (ranks.size() >= 3) {
+  							whoWon.appendText("\n\nPlayer " + ranks.get(1).getPlayerNumber() + " comes in third!\n with a networth of " + ranks.get(1).getNetWorth(numOfLand));
+  						 }
+  						 if (ranks.size() >= 4) {
+  							 whoWon.appendText("\n\nPlayer " + ranks.get(0).getPlayerNumber() + " comes in fourth!\n with a networth of " + ranks.get(0).getNetWorth(numOfLand));
+  						 }
+
+  						 endGame.getChildren().addAll(playerStats, whoWon);
+  						 endGameBox.setScene(new Scene(endGame, 600, 500));
+  						 endGameBox.show();
+      				 }
+      			 });
+
+      			 doNotClose.setOnAction(new EventHandler<ActionEvent>(){
+      				 @Override
+      				 public void handle(ActionEvent event){
+      					 exitChoice.close();
+      				 }
+      			 });
+
+      			 exitBox.getChildren().addAll(close, doNotClose);
+      			 Scene exitScene = new Scene(exitBox, 300, 200);
+      			 exitChoice.setScene(exitScene);
+      			 exitChoice.show();
+      		   }
+      	   });
 
       //Set up for menu screen (LAYOUT ONE)
       GridPane start = new GridPane();

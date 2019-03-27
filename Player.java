@@ -4,6 +4,7 @@ import java.util.Random;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
+import java.util.Collections;
 
 class Player extends Gui{
 
@@ -70,6 +71,9 @@ class Player extends Gui{
       return inJail;
     }
 
+    public int getPlayersEliminated(){
+      return playersEliminated;
+    }
 
     /* Setters */
     public void setPosition(int newPosition){
@@ -197,7 +201,7 @@ class Player extends Gui{
   		}
   	}
 
-  	public void takeTurnGui(Board board, Player player, TextArea GameInfo, Button positive, Button negative, Button nextTurn, ArrayList<Player> allPlayers, int forceSale){
+  	public void takeTurnGui(Board board, Player player, TextArea GameInfo, Button positive, Button negative, Button nextTurn, ArrayList<Player> allPlayers){
   		Scanner input = new Scanner(System.in);
   		//Creates a new scanner
     		GameInfo.setText("It is player " + player.getPlayerNumber() + "'s turn");
@@ -316,7 +320,7 @@ class Player extends Gui{
         }
     }
 
-    public void takeTurnAI(Board board, Player player, TextArea GameInfo, ArrayList<Player> allPlayers){
+    public void takeTurnAI(Board board, Player player, TextArea GameInfo, ArrayList<Player> allPlayers, Button nextTurn){
 
       GameInfo.setText("It is player " + player.getPlayerNumber() + "'s turn");
       if (player.getInJail() == false){
@@ -346,6 +350,7 @@ class Player extends Gui{
             player.setPropertiesOwned(player.getPropertiesOwned() + 1);
             player.owns.add(player.getPosition());
             player.setMoney(player.getMoney() - newSpace.getCost());
+            checkBoardSoldOut(board, GameInfo, nextTurn);
 
             //Computer does not buy the property if they do not have enough money
           } else {
@@ -365,7 +370,7 @@ class Player extends Gui{
           allPlayers.get(newSpace.getOwner() - 1).setMoney(allPlayers.get(newSpace.getOwner() - 1).getMoney() + newSpace.getValue());
           GameInfo.appendText("\nPlayer " + newSpace.getOwner() + "'s new balance: $" + allPlayers.get(newSpace.getOwner() - 1).getMoney());
           GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + "'s new balance is: $" + player.getMoney());
-          player.checkAIFunds(board, GameInfo, allPlayers);
+          player.checkAIFunds(board, GameInfo, allPlayers, player);
         }
 
 
@@ -380,7 +385,7 @@ class Player extends Gui{
           if (chanceValue < 0)
             GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + " lost $" + Integer.toString(chanceValue));
           player.setMoney(player.getMoney() + chanceValue);
-          player.checkAIFunds(board, GameInfo, allPlayers);
+          player.checkAIFunds(board, GameInfo, allPlayers, player);
         }
 
 
@@ -388,7 +393,7 @@ class Player extends Gui{
         else if (newSpace.getOwner() == 12) {
           player.setMoney(player.getMoney() - 100);
           GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + " owes the bank $100");
-          player.checkAIFunds(board, GameInfo, allPlayers);
+          player.checkAIFunds(board, GameInfo, allPlayers, player);
 
         }
 
@@ -412,7 +417,7 @@ class Player extends Gui{
           parkingValue = parkingValue * 50;
           player.setMoney(player.getMoney() + parkingValue);
           GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + " gained $" + Integer.toString(parkingValue));
-          player.checkAIFunds(board, GameInfo, allPlayers);
+          player.checkAIFunds(board, GameInfo, allPlayers, player);
         }
 
       //If the computer is stuck in jail
@@ -479,10 +484,10 @@ class Player extends Gui{
     }
 
 
-    public void forceAISale(Board board, TextArea GameInfo, ArrayList<Player> allPlayers){
+    public void forceAISale(Board board, TextArea GameInfo, ArrayList<Player> allPlayers, Player player){
       ArrayList<Integer> locations = new ArrayList<Integer>();
       for (int i = 0; i < 24; i++){
-        if (this.getSpaceOwned(i) == true){
+        if (player.getSpaceOwned(i) == true){
           locations.add(board.getSpace(i).getLocation());
         }
       }
@@ -491,19 +496,19 @@ class Player extends Gui{
       while (this.getMoney() < 0){
         if (leftToSell > 0){
           int location = locations.get(leftToSell - 1);
-          this.sell(board, location, GameInfo);
+          player.sell(board, location, GameInfo);
           leftToSell--;
         }
         else if (leftToSell <= 0 && this.getMoney() < 0){
           GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money and has no properties to sell.\nThey lose.");
-          this.setEliminated(true);
+          player.setEliminated(true);
           playersEliminated++;
           checkPlayersEliminated(GameInfo);
           break;
         }}}
 
     public void checkPlayersEliminated(TextArea GameInfo){
-      if ((getTotalHumanPlayers() + getTotalComputerPlayers()) - playersEliminated == 1){
+      if ((getTotalHumanPlayers() + getTotalComputerPlayers()) - getPlayersEliminated() == 1){
         for (int i = 0; i < allPlayers.size(); i++){
           if (allPlayers.get(i).getEliminated() == false){
             winner = allPlayers.get(i);
@@ -513,10 +518,10 @@ class Player extends Gui{
       }
     }
 
-    public void checkAIFunds(Board board, TextArea GameInfo, ArrayList<Player> allPlayers){
+    public void checkAIFunds(Board board, TextArea GameInfo, ArrayList<Player> allPlayers, Player player){
       if (this.getMoney() < 0 && this.getPropertiesOwned() > 0){
         GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money.\nThey must sell a property or forfeit the game.");
-        this.forceAISale(board, GameInfo, allPlayers);
+        this.forceAISale(board, GameInfo, allPlayers, player);
       }
       else if (this.getMoney() < 0 && this.getPropertiesOwned() == 0){
         GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money and has no properties to sell.\nThey lose.");
@@ -527,9 +532,9 @@ class Player extends Gui{
     }
 
     public void checkPlayerFunds(TextArea GameInfo, Button nextTurn){
+
       if (this.getMoney() < 0 && this.getPropertiesOwned() > 0){
         GameInfo.appendText("\nYou are out of money\nSell a property or you will forfeit the game.");
-        setForceSale(1);
         nextTurn.setDisable(true);
       }
       else if (this.getMoney() < 0 && this.getPropertiesOwned() == 0){
@@ -538,7 +543,8 @@ class Player extends Gui{
         playersEliminated++;
         checkPlayersEliminated(GameInfo);
         nextTurn.setDisable(false);
-      } else {
+
+      } else if (this.getMoney() >= 0){
         nextTurn.setDisable(false);
       }
     }
@@ -551,8 +557,11 @@ class Player extends Gui{
         }
       }
       if (unownedSpaces == 0){
-        GameInfo.appendText("All spaces have been sold. Game Over.");
+        GameInfo.appendText("\nAll spaces have been sold. Game Over.");
         nextTurn.setDisable(true);
+      }
+      else if (unownedSpaces >= 1){
+        nextTurn.setDisable(false);
       }
     }
 
@@ -563,4 +572,15 @@ class Player extends Gui{
         playerStandings.appendText("\nCurrent Position: " + board.getSpace(allPlayers.get(i).getPosition()).getName());
         playerStandings.appendText("\nMoney: $" + allPlayers.get(i).getMoney() + "\nProperties owned: " + allPlayers.get(i).getPropertiesOwned());
       }}
+
+    //method to calculate netWorth
+    public int getNetWorth(Board board) {
+      int netWorth = getMoney();
+      	for (int i = 0; i < board.getLength(); i++) {
+      		if (board.getSpace(i).getOwner() == getPlayerNumber()) {
+      			netWorth += board.getSpace(i).getCost();
+      		}
+      	}
+      	return netWorth;
+      }
   }
