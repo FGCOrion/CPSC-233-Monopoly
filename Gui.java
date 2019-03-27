@@ -1,7 +1,6 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.layout.GridPane;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -15,576 +14,829 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.*;
-import javafx.scene.text.Text; 
-import javafx.scene.text.Font; 
-import javafx.scene.control.ChoiceBox ;
+import javafx.scene.text.Text;
+import javafx.scene.text.Font;
+import javafx.scene.paint.Color;
+import javafx.stage.Popup;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import java.util.ArrayList;
 
+import java.util.Collections;
 
+public class Gui extends Application{
 
-/**
-*Instance Variables
-*/
-public class Gui extends Application {
-	private Player gameGui=new Player();
-	private Board numOfLand=new Board();
-	private Text informationOfBox = new Text();
-	private GameMain turns=new GameMain();
-	private ChoiceBox choiceBox = new ChoiceBox();
-	private Label text = new Label("Click square to get information");
-	private Label Explanation=new Label("Explanation: ");
-	private Label resultOfDice=new Label();
-	private ComputerAI AI=new ComputerAI();
-    private Label Pmoney=new Label("Your Money:");
-    private Label Pproperty=new Label("Your property:");
-    private Label Pturn=new Label("Turn processing at: ");
-    private Label AImoney=new Label("AI's Money: ");
-    private Label AIproperty=new Label("AI's property: ");
-    private Label AIinformation = new Label("Display message: ");
-    private Label AIinformation1 = new Label();
-    private Label AIinformation2 = new Label();
-    private Label AIinformation3 = new Label();
-    private Label AIinformation4 = new Label();
-    private Label AIinformation0 = new Label();
-    private Label Pinformation0 = new Label();
-    private Label Pinformation1 = new Label();
-    private Label status = new Label();
+  //instance varaibles for amount of players
+  private int totalHumanPlayers = 0;
+  private int totalComputerPlayers = 0;
+  private int totalPlayers = 0;
 
+  //Labels for messages on start menu
+  private Label welcome = new Label("Welcome to Monopoly!");
+  private Label humanPlayers = new Label("How many human players?");
+  private Label AIPlayers = new Label("How many computer players?");
+  private Label totalPlayersPlaying = new Label("Total players: " + totalPlayers);
+  private Label errorMessage = new Label();
+	ArrayList<Player> allPlayers = new ArrayList<Player>();
 
-   
+  //buttons to choose how many human players in start menu
+  private Button player1 = new Button("1");
+  private Button player2 = new Button("2");
+  private Button player3 = new Button("3");
+  private Button player4 = new Button("4");
 
-	public static void main(String[] args) {
-		Application.launch(args);
-		}
-	
-/**
-*Using GridPane to set positions.
-*The format for the GridPane is 10 row, 15 colomn.
-*/
-	@Override
-	public void start(Stage primaryStage) {
-		GridPane root = new GridPane();
-    	final int numCols = 15 ;
-        final int numRows = 10 ;
-        for (int i = 0; i < numCols; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / numCols);
-            root.getColumnConstraints().add(colConst);
-        }
-        for (int i = 0; i < numRows; i++) {
-            RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / numRows);
-            root.getRowConstraints().add(rowConst);         
-        }
+  //buttons to choose how many computer players in start menu
+  private Button computer0 = new Button("0");
+  private Button computer1 = new Button("1");
+  private Button computer2 = new Button("2");
+  private Button computer3 = new Button("3");
 
-
-    /**
-    *Giving two labels different style of texts.
-    */
-    Explanation.setFont(Font.font ("Verdana", 16));
-    AIinformation.setFont(Font.font ("Verdana", 16));
-
-    /**
-    *setting the position of labels and button
-    */
-    root.add(Explanation,0,3,2,3);
-	
-    root.add(new Label(""), 4, 20);
-    root.add(text,2,3,4,3);
-    root.add(resultOfDice,8,3,10,3);
-    root.add(Pmoney, 3, 4,4,4);
-    root.add(Pproperty, 3, 5,4,5);
-    root.add(Pturn, 3, 6,4,6);
-    root.add(AImoney, 3,1,4,1);
-    root.add(AIproperty, 3,2,4,2);
-    root.add(AIinformation,6,6,7,6);
-    root.add(AIinformation0,9,1,10,1);
-    root.add(AIinformation1,9,6,10,6);
-    root.add(AIinformation2,9,7,10,7);
-    root.add(AIinformation3,9,8,10,8);
-    root.add(AIinformation4,9,9,10,9);
-    root.add(Pinformation0,10,5,11,5);
-    root.add(Pinformation1,8,4,9,4);
-    root.add(status,8,1,10,1);
-
-
-    
-
-  
-
-
-
-
-
-    //These are buttons
-
-    //choiceBox
-    /**
-    *Create two buttons for player to make a choice: Whether wants the informations of this very land and buy it or not.
-    */
-    Button positive=new Button("yes");
-   
-    root.add(positive,7,3);
-
-
-    Button negative = new Button("no");
-   
-    root.add(negative,10,3);
-    
+  //button to start gameplay in start menu
+  private Button begin = new Button("Start Game!");
 
   /**
-  *giving a button an event: Rolling the Dice
-  *The results of the Dice will outprint in the Gui.
-  *After rolling the dice, the other two button will be actviate
-  *player should decied which button to chose
-  *After that, the computerAI will take its move
-  */
-	Button roll = new Button("Dice");
-	roll.setMaxWidth(150);
-	roll.setMaxHeight(400);
-    root.add(roll,9,3);
+	* board set up variables
+	*/
+	private Board numOfLand = new Board();
+	private int playerFlag = 1;
+  private int forceSale = 0;
 
-    roll.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-/**
-*the information of player will be shown in the screen.
-*the result of the Dice that player rolled
-*player's money;
-*player's total number of property
-*The total number of turns after the game is processing
-*/
-        turns.playerrun();
-      	resultOfDice.setText("You rolled :"+turns.player.getNumbersOfDice());
-      	Pmoney.setText(("Your Money: "+turns.player.getMoney()));
-		    Pproperty.setText(("Your property: "+numOfLand.getNumberOfLand()));
-		    Pturn.setText(("Turn processing at: "+turns.getTurns()));
-        Pinformation0.setText(turns.player.getInformation0());
-        text.setText("Do you interest in this Land?");
-        
-
-    
-       positive.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-      
-       // turns.setYes(1);
-        text.setText(turns.player.getInformation1());
-        turns.AIrun();
-        status.setText(turns.getStatus());
-        AImoney.setText(("AI's Money: "+turns.computer.getMoney()));
-        AIproperty.setText(("AI's property: "+turns.computer.getNewProperty()));
-        AIinformation0.setText(turns.computer.getInformation0());
-        AIinformation1.setText(turns.computer.getInformation1());
-        AIinformation2.setText(turns.computer.getInformation2());
-        AIinformation3.setText(turns.computer.getInformation3());
-        AIinformation4.setText(turns.computer.getInformation4());
-        turns.playerBuy();
-        }
-    }
-  );
-        negative.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-       text.setText(turns.player.getInformation1());
-       
-      //turns.setYes(0);
-      /**
-      *After the player made their/his choice, the AI will roll the dice and take its move
-      *The information of AI will display at the bottom of the screen
-      *the information include:
-      *the dice's reust that computer rolled
-      *the total property of AI
-      *the money AI holds
-      *the informations of land that computer landed.
-      *Did AI borught a land or not ar this turn
-      */
-
-
-        turns.AIrun();
-        status.setText(turns.getStatus());
-        AImoney.setText(("AI's Money: "+turns.computer.getMoney()));
-        AIproperty.setText(("AI's property: "+turns.computer.getNewProperty()));
-        AIinformation0.setText(turns.computer.getInformation0());
-        AIinformation1.setText(turns.computer.getInformation1());
-        AIinformation2.setText(turns.computer.getInformation2());
-        AIinformation3.setText(turns.computer.getInformation3());
-        AIinformation4.setText(turns.computer.getInformation4());
-        }
-    }
-  );   
-    
-    
-       
-    }
-
-       
-        
-        }
-  );
-    /**
-    *Lands are made by these buttons with the type "Button".
-    *After the player click these lands, the information of the single land will displayer properly on the screen next to Explaination.
-    */
-    Button bt01 = new Button("Jail");
-    bt01.setMaxWidth(150);
-	bt01.setMaxHeight(400);
-    root.add(bt01,6,0);
-    bt01.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Going to the jail");
-        }
-    }
-  );
-    Button bt02 = new Button();
-    bt02.setMaxWidth(150);
-	bt02.setMaxHeight(400);
-	bt02.setStyle("-fx-background-color: #00F5FF");
-
-    root.add(bt02,7,0);
-    bt02.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Blue 1");
-        }
-    }
-  );
-    Button bt03 = new Button();
-    bt03.setMaxWidth(150);
-	bt03.setMaxHeight(400);
-	bt03.setStyle("-fx-background-color: #00E5EE");
-    root.add(bt03,8,0);
-    bt03.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Blue 2");
-        }
-    }
-  );
-    Button bt04 = new Button("Rail");
-    bt04.setMaxWidth(150);
-	bt04.setMaxHeight(400);
-    root.add(bt04,9,0);
-    bt04.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("This is Rail");
-        }
-    }
-  );
-    Button bt05 = new Button();
-    bt05.setMaxWidth(150);
-	bt05.setMaxHeight(400);
-	bt05.setStyle("-fx-background-color: #00F5FF");
-    root.add(bt05,10,0);
-    bt05.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Blue 3");
-        }
-    }
-  );
-    Button bt06 = new Button("Tax");
-    bt06.setMaxWidth(150);
-	bt06.setMaxHeight(400);
-    root.add(bt06,11,0);
-    bt06.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Pay the tax");
-        }
-    }
-  );
-    Button bt07 = new Button("Parking");
-    bt07.setMaxWidth(150);
-	bt07.setMaxHeight(400);
-    root.add(bt07,12,0);
-    bt07.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("You can park here for free");
-        }
-    }
-  );
-    //vertical
-    Button bt11 = new Button("Card");
-    bt11.setMaxWidth(150);
-	bt11.setMaxHeight(400);
-
-    root.add(bt11,6,1);
-    bt11.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Draw a card");
-        }
-    }
-  );
-    Button bt21 = new Button();
-    bt21.setMaxWidth(150);
-	bt21.setMaxHeight(400);
-	bt21.setStyle("-fx-background-color: #FFFF00");
-    root.add(bt21,6,2);
-    bt21.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Yellow3");
-        }
-    }
-  );
-    Button bt31 = new Button();
-    bt31.setMaxWidth(150);
-	bt31.setMaxHeight(400);
-	bt31.setStyle("-fx-background-color: #EEEE00");
-    root.add(bt31,6,3);
-    bt31.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Yellow2");
-        }
-    }
-  );
-    Button bt41 = new Button("Rail");
-    bt41.setMaxWidth(150);
-	bt41.setMaxHeight(400);
-
-    root.add(bt41,6,4);
-    bt41.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("This is the rail");
-        }
-    }
-  );
-    Button bt51 = new Button();
-    bt51.setMaxWidth(150);
-	bt51.setMaxHeight(400);
-    root.add(bt51,6,5);
-    bt51.setStyle("-fx-background-color: #FFFF00");
-    bt51.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Yellow 1");
-        }
-    }
-  );
-    Button bt61 = new Button("Go");
-    bt61.setMaxWidth(150);
-	bt61.setMaxHeight(400);
-    root.add(bt61,6,6);
-    bt61.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Game starts from here");
-        }
-    }
-  );
-    //vertical
-
-    Button bt17 = new Button();
-    bt17.setMaxWidth(150);
-	bt17.setMaxHeight(200);
-	bt17.setStyle("-fx-background-color: #FF0000");
-    root.add(bt17,12,1);
-    bt17.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Red 1");
-        }
-    }
-  );
-    
-    Button bt27 = new Button();
-    bt27.setMaxWidth(150);
-	bt27.setMaxHeight(400);
-	bt27.setStyle("-fx-background-color: #EE0000");
-    root.add(bt27,12,2);
-    bt27.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Red 2");
-        }
-    }
-  );
-    Button bt37 = new Button("Rail");
-    bt37.setMaxWidth(150);
-	bt37.setMaxHeight(400);
-    root.add(bt37,12,3);
-
-    bt37.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("This is the rail");
-        }
-    }
-  );
-    Button bt47 = new Button();
-    bt47.setMaxWidth(150);
-	bt47.setMaxHeight(400);
-	bt47.setStyle("-fx-background-color: #FF0000");
-
-    root.add(bt47,12,4);
-    bt47.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Red 3");
-        }
-    }
-  );
-    Button bt57 = new Button("Card");
-    bt57.setMaxWidth(150);
-	bt57.setMaxHeight(400);
-    root.add(bt57,12,5);
-    bt57.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Draw a card");
-        }
-    }
-  );
-    
-    Button bt67 = new Button("Jail");
-    bt67.setMaxWidth(150);
-	bt67.setMaxHeight(400);
-    root.add(bt67,12,6);
-    bt67.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Going to the jail");
-        }
-    }
-  );
-    //horizontal
-    
-    Button bt72 = new Button();
-    bt72.setMaxWidth(150);
-	bt72.setMaxHeight(400);
-	bt72.setStyle("-fx-background-color: #7CFC00");
-    root.add(bt72,7,6);
-    bt72.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Green 2");
-        }
-    }
-  );
-    Button bt73 = new Button();
-    bt73.setMaxWidth(150);
-	bt73.setMaxHeight(400);
-    root.add(bt73,8,6);
-    bt73.setStyle("-fx-background-color: #00FA9A");
-    bt73.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Green 1");
-        }
-    }
-  );
-    Button bt74 = new Button("Fund");
-    bt74.setMaxWidth(150);
-	bt74.setMaxHeight(400);
-    root.add(bt74,9,6);
-    bt74.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Funding here");
-        }
-    }
-  );
-    Button bt75 = new Button();
-    bt75.setMaxWidth(150);
-	bt75.setMaxHeight(400);
-	bt75.setStyle("-fx-background-color: #FFD700");
-    root.add(bt75,10,6);
-    bt75.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Orange 2");
-        }
-    }
-  );
-    Button bt76 = new Button();
-    bt76.setMaxWidth(150);
-	bt76.setMaxHeight(400);
-	bt76.setStyle("-fx-background-color: #EEC900");
-    root.add(bt76,11,6);
-    bt76.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent event) {
-        
-        text.setText("Orange 1");
-        }
-    }
-  );
-
-
-
-
-
-
-
-
-	
 	/**
-  *Setting the size of screen to 1000,600;
-  *Setting the title as "Monopoly"
+	* Setup for labels in GUI that give information regarding each players total money, property,
+	* whose turn it is and general information about spaces on the board and instance variables
+	*/
+	private Label status = new Label();
+	private Label playerTurn = new Label("Player 1's turn!");
+	private Label gameInfo = new Label("Game Information");
+	private Label SpaceInfo = new Label("Space Info");
+	private TextArea playerInfo = new TextArea("Information about each player\nwill be displayed here");
+	private TextArea GameInfo = new TextArea("Information about each turn\nwill be displayed here");
+	private TextArea spaceInfo = new TextArea("Click a space on the board for more information");
+	private TextArea playerStandings = new TextArea("Player standings will be\ndisplayed here");
+	private String basicText = "";
+	private int turnCount = 0;
+
+  // Accessor Methods
+  /**
+  * returns the amount of human players
+  * @return totalHumanPlayers
   */
-	
-	primaryStage.setTitle("Monopoly");
-	primaryStage.setScene(new Scene(root, 1000, 600)); 
-	primaryStage.show();
+  public int getTotalHumanPlayers(){
+    return totalHumanPlayers;
+  }
 
-}
+  /**
+  * returns the amount of computer players
+  * @return totalComputerPLayers
+  */
+  public int getTotalComputerPlayers(){
+    return totalComputerPlayers;
+  }
 
+  /**
+	* sets the instance variable playerFlag which corresponds to each player
+	* @param playerFlag
+	*/
+  public void setPlayerFlag(int playerFlag) {
+    this.playerFlag = playerFlag;
+  }
+
+  public void setForceSale(int forceSale){
+    this.forceSale = forceSale;
+  }
+
+	/**
+	* returns 1 if it is player 1's turn or 2 if it is player 2's turn
+	* @return playerFlag
+	*/
+  public int getPlayerFlag(){
+    return playerFlag;
+  }
+
+  public int getForceSale(){
+    return forceSale;
+  }
+
+  public static void main(String[] args){
+    Application.launch(args);
+  }
+
+  @Override
+  public void start(Stage primaryStage){
+
+        GridPane root = new GridPane();
+        		final int numCols = 18 ;
+            final int numRows = 11 ;
+            for (int i = 0; i < numCols; i++) {
+                ColumnConstraints colConst = new ColumnConstraints();
+                colConst.setPercentWidth(100.0 / numCols);
+                root.getColumnConstraints().add(colConst);
+            }
+            for (int i = 0; i < numRows; i++) {
+                RowConstraints rowConst = new RowConstraints();
+                rowConst.setPercentHeight(100.0 / numRows);
+                root.getRowConstraints().add(rowConst);
+            }
+
+    		playerTurn.setTextFill(Color.BLUE);
+    		root.add(playerInfo, 1, 1, 4, 4);
+    		root.add(GameInfo, 1, 6, 4, 4);
+    		root.add(playerTurn, 2, 0, 2, 1);
+    		root.add(gameInfo, 2, 5, 2, 1);
+    		root.add(spaceInfo, 7, 9, 5, 1);
+    		root.add(SpaceInfo, 9, 8, 2, 1);
+			root.add(playerStandings, 14, 1, 3, 9);
+
+    		/**
+    		* "Yes" button displayed beside "Roll Dice" button to affirm decision to purchase property
+    		*/
+        Button positive = new Button("Yes");
+        positive.setMaxWidth(125);
+        positive.setMaxHeight(400);
+        root.add(positive, 8, 4);
+        positive.setDisable(true);
+
+    		/**
+    		* "No" button displayed beside "Roll Dice" button to decline decision to purchase property
+    		*/
+        Button negative = new Button("No");
+        negative.setMaxWidth(125);
+        negative.setMaxHeight(400);
+        root.add(negative, 10, 4);
+        negative.setDisable(true);
+
+    		/**
+    		* next turn button to switch turn to other player
+    		*/
+    		Button nextTurn = new Button("Next\nTurn");
+    		nextTurn.setMaxWidth(125);
+    		nextTurn.setMaxHeight(400);
+    		root.add(nextTurn, 9, 5);
+        nextTurn.setDisable(true);
+
+    		/**
+    		* "Roll Dice" button which initiates a die roll when clicked on the players turn
+    		*/
+    		Button roll = new Button("Roll\nDie");
+    		roll.setMaxWidth(125);
+    		roll.setMaxHeight(400);
+    	  root.add(roll, 9, 4);
+
+    		/**
+    		* Sell property button to sell properties back to the bank for the cost originally paid
+    		*/
+    		Button sell = new Button("Sell");
+    		sell.setMaxWidth(125);
+    		sell.setMaxHeight(400);
+    		root.add(sell, 9, 3);
+
+
+    		 /**
+     		* sell property
+     		*/
+    		sell.setOnAction(new EventHandler<ActionEvent>(){
+    			@Override
+    			public void handle(ActionEvent event){
+            if (allPlayers.get(getPlayerFlag() - 1).getIsPlayer() == true){
+    				final Stage sellProperties = new Stage();
+    				 sellProperties.initModality(Modality.APPLICATION_MODAL);
+    				 sellProperties.initOwner(primaryStage);
+    				 VBox sellBox = new VBox(5);
+    				 ArrayList<Integer> locations = new ArrayList<Integer>();
+    				 ArrayList<Button> buttons = new ArrayList<Button>();
+
+    				 for (int i = 0; i < 24; i++){
+    					if (allPlayers.get(getPlayerFlag() - 1).getSpaceOwned(i) == true){
+    						buttons.add(new Button(numOfLand.getSpace(i).getName() + ": $" + numOfLand.getSpace(i).getSaleValue()));
+    						locations.add(numOfLand.getSpace(i).getLocation());
+    						 }
+    					 }
+
+    					 sellBox.getChildren().addAll(buttons);
+    					 for (int i = 0; i < buttons.size(); i++){
+    						 final Button myButton = buttons.get(i);
+    						 final int location = locations.get(i);
+
+    	           myButton.setOnAction(new EventHandler<ActionEvent>() {
+              	 		public void handle(ActionEvent event) {
+    									allPlayers.get(getPlayerFlag() - 1).sell(numOfLand, location, GameInfo);
+    									sellBox.getChildren().remove(myButton);
+                      final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
+                      currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+    									myButton.setDisable(true);
+                      if (allPlayers.get(getPlayerFlag() - 1).getMoney() > 0){
+                        nextTurn.setDisable(false);
+                  }}});
+                }
+
+    					 sellBox.setAlignment(Pos.CENTER);
+    					 Scene sellScene = new Scene(sellBox, 300, 200);
+    					 sellProperties.setScene(sellScene);
+    					 sellProperties.show();
+    				 }}});
+
+    		/**
+    		* Event Handler for roll button updates labels to represent players position, money, properties owned
+    		* and total turns taken
+    		*/
+        roll.setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event){
+              roll.setDisable(true);
+							final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
+              currentPlayer.takeTurnGui(numOfLand, currentPlayer, GameInfo, positive, negative, nextTurn, allPlayers, forceSale);
+              currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+
+              if (getPlayerFlag() == 1){
+                turnCount += 1;
+              }}});
+
+    		/**
+    		* Event Handler for "Next Turn" button after a players turn is done, the player must click the next turn button
+    		* to change turn to other player this changes the player information to update to the current players information
+    		* updates label to display whose turn it is
+    		*/
+    		nextTurn.setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event){
+
+              //If it is player ones turn and player two is not eliminated
+              if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == false){
+                playerTurn.setText("Player 2's Turn");
+                playerTurn.setTextFill(Color.RED);
+
+                //If player two is a human player
+                if (allPlayers.get(1).getIsPlayer() == true){
+                  final Player currentPlayer = allPlayers.get(1);
+                  roll.setDisable(false);
+                  nextTurn.setDisable(true);
+                  setPlayerFlag(2);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                }
+
+                //If player two is a computer player
+                else if (allPlayers.get(1).getIsPlayer() == false){
+                  roll.setDisable(true);
+                  final Player currentPlayer = allPlayers.get(1);
+                  allPlayers.get(1).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                  nextTurn.setDisable(false);
+                  setPlayerFlag(2);
+                }
+              }
+
+              //If player two has been eliminated
+              else if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == true){
+                GameInfo.setText("Player 2 has been eliminated\nPlayer 1 is the winner!");
+                roll.setDisable(true);
+                nextTurn.setDisable(true);
+              }
+
+              //If it is player two turn and player one has not been eliminated
+              //Player one is always human, so we don't need to worry about an AI situation
+              else if (getPlayerFlag() == 2){
+                if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == false){
+                  playerTurn.setText("Player 1's Turn");
+                  playerTurn.setTextFill(Color.BLUE);
+                  roll.setDisable(false);
+                  nextTurn.setDisable(true);
+                  setPlayerFlag(1);
+                  final Player currentPlayer = allPlayers.get(0);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+              }
+
+                //If player one has been eliminated in a two player game, player 2 wins
+                else if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == true){
+                  GameInfo.setText("Player 1 has been eliminated\nPlayer 2 is the winner!");
+                  roll.setDisable(true);
+                  nextTurn.setDisable(true);
+              }
+
+                //If there are more than 2 players in a game and player 3 is not eliminated
+                else if (totalPlayers > 2 && allPlayers.get(2).getEliminated() == false){
+                  playerTurn.setText("Player 3's Turn");
+                  playerTurn.setTextFill(Color.ORANGE);
+
+                  //If player three is a human player
+                  if (allPlayers.get(2).getIsPlayer() == true){
+                    final Player currentPlayer = allPlayers.get(2);
+                    roll.setDisable(false);
+                    nextTurn.setDisable(true);
+                    setPlayerFlag(3);
+                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                    currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                  }
+
+                  //If player three is a computer player
+                  else if (allPlayers.get(2).getIsPlayer() == false){
+                    roll.setDisable(true);
+                    final Player currentPlayer = allPlayers.get(2);
+                    allPlayers.get(2).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                    currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                    nextTurn.setDisable(false);
+                    setPlayerFlag(3);
+                  }
+                }
+
+                //If there are more than 2 players in a game and player 3 has been eliminated
+                else if (totalPlayers > 2 && allPlayers.get(2).getEliminated() == true){
+                  GameInfo.setText("Player 3 has been eliminated\nPress Next Turn to continue play");
+                    roll.setDisable(true);
+                    nextTurn.setDisable(false);
+                    setPlayerFlag(3);
+                }
+              }
+
+              else if (getPlayerFlag() == 3){
+                //if in a three player game, player one is not eliminated
+                if (totalPlayers == 3 && allPlayers.get(0).getEliminated() == false){
+                  playerTurn.setText("Player 1's Turn");
+                  playerTurn.setTextFill(Color.BLUE);
+                  roll.setDisable(false);
+                  nextTurn.setDisable(true);
+                  setPlayerFlag(1);
+                  final Player currentPlayer = allPlayers.get(0);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                }
+
+                //if in a three player game player one is eliminated
+                else if (totalPlayers == 3 && allPlayers.get(0).getEliminated() == true){
+                  GameInfo.setText("Player 1 has been eliminated\nPress Next Turn to continue play");
+                  roll.setDisable(true);
+                  nextTurn.setDisable(false);
+                  setPlayerFlag(1);
+                }
+
+                //if in a four player game , player four is not eliminated
+                else if (totalPlayers == 4 && allPlayers.get(3).getEliminated() == false){
+                  playerTurn.setText("Player 4's Turn");
+                  playerTurn.setTextFill(Color.PURPLE);
+
+                  //If player four is a human player
+                  if (allPlayers.get(3).getIsPlayer() == true){
+                    final Player currentPlayer = allPlayers.get(3);
+                    roll.setDisable(false);
+                    nextTurn.setDisable(true);
+                    setPlayerFlag(4);
+                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                    currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                  }
+
+                  //If player four is a computer player
+                  else if (allPlayers.get(3).getIsPlayer() == false){
+                    roll.setDisable(true);
+                    final Player currentPlayer = allPlayers.get(3);
+                    allPlayers.get(3).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers);
+                    currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                    currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                    nextTurn.setDisable(false);
+                    setPlayerFlag(4);
+                  }
+                }
+
+                //if in a four player game, player four is eliminated
+                else if (totalPlayers == 4 && allPlayers.get(3).getEliminated() == true){
+                  GameInfo.setText("Player 4 has been eliminated\nPress Next Turn to continue play");
+                  roll.setDisable(true);
+                  nextTurn.setDisable(false);
+                  setPlayerFlag(4);
+                }
+              }
+
+              else if (getPlayerFlag() == 4){
+                if (allPlayers.get(0).getEliminated() == false){
+                  playerTurn.setText("Player 1's Turn");
+                  playerTurn.setTextFill(Color.BLUE);
+                  roll.setDisable(false);
+                  nextTurn.setDisable(true);
+                  setPlayerFlag(1);
+                  final Player currentPlayer = allPlayers.get(0);
+                  currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                  currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
+                }
+
+                else if (allPlayers.get(0).getEliminated() == true){
+                  GameInfo.setText("Player 1 has been eliminated\nPlease press Next Turn button to advance play");
+                  roll.setDisable(true);
+                  nextTurn.setDisable(false);
+                  setPlayerFlag(1);
+                }}}
+        });
+
+    		/**
+    		* Event Handler for positive ("Yes") button updates labels to reflect the property purchased by player
+    		* and updates players money to reflect the purchase of said property which is (players money - the price of property purchased)
+    		*/
+        positive.setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event){
+              final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
+              currentPlayer.purchase(numOfLand, GameInfo);
+              currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+              positive.setDisable(true);
+              negative.setDisable(true);
+              nextTurn.setDisable(false);
+              }
+            });
+
+    		/**
+    		* Event Handler for negative ("No") button declines purchase/sale of property and proceeds to next players turn
+    		*/
+        negative.setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event){
+              negative.setDisable(true);
+              positive.setDisable(true);
+    					nextTurn.setDisable(false);
+              }
+          });
+
+    		/**
+    		* Set up of buttons for the main gameboard
+    		*/
+        ArrayList<Button> boardButtons = new ArrayList<Button>();
+        int space = 1;
+        int leftspace = 12;
+
+        for (int s = 0; s < 24; s++){
+          boardButtons.add(new Button());
+        }
+
+        for (int i = 0; i < boardButtons.size(); i++){
+          boardButtons.get(i).setMaxWidth(150);
+          boardButtons.get(i).setMaxHeight(400);
+
+          if (i <= 6){
+            root.add(boardButtons.get(i), 6, 7 - i);
+          } else if (i >= 7 && i <= 12){
+            root.add(boardButtons.get(i), i, 1);
+          } else if (i >= 13 && i <= 18){
+            root.add(boardButtons.get(i), 12, (space + 1));
+            space++;
+          } else if (i >= 19 && i <= 23){
+            root.add(boardButtons.get(i), (leftspace - 1) ,7);
+            leftspace--;
+          }
+        }
+
+        //Set up of event handlers to eturn information about each spaces when clicked/selected
+        for (int i = 0; i < 24; i++){
+          final Space newSpace = numOfLand.getSpace(i);
+          final String spaceName = numOfLand.getSpace(i).getName();
+          if (i == 1||i == 3||i == 4||i == 7||i == 8||i == 10||i == 13||i == 14||i == 16||i == 19||i == 20||i == 22||i == 23){
+            final int spaceCost = numOfLand.getSpace(i).getCost();
+            final int spaceRent = numOfLand.getSpace(i).getValue();
+            boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+              basicText = spaceName + ", Cost " + spaceCost + ", Rent " + spaceRent;
+              newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
+            }
+            });
+        } else if (i==0){
+          boardButtons.get(i).setText(spaceName);
+          boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event) {
+            spaceInfo.setText("Players start game here");
+            }});
+
+        } else if (i==6){
+          boardButtons.get(i).setText(spaceName);
+          boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event) {
+            spaceInfo.setText("Player is sent here when\nthey land on go to jail");
+            }});
+
+        } else if (i==2||i==9||i==15){
+          final int spaceCost = numOfLand.getSpace(i).getCost();
+          final int spaceRent = numOfLand.getSpace(i).getValue();
+          boardButtons.get(i).setText("Rail\nRoad");
+          boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event) {
+            basicText = spaceName + ", Cost " + spaceCost + ", Rent " + spaceRent;
+            newSpace.setSpaceInfo(newSpace, spaceInfo, basicText);
+          }});
+
+        } else if (i==5||i==17){
+          boardButtons.get(i).setText(spaceName);
+          boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event) {
+            spaceInfo.setText("Receive a random amount of money\nbetween -300 and 250");
+        }});
+
+        } else if (i==11){
+          boardButtons.get(i).setText("Income\nTax");
+          boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event) {
+            spaceInfo.setText("Pay the bank $100");
+          }});
+
+        } else if (i==12){
+          boardButtons.get(i).setText("Free\nParking");
+          boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event) {
+            spaceInfo.setText("Receive a random amount of money");
+          }});
+
+        } else if (i==18){
+          boardButtons.get(i).setText("Go to\nJail");
+          boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event) {
+            spaceInfo.setText("Sends you to jail");
+          }});
+
+        } else if (i==21){
+          boardButtons.get(i).setText("Comm\nFund");
+          boardButtons.get(i).setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent event) {
+            spaceInfo.setText("Funding here");
+          }});
+        }
+
+        //Sets the colours of buyables spaces to match their names
+        boardButtons.get(1).setStyle("-fx-background-color: #FFFF00");
+        boardButtons.get(3).setStyle("-fx-background-color: #EEEE00");
+        boardButtons.get(4).setStyle("-fx-background-color: #FFFF00");
+        boardButtons.get(7).setStyle("-fx-background-color: #00F5FF");
+        boardButtons.get(8).setStyle("-fx-background-color: #00E5EE");
+        boardButtons.get(10).setStyle("-fx-background-color: #00F5FF");
+        boardButtons.get(13).setStyle("-fx-background-color: #FF0000");
+        boardButtons.get(14).setStyle("-fx-background-color: #EE0000");
+        boardButtons.get(16).setStyle("-fx-background-color: #FF0000");
+        boardButtons.get(19).setStyle("-fx-background-color: #EEC900");
+        boardButtons.get(20).setStyle("-fx-background-color: #FFD700");
+        boardButtons.get(22).setStyle("-fx-background-color: #00FA9A");
+        boardButtons.get(23).setStyle("-fx-background-color: #7CFC00");
+
+    	/**
+    	* Exit button to prematurely end game without meeting end condition and pop up window to confirm
+    	* if you'd like to quit or not
+    	*/
+    	Button btClose = new Button("Exit");
+    	btClose.setMaxWidth(75);
+    	btClose.setMaxHeight(75);
+    	root.add(btClose, 17, 0);
+    	btClose.setOnAction(new EventHandler<ActionEvent>(){
+    		@Override
+    		public void handle(ActionEvent event) {
+    			 final Stage exitChoice = new Stage();
+    			 exitChoice.initModality(Modality.APPLICATION_MODAL);
+    			 exitChoice.initOwner(primaryStage);
+    			 HBox exitBox = new HBox(20);
+    			 Button close = new Button("Exit");
+    			 Button doNotClose = new Button("Keep Playing");
+    			 exitBox.setAlignment(Pos.CENTER);
+
+    			 close.setOnAction(new EventHandler<ActionEvent>(){
+    				 @Override
+    				 public void handle(ActionEvent event){
+    					 primaryStage.close();
+						 //displays player stands
+						 final Stage endGameBox = new Stage();
+						 final HBox endGame = new HBox(50);
+						 endGameBox.initModality(Modality.APPLICATION_MODAL);
+						 endGameBox.initOwner(primaryStage);
+						 endGameBox.setTitle("Game Over!");
+						 
+						 /**
+						 * Determines who the winner is (most money for the honeys)
+						 * This is in NO WAY efficient and may not even be right
+						 * getNetWorth() method is in Player at the deadass bottom
+						 *Goes from line 622 to 666
+						 *getNetWorth is in Player at the deadass bottom
+						 */
+						 //basically player standings but worse
+						 TextArea playerStats = new TextArea();
+						 playerStats.appendText("Player Stats: ");
+						 
+						 ArrayList<Integer> netWorths = new ArrayList<Integer>(); //used for the ranks and shit (uses the for loop below to add to it
+						 
+						 for (int i = 0; i < allPlayers.size(); i++){
+							playerStats.appendText("\n\nPlayer " + allPlayers.get(i).getPlayerNumber() + " :");
+							playerStats.appendText("\nMoney: $" + allPlayers.get(i).getMoney() + "\nProperties owned: " + allPlayers.get(i).getPropertiesOwned());
+							playerStats.appendText("\nNetworth: $" + allPlayers.get(i).getNetWorth(numOfLand));
+							netWorths.add(allPlayers.get(i).getNetWorth(numOfLand));
+						 }
+						 
+						 Collections.sort(netWorths); //sorts the array from lowest to highest (imported Collections)
+						 
+						 //finds which players networth matches the array index (could be more optimized?)
+						 ArrayList<Player> ranks = new ArrayList<Player>();
+						 for (int i = 0; i < netWorths.size(); i++) {
+							 for (int x = 0; x < allPlayers.size(); x++) {
+								 if (netWorths.get(i) == allPlayers.get(x).getNetWorth(numOfLand)) {
+									 ranks.add(allPlayers.get(x));
+								 }
+							 }
+						 }
+						 
+						 //tells who wins
+						 TextArea whoWon = new TextArea();
+						 whoWon.appendText("Who won?");
+						 if (ranks.size() >= 1) {
+							whoWon.appendText("\n\nPlayer " + ranks.get(3).getPlayerNumber() + " wins first place!\n with a networth of " + ranks.get(3).getNetWorth(numOfLand));
+						 }
+						 if(ranks.size() >= 2) {
+							whoWon.appendText("\n\nPlayer " + ranks.get(2).getPlayerNumber() + " comes in second!\n with a networth of " + ranks.get(2).getNetWorth(numOfLand));
+						 }
+						 if (ranks.size() >= 3) { 
+							whoWon.appendText("\n\nPlayer " + ranks.get(1).getPlayerNumber() + " comes in third!\n with a networth of " + ranks.get(1).getNetWorth(numOfLand));
+						 }
+						 if (ranks.size() >= 4) {
+							 whoWon.appendText("\n\nPlayer " + ranks.get(0).getPlayerNumber() + " comes in fourth!\n with a networth of " + ranks.get(0).getNetWorth(numOfLand));
+						 }
+						 
+						 endGame.getChildren().addAll(playerStats, whoWon);
+						 endGameBox.setScene(new Scene(endGame, 600, 500));
+						 endGameBox.show();
+    				 }
+    			 });
+
+    			 doNotClose.setOnAction(new EventHandler<ActionEvent>(){
+    				 @Override
+    				 public void handle(ActionEvent event){
+    					 exitChoice.close();
+    				 }
+    			 });
+
+    			 exitBox.getChildren().addAll(close, doNotClose);
+    			 Scene exitScene = new Scene(exitBox, 300, 200);
+    			 exitChoice.setScene(exitScene);
+    			 exitChoice.show();
+    		   }
+    	   });
+
+      //Set up for menu screen (LAYOUT ONE)
+      GridPane start = new GridPane();
+          final int rnumCols = 11;
+          final int rnumRows = 7;
+          for (int w = 0; w < rnumCols; w++) {
+              ColumnConstraints colConst = new ColumnConstraints();
+              colConst.setPercentWidth(100.0 / rnumCols);
+              start.getColumnConstraints().add(colConst);
+          }
+          for (int w = 0; w < rnumRows; w++) {
+              RowConstraints rowConst = new RowConstraints();
+              rowConst.setPercentHeight(100.0 / rnumRows);
+              start.getRowConstraints().add(rowConst);
+          }
+
+          // adding buttons and labels to start menu
+          welcome.setFont(Font.font ("Verdana", 40));
+          humanPlayers.setFont(Font.font ("Veranda", 20));
+          AIPlayers.setFont(Font.font ("Veranda", 20));
+          start.add(welcome, 3, 1, 6, 1);
+          start.add(humanPlayers, 1, 2, 5, 1 );
+          start.add(AIPlayers, 7, 2, 5, 1);
+          start.add(errorMessage, 4, 6, 3, 1);
+          start.add(player1, 1, 3, 1, 1);
+          start.add(player2, 2, 3, 1, 1);
+          start.add(player3, 3, 3, 1, 1);
+          start.add(player4, 4, 3, 1, 1);
+          start.add(computer0, 7, 3, 1, 1);
+          computer0.setDisable(true);
+          start.add(computer1, 8, 3, 1, 1);
+          computer1.setDisable(true);
+          start.add(computer2, 9, 3, 1, 1);
+          computer2.setDisable(true);
+          start.add(computer3, 10, 3, 1, 1);
+          computer3.setDisable(true);
+          start.add(begin, 5, 5, 2, 1);
+          start.add(totalPlayersPlaying, 5, 4, 2, 1);
+
+          //Event handlers for all buttons, set the amount of players in game in accordance with buttons clicked
+          player1.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+              totalHumanPlayers = 1;
+              totalPlayers = getTotalHumanPlayers() + getTotalComputerPlayers();
+              totalPlayersPlaying.setText("Total players: " + totalPlayers);
+              computer0.setDisable(true);
+              computer1.setDisable(false);
+              computer2.setDisable(false);
+              computer3.setDisable(false);
+            }
+          });
+
+          player2.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+              totalHumanPlayers = 2;
+              totalPlayers = getTotalHumanPlayers() + getTotalComputerPlayers();
+              totalPlayersPlaying.setText("Total players: " + totalPlayers);
+              computer0.setDisable(false);
+              computer1.setDisable(false);
+              computer2.setDisable(false);
+              computer3.setDisable(true);
+            }
+          });
+
+          player3.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+              totalHumanPlayers = 3;
+              totalPlayers = getTotalHumanPlayers() + getTotalComputerPlayers();
+              totalPlayersPlaying.setText("Total players: " + totalPlayers);
+              computer0.setDisable(false);
+              computer1.setDisable(false);
+              computer2.setDisable(true);
+              computer3.setDisable(true);
+            }
+          });
+
+          player4.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+              totalHumanPlayers = 4;
+              totalPlayers = getTotalHumanPlayers();
+              totalPlayersPlaying.setText("Total players: " + totalPlayers);
+              computer0.setDisable(false);
+              computer1.setDisable(true);
+              computer2.setDisable(true);
+              computer3.setDisable(true);
+            }
+          });
+
+          computer0.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+              totalComputerPlayers = 0;
+              totalPlayers = getTotalHumanPlayers() + getTotalComputerPlayers();
+              totalPlayersPlaying.setText("Total players: " + totalPlayers);
+            }
+          });
+
+          computer1.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+              totalComputerPlayers = 1;
+              totalPlayers = getTotalHumanPlayers() + getTotalComputerPlayers();
+              totalPlayersPlaying.setText("Total players: " + totalPlayers);
+            }
+          });
+
+          computer2.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+              totalComputerPlayers = 2;
+              totalPlayers = getTotalHumanPlayers() + getTotalComputerPlayers();
+              totalPlayersPlaying.setText("Total players: " + totalPlayers);
+            }
+          });
+
+          computer3.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+              totalComputerPlayers = 3;
+              totalPlayers = getTotalHumanPlayers() + getTotalComputerPlayers();
+              totalPlayersPlaying.setText("Total players: " + totalPlayers);
+            }
+          });
+
+          begin.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+              if (totalPlayers >= 2 && totalPlayers <= 4){
+  							for (int i = 0; i < totalHumanPlayers; i++){
+  								allPlayers.add(new Player(i, true));
+  							}
+
+  							for (int i = 0; i < totalComputerPlayers; i++){
+  								allPlayers.add(new ComputerAI(i, false));
+  							}
+
+  							for (int i = 0; i < allPlayers.size(); i++){
+  								allPlayers.get(i).setPlayerNumber(i + 1);
+  							}
+
+                Scene gamePlay = new Scene(root, 1200, 600);
+                primaryStage.setTitle("Mono-Poly");
+                primaryStage.setScene(gamePlay);
+                primaryStage.show();
+              }
+              else if (totalPlayers < 2 || totalPlayers > 4){
+                errorMessage.setText("Choose between 1 - 4 Players");
+              }
+            }});
+
+        Scene menu = new Scene(start, 1200, 600);
+      	primaryStage.setTitle("Mono-Poly");
+      	primaryStage.setScene(menu);
+      	primaryStage.show();
+      }
+  }
 }
