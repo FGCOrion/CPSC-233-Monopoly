@@ -435,7 +435,7 @@ public class Gui extends Application{
           @Override
           public void handle(ActionEvent event){
               final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
-              currentPlayer.purchase(numOfLand, GameInfo);
+              currentPlayer.purchase(numOfLand, GameInfo, nextTurn);
               currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
               positive.setDisable(true);
               negative.setDisable(true);
