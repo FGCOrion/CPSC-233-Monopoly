@@ -627,13 +627,14 @@ public class Gui extends Application{
   						 ArrayList<Integer> netWorths = new ArrayList<Integer>(); //used for the ranks and shit (uses the for loop below to add to it
 
   						 for (int i = 0; i < allPlayers.size(); i++){
+                netWorths.add(allPlayers.get(i).getNetWorth(numOfLand));
   							playerStats.appendText("\n\nPlayer " + allPlayers.get(i).getPlayerNumber() + " :");
   							playerStats.appendText("\nMoney: $" + allPlayers.get(i).getMoney() + "\nProperties owned: " + allPlayers.get(i).getPropertiesOwned());
   							playerStats.appendText("\nNetworth: $" + allPlayers.get(i).getNetWorth(numOfLand));
-  							netWorths.add(allPlayers.get(i).getNetWorth(numOfLand));
   						 }
 
   						 Collections.sort(netWorths); //sorts the array from lowest to highest (imported Collections)
+               Collections.reverse(netWorths);
 
   						 //finds which players networth matches the array index (could be more optimized?)
   						 ArrayList<Player> ranks = new ArrayList<Player>();
@@ -644,22 +645,19 @@ public class Gui extends Application{
   								 }
   							 }
   						 }
-
   						 //tells who wins
   						 TextArea whoWon = new TextArea();
   						 whoWon.appendText("Who won?");
-  						 if (ranks.size() >= 1) {
-  							whoWon.appendText("\n\nPlayer " + ranks.get(3).getPlayerNumber() + " wins first place!\n with a networth of " + ranks.get(3).getNetWorth(numOfLand));
-  						 }
-  						 if(ranks.size() >= 2) {
-  							whoWon.appendText("\n\nPlayer " + ranks.get(2).getPlayerNumber() + " comes in second!\n with a networth of " + ranks.get(2).getNetWorth(numOfLand));
-  						 }
-  						 if (ranks.size() >= 3) {
-  							whoWon.appendText("\n\nPlayer " + ranks.get(1).getPlayerNumber() + " comes in third!\n with a networth of " + ranks.get(1).getNetWorth(numOfLand));
-  						 }
-  						 if (ranks.size() >= 4) {
-  							 whoWon.appendText("\n\nPlayer " + ranks.get(0).getPlayerNumber() + " comes in fourth!\n with a networth of " + ranks.get(0).getNetWorth(numOfLand));
-  						 }
+               whoWon.appendText("\n\nPlayer " + ranks.get(0).getPlayerNumber() + " wins first place!\nwith a networth of $" + ranks.get(0).getNetWorth(numOfLand));
+               whoWon.appendText("\n\nPlayer " + ranks.get(1).getPlayerNumber() + " wins second place!\nwith a networth of $" + ranks.get(1).getNetWorth(numOfLand));
+               if (ranks.size() == 3){
+                 whoWon.appendText("\n\nPlayer " + ranks.get(2).getPlayerNumber() + " wins third place!\nwith a networth of $" + ranks.get(2).getNetWorth(numOfLand));
+                }
+               if (ranks.size() == 4){
+                 whoWon.appendText("\n\nPlayer " + ranks.get(2).getPlayerNumber() + " wins third place!\nwith a networth of $" + ranks.get(2).getNetWorth(numOfLand));
+                 whoWon.appendText("\n\nPlayer " + ranks.get(3).getPlayerNumber() + " wins fourth place!\nwith a networth of $" + ranks.get(3).getNetWorth(numOfLand));
+                }
+
 
   						 endGame.getChildren().addAll(playerStats, whoWon);
   						 endGameBox.setScene(new Scene(endGame, 600, 500));

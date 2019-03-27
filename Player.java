@@ -575,12 +575,12 @@ class Player extends Gui{
 
     //method to calculate netWorth
     public int getNetWorth(Board board) {
-      int netWorth = getMoney();
-      	for (int i = 0; i < board.getLength(); i++) {
-      		if (board.getSpace(i).getOwner() == getPlayerNumber()) {
+      int netWorth = 0;
+      	for (int i = 0; i < 24; i++) {
+      		if (board.getSpace(i).getOwner() == this.getPlayerNumber()){
       			netWorth += board.getSpace(i).getCost();
       		}
       	}
-      	return netWorth;
+      	return netWorth + this.getMoney();
       }
   }
