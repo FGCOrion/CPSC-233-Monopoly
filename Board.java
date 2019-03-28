@@ -31,7 +31,7 @@ class Board {
 	* @param location, space
 	*/
 	public void setSpace(int location, Space space) {
-		boardArray.set(number, space);
+		boardArray.set(location, space);
 	}
 
 	/**
