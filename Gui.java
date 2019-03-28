@@ -37,7 +37,7 @@ public class Gui extends Application{
   private Label AIPlayers = new Label("How many computer players?");
   private Label totalPlayersPlaying = new Label("Total players: " + totalPlayers);
   private Label errorMessage = new Label();
-	ArrayList<Player> allPlayers = new ArrayList<Player>();
+	private ArrayList<Player> allPlayers = new ArrayList<Player>();
 
   //buttons to choose how many human players in start menu
   private Button player1 = new Button("1");
@@ -86,13 +86,15 @@ public class Gui extends Application{
     return totalHumanPlayers;
   }
 
+  /**
+  * returns true if end conditions have been met
+  * returns false otherwise
+  * @return endGame
+  */
   public boolean getEndGame(){
       return endGame;
   }
 
-  public void setEndGame(boolean isEndGame){
-    endGame = isEndGame;
-  }
 
   /**
   * returns the amount of computer players
@@ -102,14 +104,6 @@ public class Gui extends Application{
     return totalComputerPlayers;
   }
 
-  /**
-	* sets the instance variable playerFlag which corresponds to each player
-	* @param playerFlag
-	*/
-  public void setPlayerFlag(int playerFlag) {
-    this.playerFlag = playerFlag;
-  }
-
 	/**
 	* returns 1 if it is player 1's turn or 2 if it is player 2's turn
 	* @return playerFlag
@@ -117,6 +111,26 @@ public class Gui extends Application{
   public int getPlayerFlag(){
     return playerFlag;
   }
+
+  //Mutator Methods
+
+  /**
+  * sets the varibale endGame to true if end conditions have been met
+  * sets to false if end conditions have not been met
+  * @param isEndGame
+  */
+  public void setEndGame(boolean isEndGame){
+    endGame = isEndGame;
+  }
+
+  /**
+  * sets the instance variable playerFlag which corresponds to each player
+  * @param playerFlag
+  */
+  public void setPlayerFlag(int playerFlag) {
+    this.playerFlag = playerFlag;
+  }
+
 
   public static void main(String[] args){
     Application.launch(args);
@@ -184,7 +198,7 @@ public class Gui extends Application{
     	  root.add(roll, 9, 4);
 
     		/**
-    		* Sell property button to sell properties back to the bank for the cost originally paid
+    		* Sell property button to sell properties back to the bank for half of the cost originally paid
     		*/
     		Button sell = new Button("Sell");
     		sell.setMaxWidth(125);
@@ -193,8 +207,10 @@ public class Gui extends Application{
 
 
     		 /**
-     		* sell property
-     		*/
+     		 * When player selects the sell property button, method will loop through the properties the player owns
+         * and add a button to a pop up window for each property owned. The player is then able to select a button
+         * and sell the property represented, at which point the button is removed from the pop up window
+     		 */
     		sell.setOnAction(new EventHandler<ActionEvent>(){
     			@Override
     			public void handle(ActionEvent event){
@@ -219,6 +235,7 @@ public class Gui extends Application{
     						 final Button myButton = buttons.get(i);
     						 final int location = locations.get(i);
 
+                 //set up of buttons for each property the player owns
     	           myButton.setOnAction(new EventHandler<ActionEvent>() {
               	 		public void handle(ActionEvent event) {
     									allPlayers.get(getPlayerFlag() - 1).sell(numOfLand, location, GameInfo);
@@ -240,7 +257,7 @@ public class Gui extends Application{
 
     		/**
     		* Event Handler for roll button updates labels to represent players position, money, properties owned
-    		* and total turns taken
+    		* and total turns taken, only allows roll if no end conditions have been met
     		*/
         roll.setOnAction(new EventHandler<ActionEvent>(){
           @Override
@@ -263,8 +280,8 @@ public class Gui extends Application{
 
     		/**
     		* Event Handler for "Next Turn" button after a players turn is done, the player must click the next turn button
-    		* to change turn to other player this changes the player information to update to the current players information
-    		* updates label to display whose turn it is
+    		* to change turn to next player. This changes the player information to update to the current players information
+    		* updates label to display whose turn it is, and passes over any players who may have been previously eliminated
     		*/
     		nextTurn.setOnAction(new EventHandler<ActionEvent>(){
           @Override
@@ -307,6 +324,7 @@ public class Gui extends Application{
                 sell.setDisable(true);
               }
 
+              //if there are more than two players and it is player ones turn and player two has been eliminated
               else if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == true && totalPlayers > 2){
                 GameInfo.setText("Player 2 has been eliminated\nPress Next Turn to continue play");
                   final Player currentPlayer = allPlayers.get(0);
@@ -440,7 +458,10 @@ public class Gui extends Application{
                 }
               }
 
+              //four player game
               else if (getPlayerFlag() == 4){
+
+                //if player one has not been eliminated
                 if (allPlayers.get(0).getEliminated() == false){
                   playerTurn.setText("Player 1's Turn");
                   playerTurn.setTextFill(Color.BLUE);
@@ -452,6 +473,7 @@ public class Gui extends Application{
                   currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                 }
 
+                //if player one has been eliminated
                 else if (allPlayers.get(0).getEliminated() == true){
                   GameInfo.setText("Player 1 has been eliminated\nPlease press Next Turn button to advance play");
                   final Player currentPlayer = allPlayers.get(0);
@@ -462,6 +484,7 @@ public class Gui extends Application{
                   turnCount++;
                 }}}
 
+          //if end conditions for the game have been met, then ends the game
           else if (getEndGame() == true){
             GameInfo.appendText("\nPlease press the End Game button to see who won!");
             nextTurn.setDisable(true);
@@ -505,14 +528,17 @@ public class Gui extends Application{
         int space = 1;
         int leftspace = 12;
 
+        //initializes 24 buttons (one for each space on the board)
         for (int s = 0; s < 24; s++){
           boardButtons.add(new Button());
         }
 
+        //sets the size of each button
         for (int i = 0; i < boardButtons.size(); i++){
           boardButtons.get(i).setMaxWidth(150);
           boardButtons.get(i).setMaxHeight(400);
 
+          //assigns each button to its appropriate spot on the board
           if (i <= 6){
             root.add(boardButtons.get(i), 6, 7 - i);
           } else if (i >= 7 && i <= 12){
@@ -526,7 +552,11 @@ public class Gui extends Application{
           }
         }
 
-        //Set up of event handlers to return information about each spaces when clicked/selected
+        /**
+        * set up of event handlers for all 24 buttons on the board. If the space is a property that players are able to purchase
+        * then the name, cost, rent and owner information is listed when the player clicks on the space. If the space is not able to be
+        * purchased, then when a player clicks on the space information about what that space is/does is listed
+        */
         for (int i = 0; i < 24; i++){
           final Space newSpace = numOfLand.getSpace(i);
           final String spaceName = numOfLand.getSpace(i).getName();
@@ -608,7 +638,7 @@ public class Gui extends Application{
           }});
         }
 
-        //Sets the colours of buyables spaces to match their names
+        //Sets the colours of buyable spaces to match their names
         boardButtons.get(1).setStyle("-fx-background-color: #FFFF00");
         boardButtons.get(3).setStyle("-fx-background-color: #EEEE00");
         boardButtons.get(4).setStyle("-fx-background-color: #FFFF00");
@@ -654,18 +684,16 @@ public class Gui extends Application{
   						 endGameBox.setTitle("Game Over!");
 
   						 /**
-  						 * Determines who the winner is (most money for the honeys)
-  						 * This is in NO WAY efficient and may not even be right
-  						 * getNetWorth() method is in Player at the deadass bottom
-  						 *Goes from line 622 to 666
-  						 *getNetWorth is in Player at the deadass bottom
+  						 * If you select that you would like to exit the game then this determines who the winner is
+               * based on their net worth. The main GUI is then closed, and a new window is opened which displays
+               * the rankings of each player from first to last, who won and how much money/property they had.
   						 */
-  						 //basically player standings but worse
   						 TextArea playerStats = new TextArea();
   						 playerStats.appendText("Player Stats: ");
 
-  						 ArrayList<Integer> netWorths = new ArrayList<Integer>(); //used for the ranks and shit (uses the for loop below to add to it
+  						 ArrayList<Integer> netWorths = new ArrayList<Integer>();
 
+              //sets up an array with the players networths
   						 for (int i = 0; i < allPlayers.size(); i++){
                 netWorths.add(allPlayers.get(i).getNetWorth(numOfLand));
   							playerStats.appendText("\n\nPlayer " + allPlayers.get(i).getPlayerNumber() + " :");
@@ -673,10 +701,11 @@ public class Gui extends Application{
   							playerStats.appendText("\nNetworth: $" + allPlayers.get(i).getNetWorth(numOfLand));
   						 }
 
-  						 Collections.sort(netWorths); //sorts the array from lowest to highest (imported Collections)
+              //sorts the networths from lowest to highest, then inverts the list to be from first to last place
+  						 Collections.sort(netWorths);
                Collections.reverse(netWorths);
 
-  						 //finds which players networth matches the array index (could be more optimized?)
+  						 //finds which players networth matches the array index
   						 ArrayList<Player> ranks = new ArrayList<Player>();
   						 for (int i = 0; i < netWorths.size(); i++) {
   							 for (int x = 0; x < allPlayers.size(); x++) {
@@ -685,7 +714,8 @@ public class Gui extends Application{
   								 }
   							 }
   						 }
-  						 //tells who wins
+
+  						 //displays player standings, who won and who lost
   						 TextArea whoWon = new TextArea();
   						 whoWon.appendText("Who won?");
                whoWon.appendText("\n\nPlayer " + ranks.get(0).getPlayerNumber() + " wins first place!\nwith a networth of $" + ranks.get(0).getNetWorth(numOfLand));
@@ -704,6 +734,7 @@ public class Gui extends Application{
       				 }
       			 });
 
+             //if player decides to keep playing
       			 doNotClose.setOnAction(new EventHandler<ActionEvent>(){
       				 @Override
       				 public void handle(ActionEvent event){
@@ -718,7 +749,7 @@ public class Gui extends Application{
       		   }
       	   });
 
-      //Set up for menu screen (LAYOUT ONE)
+      //Set up for the main menu
       GridPane start = new GridPane();
           final int rnumCols = 11;
           final int rnumRows = 7;
@@ -756,7 +787,7 @@ public class Gui extends Application{
           start.add(begin, 5, 5, 2, 1);
           start.add(totalPlayersPlaying, 5, 4, 2, 1);
 
-          //Event handlers for all buttons, set the amount of players in game in accordance with buttons clicked
+          //Event handlers for all buttons, sets the amount of players in game in accordance with buttons clicked
           player1.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -845,6 +876,7 @@ public class Gui extends Application{
             }
           });
 
+          //After the amount of human and computer players has been selected, the begin button launches the main gameplay GUI to begin play
           begin.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){

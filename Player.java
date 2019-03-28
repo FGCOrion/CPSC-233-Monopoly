@@ -21,35 +21,63 @@ class Player extends Gui{
     private ArrayList<Player> allPlayers = new ArrayList<Player>();
     private Player winner;
 
-    /* Getters */
+    //Accessor Methods
+
+    /**
+    * returns position of player
+    * @return position
+    */
     public int getPosition(){
         return position;
     }
 
-    public char getAvatar(){
-        return avatar;
-    }
-
+    /**
+    * returns amount of money a player has
+    * @return money
+    */
     public int getMoney(){
         return money;
     }
 
+    /**
+    * returns true if the player is human
+    * retuns false if the player is AI
+    * @return isPlayer
+    */
     public boolean getIsPlayer(){
       return isPlayer;
     }
 
+    /**
+    * returns true if the player has been eliminated from the game
+    * returns false if the player is still playing and has not been eliminated
+    * @return eliminated
+    */
     public boolean getEliminated(){
       return this.eliminated;
     }
 
+    /**
+    * returns which player it is (player 1 or 2 or 3 or 4)
+    * @return playerNumber
+    */
     public int getPlayerNumber(){
     	return this.playerNumber;
     }
 
+    /**
+    * returns the amount of properties a player owns
+    * @return propertiesOwned
+    */
     public int getPropertiesOwned(){
     	return this.propertiesOwned;
 	   }
 
+     /**
+     * returns true if a property is owned by the specified player
+     * returns false if it is not owned by the specified player
+     * @return tf
+     */
 	  public boolean getSpaceOwned(int space){
   		boolean tf = false;
   		if (this.owns.contains(space))
@@ -57,45 +85,81 @@ class Player extends Gui{
   		return tf;
 	   }
 
-    public void setEliminated(boolean isEliminated){
-       eliminated = isEliminated;
-     }
-
-    public void setIsPlayer(boolean newIsPlayer){
-      this.isPlayer = newIsPlayer;
-    }
-
+     /**
+     * returns true if the player is in jail
+     * retuns false if the player is not in jail
+     * @return inJail
+     */
     public boolean getInJail(){
       return inJail;
     }
 
 
     /* Setters */
+
+    /**
+    * sets the player status to eliminated when true
+    * sets the player status to not eliminated when false
+    * @param isEliminated
+    */
+    public void setEliminated(boolean isEliminated){
+       eliminated = isEliminated;
+     }
+
+     /**
+     * sets the player status to human when true
+     * sets the player status to AI when false
+     * @param newIsPlayer
+     */
+    public void setIsPlayer(boolean newIsPlayer){
+      this.isPlayer = newIsPlayer;
+    }
+
+    /**
+    * sets the position of the player on the board
+    * @param newPosition
+    */
     public void setPosition(int newPosition){
         this.position = newPosition;
     }
 
-    public void setAvatar(char avatarType) {
-        this.avatar = avatarType;
-    }
-
+    /**
+    * sets the amount of money a player has
+    * @param newMoney
+    */
     public void setMoney(int newMoney){
         this.money = newMoney;
     }
 
+    /**
+    * sets the players number (1-4)
+    * @param newPlayerNumber
+    */
     public void setPlayerNumber(int newPlayerNumber){
     	this.playerNumber = newPlayerNumber;
   	}
 
+    /**
+    * sets the amount of properties a player owns
+    * @param propertiesOwned
+    */
   	public void setPropertiesOwned(int propertiesOwned){
       	this.propertiesOwned = propertiesOwned;
   	}
 
+    /**
+    * sets if the player is in jail or not
+    * if true, the player is in Jail
+    * if false, the player is not in jail
+    * @param inJail
+    */
     public void setInJail(boolean inJail){
       this.inJail = inJail;
     }
 
-    /* constructor */
+    //Constructors for player
+
+    //default constructor
     public Player() {
       position = 0;
       avatar = '@';
@@ -104,6 +168,11 @@ class Player extends Gui{
       eliminated = false;
     }
 
+    /**
+    * constructor that takes a player number and boolen isPlayer as an argument
+    * this constructor called from the main menu when setting up human and computer players
+    * @param playerNumber, isPLayer
+    */
     public Player(int playerNumber, boolean isPlayer){
   		position = 0;
   		avatar = '@';
@@ -129,7 +198,6 @@ class Player extends Gui{
   	 * Method to make the program wait x amount of milliseconds, so I don't have to write the code every time
   	 * @param milliseconds
   	 */
-
   	public static void wait(int milliseconds){
   		try {Thread.sleep(milliseconds);} catch(InterruptedException intrx) {/* handle the exception */}
   	}
@@ -196,16 +264,23 @@ class Player extends Gui{
   		}
   	}
 
+
+    /**
+    * this is the method that allows the human players to take their turn, updated information on all players as play progresses
+    * @param board, player, GameInfo, positive, negative, nextTurn, allPlayers
+    */
   	public void takeTurnGui(Board board, Player player, TextArea GameInfo, Button positive, Button negative, Button nextTurn, ArrayList<Player> allPlayers){
-  		Scanner input = new Scanner(System.in);
-  		//Creates a new scanner
+
     		GameInfo.setText("It is player " + player.getPlayerNumber() + "'s turn");
+
+        //Start of turn if the player is not stuck in jail
         if (player.getInJail() == false){
       		int x = rollDie();
       		GameInfo.appendText("\nYou rolled a " + String.valueOf(x));
       		int oldPosition = player.getPosition();
       		player.setPosition(oldPosition + x);
 
+          //If the player passes or lands on GO they collect $200
       		if (player.getPosition() >= board.getLength()) {
       			GameInfo.appendText("\nYou passed GO and collected $200");
       			player.setPosition(player.getPosition() - board.getLength());
@@ -213,12 +288,13 @@ class Player extends Gui{
             nextTurn.setDisable(false);
       		}
 
+          //updates gameinfo to let the player know where they have landed
       		Space newSpace = board.getSpace(player.getPosition());
       		GameInfo.appendText("\nYou landed on " + newSpace.getName());
 
       		/**
-      		 *when a player comes to an unowned place, player will have the opinion to determine purchase this very place or not.
-      		 *if player decide to own the place and have enough money, player will lose the amount of money and own this place.
+      		 * when a player comes to an unowned place they will be given the option to purchase the space or not
+      		 * if they deicde to purchase the property, their money will be adjusted, less the cost of the property
       		 **/
       		if (newSpace.getOwner() == 0) {
       			GameInfo.appendText("\n" + newSpace.getName() + " is unowned. \nWould you like to purchase it for $" +
@@ -239,7 +315,8 @@ class Player extends Gui{
             nextTurn.setDisable(false);
       		}
 
-      		//If the player lands on a space owned by another player
+      		//If the player lands on a space owned by another player they will pay rent to that player, the system then updates
+          // gameinfo to display the players new total money and the property owners new total money
       		else if (newSpace.getOwner() != 0 && newSpace.getOwner() != getPlayerNumber() && newSpace.getOwner() < 10 && newSpace.getOwner() != -1) {
           	GameInfo.appendText("\n" + newSpace.getName() + " is owned by player " + newSpace.getOwner() + ". \nYou owe them $" + String.valueOf(newSpace.getValue()));
             player.setMoney(player.getMoney() - newSpace.getValue());
@@ -298,7 +375,8 @@ class Player extends Gui{
             player.checkPlayerFunds(GameInfo, nextTurn, allPlayers, board);
         }
 
-        //If the player is stuck in jail
+        //Start of player turn if they are stuck in jail
+        //the player must roll a 3 or a 6 to be released from jail
         } else if (player.getInJail()){
           int x = rollDie();
           if (x == 3 || x == 6){
@@ -315,20 +393,29 @@ class Player extends Gui{
         }
     }
 
+    /**
+    * this is the method that allows the human players to take their turn, updated information on all players as play progresses
+    * @param board, player, GameInfo, allPlayers, nextTurn
+    */
     public void takeTurnAI(Board board, Player player, TextArea GameInfo, ArrayList<Player> allPlayers, Button nextTurn){
 
       GameInfo.setText("It is player " + player.getPlayerNumber() + "'s turn");
+
+      //Start of the AIs turn if they are not stuck in jail
       if (player.getInJail() == false){
         int x = rollDie();
         GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + " rolled a " + String.valueOf(x));
         int oldPosition = player.getPosition();
         player.setPosition(oldPosition + x);
+
+        //if the AI passes or lands on GO they collect $200 dollars
         if (player.getPosition() >= board.getLength()) {
           GameInfo.appendText("\nYou passed GO and collected $200");
           player.setPosition(player.getPosition() - board.getLength());
           player.setMoney(player.getMoney() + 200);
         }
 
+        //updates the AI info to display where they have landed
         Space newSpace = board.getSpace(player.getPosition());
         GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + " landed on " + newSpace.getName());
 
@@ -358,7 +445,8 @@ class Player extends Gui{
           GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + " owns " + newSpace.getName());
         }
 
-        //If the computer player lands on a space owned by another player
+        //If the computer player lands on a space owned by another player they pay rent to the owner
+        //they gameinfo is then updated to display the AI's new balance and the property owners new balance
         else if (newSpace.getOwner() != 0 && newSpace.getOwner() != getPlayerNumber() && newSpace.getOwner() < 10 && newSpace.getOwner() != -1) {
           GameInfo.appendText("\n" + newSpace.getName() + " is owned by player " + newSpace.getOwner() + ". \nPlayer " + player.getPlayerNumber() +  " owes them $" + String.valueOf(newSpace.getValue()));
           player.setMoney(player.getMoney() - newSpace.getValue());
@@ -415,7 +503,7 @@ class Player extends Gui{
           player.checkAIFunds(board, GameInfo, allPlayers, player);
         }
 
-      //If the computer is stuck in jail
+      //Start of AIs turn if they are stuck in jail
       } else if (player.getInJail()){
           int y = rollDie();
           if (y == 3 || y == 6){
@@ -432,7 +520,9 @@ class Player extends Gui{
 
 
     /**
-    * purchases property player is on when positive button is clicked in Gui
+    * method to purchase a propety when they player choose "Yes" after they have landed on
+    * on an unowned property
+    * @param board, GameInfo, nextTurn
     */
   	public void purchase(Board board, TextArea GameInfo, Button nextTurn){
     		Space newSpace = board.getSpace(this.getPosition());
@@ -451,7 +541,11 @@ class Player extends Gui{
 
 
     /**
-    * sells selected property
+    * If the player chooses the sell button and selects a property button from the pop up window
+    * this method handles the sale of the property by adding the sale cost to the players balance
+    * setting the spaces ownership to zero (which represents an unowned space) and updating the
+    * GUI GameInfo to communicate that the property was successfully sold
+    * @param board, location, GameInfo
     */
     public void sell(Board board, int location, TextArea GameInfo){
       Space newSpace = board.getSpace(location);
@@ -469,7 +563,8 @@ class Player extends Gui{
     }}
 
     /**
-    * updates player info in TextArea in Gui
+    * updates player info in TextArea playerInfo
+    * @param playerInfo, currentPlayer, board, turnCount
     */
     public void updatePlayerInfo(TextArea playerInfo, Player currentPlayer, Board board, int turnCount){
       playerInfo.setText("Current Position: " + board.getSpace(currentPlayer.getPosition()).getName());
@@ -478,7 +573,12 @@ class Player extends Gui{
       playerInfo.appendText("\nCurrent Turn: " + turnCount);
     }
 
-
+    /**
+    * if an AI players balance falls below 0, they will be forced to sell properties until the balance is greater than
+    * or equal to zero. If they run out of properties to sell and their balance is still below 0 the AI player will be
+    * eliminated from the game
+    * @param board, GameInfo, allPlayers, player
+    */
     public void forceAISale(Board board, TextArea GameInfo, ArrayList<Player> allPlayers, Player player){
       ArrayList<Integer> locations = new ArrayList<Integer>();
       for (int i = 0; i < 24; i++){
@@ -501,6 +601,14 @@ class Player extends Gui{
           break;
         }}}
 
+
+
+    /**
+    * method to check if all but one player has been eliminated. If more than one player is not eliminated then gameplay will
+    * continur as normal. If only one player remains not eliminated, then gameplay will come to an end and that player will
+    * be delcared the winner
+    * @param board, GameInfo, allPlayers
+    */
     public void checkPlayersEliminated(Board board, TextArea GameInfo, ArrayList<Player> allPlayers){
       int eliminatedPlayers = 0;
       for (int i = 0; i < allPlayers.size(); i++){
@@ -524,6 +632,11 @@ class Player extends Gui{
       }
     }
 
+    /**
+    * Method to check if the AI's balance has fallen below 0. If so, will call the forceAISale method until
+    * balance is above zero or the AI is eliminated from gameplay
+    * @param board, GameInfo, allPlayers, player
+    */
     public void checkAIFunds(Board board, TextArea GameInfo, ArrayList<Player> allPlayers, Player player){
       if (this.getMoney() < 0 && this.getPropertiesOwned() > 0){
         GameInfo.appendText("\nPlayer " + this.getPlayerNumber() + " is out of money.\nThey must sell a property or forfeit the game.");
@@ -536,6 +649,12 @@ class Player extends Gui{
       }
     }
 
+    /**
+    * Method to check if the human players balance has fallen below zero. If so, play will not be able to proceed
+    * until the player sells enough property to being their balance above zero, or until they run out of property
+    * at which point they will be eliminated
+    * @param GameInfo, nexgtTurn, allPlayers, board
+    */
     public void checkPlayerFunds(TextArea GameInfo, Button nextTurn, ArrayList<Player> allPlayers, Board board){
 
       if (this.getMoney() < 0 && this.getPropertiesOwned() > 0){
@@ -554,7 +673,12 @@ class Player extends Gui{
       }
     }
 
-
+    /**
+    * Method to check if there are any spaces left on the board to purchase.
+    * If not, gameplay will be stopped and players will be propmted to End Game to see who the winner is
+    * If there are spaces still left available for purchase, gameplay will continue as normal
+    * @param board, GameInfo, nextTurn
+    */
     public void checkBoardSoldOut(Board board, TextArea GameInfo, Button nextTurn){
 
       int unownedSpaces = 0;
@@ -575,15 +699,27 @@ class Player extends Gui{
       }
     }
 
+    /**
+    * updates the current position, balance, properties owned for each player in the game
+    * also reports which players are eliminated (if any)
+    * @param playerStandings, allPLayers, board
+    */
     public void updatePlayerStandings(TextArea playerStandings, ArrayList<Player> allPlayers, Board board){
         playerStandings.setText("Player Standings");
       for (int i = 0; i < allPlayers.size(); i++){
         playerStandings.appendText("\n\nPlayer " + allPlayers.get(i).getPlayerNumber() + " :");
         playerStandings.appendText("\nCurrent Position: " + board.getSpace(allPlayers.get(i).getPosition()).getName());
         playerStandings.appendText("\nMoney: $" + allPlayers.get(i).getMoney() + "\nProperties owned: " + allPlayers.get(i).getPropertiesOwned());
+        if (allPlayers.get(i).getEliminated() == true){
+        playerStandings.appendText("\nELIMINATED");
+}
       }}
 
-    //method to calculate netWorth
+      /**
+      * Method to calculate the networth of a player, which is the total amount of money they have
+      * plus the purchase price of any properties they own
+      * @param board
+      */
     public int getNetWorth(Board board) {
       int netWorth = 0;
       	for (int i = 0; i < 24; i++) {
