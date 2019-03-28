@@ -4,7 +4,7 @@ import java.util.Random;
 class ComputerAI extends Player{
 
 	/**
-	* Basic setup variables for the computers position, avatar, money and number
+	* Basic setup variables for the computer's position, avatar, money and number
 	**/
 	private int position;
 	private char avatar;
@@ -25,7 +25,7 @@ class ComputerAI extends Player{
 	/**
 	* Constructor
 	* @param playerNumber
-	* @param isPlayer		To make sure the computer controls this players actions
+	* @param isPlayer		To make sure the computer controls this player's actions
 	**/
 	public ComputerAI(int playerNumber, boolean isPlayer){
 		position = 1;
@@ -75,8 +75,9 @@ class ComputerAI extends Player{
 			print("AI landed on " + newSpace.getName());
 
 			/**
-			 *when a player comes to an unowned place, player will have the opinion to determine purchase this very place or not.
-			 *if player decide to own the place and have enough money, player will lose the amount of money and own this place.
+			 *When an AI comes to an unowned place, it will have the opinion to determine purchase the place or not.
+			 *If it has enough money it will purchase it, otherwise it will not, and the later code blocks deal with the
+			 * other cases
 			 **/
 			if (newSpace.getOwner() == 0) {
 				print(newSpace.getName() + " is unowned and costs $" + String.valueOf(newSpace.getCost()) + ". (Value of $" + String.valueOf(newSpace.getValue()) + ")");

@@ -334,7 +334,7 @@ public class Gui extends Application{
                   setPlayerFlag(2);
               }
 
-              //If it is player twos turn and player one has not been eliminated
+              //If it is player two's turn and player one has not been eliminated
               //Player one is always human, so we don't need to worry about an AI situation
               else if (getPlayerFlag() == 2){
                 if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == false){

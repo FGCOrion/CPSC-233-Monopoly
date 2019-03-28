@@ -14,17 +14,9 @@ import javafx.scene.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 
-// I want to set up a menu that gives you the option to select either PvP
-// or player vs AI and possibly multiple (up tp 4) players
-
-// I will need a welcome greting "Welcome to Monopoly"
-// and then a prompt
-// how many people are playing today?
-// 1-4Players, min of at least 1 human player
-// so maybe you can choose how many humans and how many computer
-
 public class Start extends Gui {
 
+  // Private instance variables for the start menu
   private int totalHumanPlayers = 0;
   private int totalComputerPlayers = 0;
 
@@ -44,6 +36,7 @@ public class Start extends Gui {
 
   private Button begin = new Button("Start Game!");
 
+  // Getter Methods
   public int getTotalHumanPlayers(){
     return totalHumanPlayers;
   }
@@ -52,6 +45,11 @@ public class Start extends Gui {
     return totalComputerPlayers;
   }
 
+  /**
+   * The code for generating the start menu, which asks how many human and AI players the player wants, then
+   * begins the game with the requested settings
+   * @param args
+   */
   public static void main(String[] args) {
     Application.launch(args);
     }
