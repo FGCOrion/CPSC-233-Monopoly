@@ -720,10 +720,10 @@ public class Gui extends Application{
   						 whoWon.appendText("Who won?");
                whoWon.appendText("\n\nPlayer " + ranks.get(0).getPlayerNumber() + " wins first place!\nwith a networth of $" + ranks.get(0).getNetWorth(numOfLand));
                whoWon.appendText("\n\nPlayer " + ranks.get(1).getPlayerNumber() + " wins second place!\nwith a networth of $" + ranks.get(1).getNetWorth(numOfLand));
-               if (allPlayers.size() == 3){
+               if (ranks.size() == 3){
                  whoWon.appendText("\n\nPlayer " + ranks.get(2).getPlayerNumber() + " wins third place!\nwith a networth of $" + ranks.get(2).getNetWorth(numOfLand));
                 }
-               if (allPlayers.size() == 4){
+               if (ranks.size() == 4){
                  whoWon.appendText("\n\nPlayer " + ranks.get(2).getPlayerNumber() + " wins third place!\nwith a networth of $" + ranks.get(2).getNetWorth(numOfLand));
                  whoWon.appendText("\n\nPlayer " + ranks.get(3).getPlayerNumber() + " wins fourth place!\nwith a networth of $" + ranks.get(3).getNetWorth(numOfLand));
                 }
