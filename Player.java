@@ -336,7 +336,7 @@ class Player extends Gui{
       			if (chanceValue >= 0)
       				GameInfo.appendText("\nYou gained $" + Integer.toString(chanceValue));
       			if (chanceValue < 0)
-      				GameInfo.appendText("\nYou lost $" + Integer.toString(chanceValue));
+      				GameInfo.appendText("\nYou lost $" + Integer.toString(Math.abs(chanceValue)));
       			player.setMoney(player.getMoney() + chanceValue);
             player.checkPlayerFunds(GameInfo, nextTurn, allPlayers, board);
 
@@ -466,7 +466,7 @@ class Player extends Gui{
           if (chanceValue >= 0)
             GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + " gained $" + Integer.toString(chanceValue));
           if (chanceValue < 0)
-            GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + " lost $" + Integer.toString(chanceValue));
+            GameInfo.appendText("\nPlayer " + player.getPlayerNumber() + " lost $" + Integer.toString(Math.abs(chanceValue)));
           player.setMoney(player.getMoney() + chanceValue);
           player.checkAIFunds(board, GameInfo, allPlayers, player);
         }
