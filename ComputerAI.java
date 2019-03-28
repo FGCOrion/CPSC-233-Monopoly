@@ -3,6 +3,9 @@ import java.util.Random;
 
 class ComputerAI extends Player{
 
+	/**
+	* Basic setup variables for the computers position, avatar, money and number
+	**/
 	private int position;
 	private char avatar;
 	private int money;
@@ -10,12 +13,20 @@ class ComputerAI extends Player{
 	private boolean isPlayer = false;
 
 
+	/**
+	* Default Constructor
+	**/
 	public ComputerAI() {
 		position = 1;
-    avatar = 'C';
-    money = 1500;
+		avatar = 'C';
+		money = 1500;
 	}
 
+	/**
+	* Constructor
+	* @param playerNumber
+	* @param isPlayer		To make sure the computer controls this players actions
+	**/
 	public ComputerAI(int playerNumber, boolean isPlayer){
 		position = 1;
 		avatar = 'C';
@@ -24,15 +35,27 @@ class ComputerAI extends Player{
 		setIsPlayer(isPlayer);
 	}
 
+	/**
+	* Returns which player it is as an integer
+	* @return playerNumber
+	**/
 	public int getPlayerNumber(){
 		return playerNumber;
 	}
 
-
+	/**
+	* Sets the players number so they can be called later
+	* @param playerNumber
+	**/
 	public void setPlayerNumber(int playerNumber){
 		this.playerNumber = playerNumber;
 	}
 
+	/**
+	* Basic turn for the computer, automatically rolls the dice and moves the computer player to make decisions
+	* @param board
+	* @param player
+	**/
 	public void takeTurn(Board board, Player player) {
 		if(isPlayer == false){
 			print("\nIt is the computer's turn");
@@ -40,6 +63,8 @@ class ComputerAI extends Player{
 			print("AI rolled a " + String.valueOf(x));
 			int oldPosition = this.getPosition();
 			this.setPosition(oldPosition + x);
+			
+			//If the player goes all the way around the board it resets their position and they get $200
 			if (this.getPosition() > board.getLength()) {
 				print("AI passed GO and collected $200");
 				this.setPosition(this.getPosition() - board.getLength());
@@ -79,6 +104,7 @@ class ComputerAI extends Player{
 			}
 		}
 		else{
+			// If the player is a human player instead of a computer player than it calles the human takeTurn method
 			super.takeTurn(board, player);
 		}
 	}
