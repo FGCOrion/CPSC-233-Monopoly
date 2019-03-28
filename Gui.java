@@ -59,6 +59,8 @@ public class Gui extends Application{
 	*/
 	private Board numOfLand = new Board();
 	private int playerFlag = 1;
+  private boolean endGame = false;
+
 
 	/**
 	* Setup for labels in GUI that give information regarding each players total money, property,
@@ -82,6 +84,14 @@ public class Gui extends Application{
   */
   public int getTotalHumanPlayers(){
     return totalHumanPlayers;
+  }
+
+  public boolean getEndGame(){
+      return endGame;
+  }
+
+  public void setEndGame(boolean isEndGame){
+    endGame = isEndGame;
   }
 
   /**
@@ -215,6 +225,7 @@ public class Gui extends Application{
     									sellBox.getChildren().remove(myButton);
                       final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
                       currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
+                      currentPlayer.checkPlayerFunds(GameInfo, nextTurn, allPlayers, numOfLand);
     									myButton.setDisable(true);
                       if (allPlayers.get(getPlayerFlag() - 1).getMoney() > 0){
                         nextTurn.setDisable(false);
@@ -234,6 +245,7 @@ public class Gui extends Application{
         roll.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event){
+            if (getEndGame() == false){
               roll.setDisable(true);
 							final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
               currentPlayer.takeTurnGui(numOfLand, currentPlayer, GameInfo, positive, negative, nextTurn, allPlayers);
@@ -241,6 +253,12 @@ public class Gui extends Application{
 
               if (getPlayerFlag() == 1){
                 turnCount += 1;
+            } else if (getEndGame() == true){
+              GameInfo.appendText("\nPlease press the End Game button to see who won!");
+              nextTurn.setDisable(true);
+              roll.setDisable(true);
+              sell.setDisable(true);
+            }
               }}});
 
     		/**
@@ -251,6 +269,7 @@ public class Gui extends Application{
     		nextTurn.setOnAction(new EventHandler<ActionEvent>(){
           @Override
           public void handle(ActionEvent event){
+            if (getEndGame() == false){
 
               //If it is player ones turn and player two is not eliminated
               if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == false){
@@ -282,12 +301,16 @@ public class Gui extends Application{
               //If player two has been eliminated
               else if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == true && totalPlayers == 2){
                 GameInfo.setText("Player 2 has been eliminated\nPlayer 1 is the winner!");
+                GameInfo.appendText("\nPlease press the End Game button to see\nthe player standings for all players!");
                 roll.setDisable(true);
                 nextTurn.setDisable(true);
+                sell.setDisable(true);
               }
 
               else if (getPlayerFlag() == 1 && allPlayers.get(1).getEliminated() == true && totalPlayers > 2){
                 GameInfo.setText("Player 2 has been eliminated\nPress Next Turn to continue play");
+                  final Player currentPlayer = allPlayers.get(0);
+                  currentPlayer.checkPlayersEliminated(numOfLand, GameInfo, allPlayers);
                   roll.setDisable(true);
                   nextTurn.setDisable(false);
                   setPlayerFlag(2);
@@ -310,8 +333,10 @@ public class Gui extends Application{
                 //If player one has been eliminated in a two player game, player 2 wins
                 else if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == true){
                   GameInfo.setText("Player 1 has been eliminated\nPlayer 2 is the winner!");
+                  GameInfo.appendText("\nPlease press the End Game button to see\nthe player standings for all players!");
                   roll.setDisable(true);
                   nextTurn.setDisable(true);
+                  sell.setDisable(true);
                   turnCount++;
               }
 
@@ -345,6 +370,8 @@ public class Gui extends Application{
                 //If there are more than 2 players in a game and player 3 has been eliminated
                 else if (totalPlayers > 2 && allPlayers.get(2).getEliminated() == true){
                   GameInfo.setText("Player 3 has been eliminated\nPress Next Turn to continue play");
+                   final Player currentPlayer = allPlayers.get(0);
+                   currentPlayer.checkPlayersEliminated(numOfLand, GameInfo, allPlayers);
                     roll.setDisable(true);
                     nextTurn.setDisable(false);
                     setPlayerFlag(3);
@@ -367,6 +394,8 @@ public class Gui extends Application{
                 //if in a three player game player one is eliminated
                 else if (totalPlayers == 3 && allPlayers.get(0).getEliminated() == true){
                   GameInfo.setText("Player 1 has been eliminated\nPress Next Turn to continue play");
+                  final Player currentPlayer = allPlayers.get(0);
+                  currentPlayer.checkPlayersEliminated(numOfLand, GameInfo, allPlayers);
                   roll.setDisable(true);
                   nextTurn.setDisable(false);
                   setPlayerFlag(1);
@@ -403,6 +432,8 @@ public class Gui extends Application{
                 //if in a four player game, player four is eliminated
                 else if (totalPlayers == 4 && allPlayers.get(3).getEliminated() == true){
                   GameInfo.setText("Player 4 has been eliminated\nPress Next Turn to continue play");
+                  final Player currentPlayer = allPlayers.get(0);
+                  currentPlayer.checkPlayersEliminated(numOfLand, GameInfo, allPlayers);
                   roll.setDisable(true);
                   nextTurn.setDisable(false);
                   setPlayerFlag(4);
@@ -423,12 +454,21 @@ public class Gui extends Application{
 
                 else if (allPlayers.get(0).getEliminated() == true){
                   GameInfo.setText("Player 1 has been eliminated\nPlease press Next Turn button to advance play");
+                  final Player currentPlayer = allPlayers.get(0);
+                  currentPlayer.checkPlayersEliminated(numOfLand, GameInfo, allPlayers);
                   roll.setDisable(true);
                   nextTurn.setDisable(false);
                   setPlayerFlag(1);
                   turnCount++;
                 }}}
-        });
+
+          else if (getEndGame() == true){
+            GameInfo.appendText("\nPlease press the End Game button to see who won!");
+            nextTurn.setDisable(true);
+            roll.setDisable(true);
+            sell.setDisable(true);
+        }}});
+
 
     		/**
     		* Event Handler for positive ("Yes") button updates labels to reflect the property purchased by player
@@ -587,7 +627,7 @@ public class Gui extends Application{
       	* Exit button to prematurely end game without meeting end condition and pop up window to confirm
       	* if you'd like to quit or not
       	*/
-      	Button btClose = new Button("Exit");
+      	Button btClose = new Button("End\nGame");
       	btClose.setMaxWidth(75);
       	btClose.setMaxHeight(75);
       	root.add(btClose, 17, 0);
@@ -598,7 +638,7 @@ public class Gui extends Application{
       			 exitChoice.initModality(Modality.APPLICATION_MODAL);
       			 exitChoice.initOwner(primaryStage);
       			 HBox exitBox = new HBox(20);
-      			 Button close = new Button("Exit");
+      			 Button close = new Button("End Game");
       			 Button doNotClose = new Button("Keep Playing");
       			 exitBox.setAlignment(Pos.CENTER);
 
@@ -657,7 +697,6 @@ public class Gui extends Application{
                  whoWon.appendText("\n\nPlayer " + ranks.get(2).getPlayerNumber() + " wins third place!\nwith a networth of $" + ranks.get(2).getNetWorth(numOfLand));
                  whoWon.appendText("\n\nPlayer " + ranks.get(3).getPlayerNumber() + " wins fourth place!\nwith a networth of $" + ranks.get(3).getNetWorth(numOfLand));
                 }
-
 
   						 endGame.getChildren().addAll(playerStats, whoWon);
   						 endGameBox.setScene(new Scene(endGame, 600, 500));

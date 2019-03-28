@@ -59,8 +59,8 @@ class Board {
 		Space space12 = new Space("Free Parking", 0, 0, 0, 11, 16); //FOR NOW FREE PARKING IS JUST ANOTHER CHANCE
 
 		Space space13 = new Space("Red 1", 550, 250, 275, 0, 13);		//45.5%
-		Space space14 = new Space("Railroad 3", 200, 100, 100, 0, 14);
-		Space space15 = new Space("Red 2", 600, 275, 300, 0, 15);		//45.8%
+		Space space14 = new Space("Red 2", 600, 275, 300, 0, 14);		//45.8%
+		Space space15 = new Space("Railroad 3", 200, 100, 100, 0, 15);
 		Space space16 = new Space("Red 3", 650, 300, 325, 0, 16);		//46.2%
 		Space space17 = new Space("Chance", 0, 0, 0, 11, 17);
 		Space space18 = new Space("Go to Jail", 0, 0, 0, 15, 18);
