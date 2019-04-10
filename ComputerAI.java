@@ -3,30 +3,24 @@ import java.util.Random;
 
 class ComputerAI extends Player{
 
-	/**
-	* Basic setup variables for the computer's position, avatar, money and number
-	**/
 	private int position;
 	private char avatar;
 	private int money;
 	private int playerNumber = 2;
 	private boolean isPlayer = false;
+	private boolean inJail = false;
+	private boolean eliminated = false;
 
 
-	/**
-	* Default Constructor
-	**/
+
 	public ComputerAI() {
-		position = 1;
-		avatar = 'C';
-		money = 1500;
+		position = 0;
+    avatar = 'C';
+    money = 1500;
+		inJail = false;
+		eliminated = false;
 	}
 
-	/**
-	* Constructor
-	* @param playerNumber
-	* @param isPlayer		To make sure the computer controls this player's actions
-	**/
 	public ComputerAI(int playerNumber, boolean isPlayer){
 		position = 1;
 		avatar = 'C';
@@ -35,27 +29,15 @@ class ComputerAI extends Player{
 		setIsPlayer(isPlayer);
 	}
 
-	/**
-	* Returns which player it is as an integer
-	* @return playerNumber
-	**/
 	public int getPlayerNumber(){
 		return playerNumber;
 	}
 
-	/**
-	* Sets the players number so they can be called later
-	* @param playerNumber
-	**/
+
 	public void setPlayerNumber(int playerNumber){
 		this.playerNumber = playerNumber;
 	}
 
-	/**
-	* Basic turn for the computer, automatically rolls the dice and moves the computer player to make decisions
-	* @param board
-	* @param player
-	**/
 	public void takeTurn(Board board, Player player) {
 		if(isPlayer == false){
 			print("\nIt is the computer's turn");
@@ -63,8 +45,6 @@ class ComputerAI extends Player{
 			print("AI rolled a " + String.valueOf(x));
 			int oldPosition = this.getPosition();
 			this.setPosition(oldPosition + x);
-			
-			//If the player goes all the way around the board it resets their position and they get $200
 			if (this.getPosition() > board.getLength()) {
 				print("AI passed GO and collected $200");
 				this.setPosition(this.getPosition() - board.getLength());
@@ -75,9 +55,8 @@ class ComputerAI extends Player{
 			print("AI landed on " + newSpace.getName());
 
 			/**
-			 *When an AI comes to an unowned place, it will have the opinion to determine purchase the place or not.
-			 *If it has enough money it will purchase it, otherwise it will not, and the later code blocks deal with the
-			 * other cases
+			 *when a player comes to an unowned place, player will have the opinion to determine purchase this very place or not.
+			 *if player decide to own the place and have enough money, player will lose the amount of money and own this place.
 			 **/
 			if (newSpace.getOwner() == 0) {
 				print(newSpace.getName() + " is unowned and costs $" + String.valueOf(newSpace.getCost()) + ". (Value of $" + String.valueOf(newSpace.getValue()) + ")");
@@ -105,7 +84,6 @@ class ComputerAI extends Player{
 			}
 		}
 		else{
-			// If the player is a human player instead of a computer player than it calles the human takeTurn method
 			super.takeTurn(board, player);
 		}
 	}

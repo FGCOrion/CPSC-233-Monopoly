@@ -13,8 +13,6 @@ class TakeTurn extends Player{
 
   }
 
-
-
   /**
   * this is the method that allows the human players to take their turn, updated information on all players as play progresses
   * @param board, player, GameInfo, positive, negative, nextTurn, allPlayers

@@ -59,7 +59,7 @@ public class Gui extends Application{
 	*/
 	private Board numOfLand = new Board();
 	private int playerFlag = 1;
-  private boolean endGame = false;
+  private static boolean endGame = false;
 
 
 	/**
@@ -119,7 +119,7 @@ public class Gui extends Application{
   * sets to false if end conditions have not been met
   * @param isEndGame
   */
-  public void setEndGame(boolean isEndGame){
+  public static void setEndGame(boolean isEndGame){
     endGame = isEndGame;
   }
 
@@ -885,17 +885,7 @@ public class Gui extends Application{
             @Override
             public void handle(ActionEvent event){
               if (totalPlayers >= 2 && totalPlayers <= 4){
-  							for (int i = 0; i < totalHumanPlayers; i++){
-  								allPlayers.add(new Player(i, true));
-  							}
-
-  							for (int i = 0; i < totalComputerPlayers; i++){
-  								allPlayers.add(new ComputerAI(i, false));
-  							}
-
-  							for (int i = 0; i < allPlayers.size(); i++){
-  								allPlayers.get(i).setPlayerNumber(i + 1);
-  							}
+                Player.createGame(totalPlayers, totalHumanPlayers, totalComputerPlayers, allPlayers);
 
                 Scene gamePlay = new Scene(root, 1200, 600);
                 primaryStage.setTitle("Mono-Poly");

@@ -6,7 +6,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import java.util.Collections;
 
-class Player extends Gui{
+class Player{
 
     //instance variables
     private int position = 1;
@@ -29,6 +29,14 @@ class Player extends Gui{
     */
     public int getPosition(){
         return position;
+    }
+
+    /**
+    * returns array list containing information on all players
+    * @return allPlayers
+    */
+    public ArrayList<Player> getPlayers(){
+        return allPlayers;
     }
 
     /**
@@ -202,6 +210,20 @@ class Player extends Gui{
   		try {Thread.sleep(milliseconds);} catch(InterruptedException intrx) {/* handle the exception */}
   	}
 
+    public static void createGame(int totalPlayers, int totalHumanPlayers, int totalComputerPlayers, ArrayList<Player> allPlayers){
+        for (int i = 0; i < totalHumanPlayers; i++){
+          allPlayers.add(new Player(i, true));
+        }
+
+        for (int i = 0; i < totalComputerPlayers; i++){
+          allPlayers.add(new ComputerAI(i, false));
+        }
+
+        for (int i = 0; i < allPlayers.size(); i++){
+          allPlayers.get(i).setPlayerNumber(i + 1);
+        }
+    }
+
   	/**
   	*Method for the players turn
   	*giving user an output to show the value of dice they rolled, then player walks the equal step. Out put play's current loation.
@@ -264,8 +286,6 @@ class Player extends Gui{
   		}
   	}
 
-
-
     /**
     * method to purchase a propety when they player choose "Yes" after they have landed on
     * on an unowned property
@@ -285,7 +305,6 @@ class Player extends Gui{
   		  else {
   			 GameInfo.appendText("\nYou cannot afford this space");
   		}}
-
 
     /**
     * If the player chooses the sell button and selects a property button from the pop up window
@@ -348,8 +367,6 @@ class Player extends Gui{
           break;
         }}}
 
-
-
     /**
     * method to check if all but one player has been eliminated. If more than one player is not eliminated then gameplay will
     * continur as normal. If only one player remains not eliminated, then gameplay will come to an end and that player will
@@ -364,7 +381,6 @@ class Player extends Gui{
         }
       }
 
-
       if (allPlayers.size() - eliminatedPlayers == 1){
         for(int i = 0; i < allPlayers.size(); i++){
           if (allPlayers.get(i).getEliminated() == false){
@@ -375,7 +391,7 @@ class Player extends Gui{
         GameInfo.appendText("\nPlayer " + winner.getPlayerNumber() + " is the winner!");
         GameInfo.appendText("\nPlayer " + winner.getPlayerNumber() + " won with a networth of $" + winner.getNetWorth(board));
         GameInfo.appendText("\nPlease press the End Game button to see\nthe player standings for all players!");
-        setEndGame(true);
+        Gui.setEndGame(true);
       }
     }
 
@@ -439,7 +455,7 @@ class Player extends Gui{
         GameInfo.setText("All spaces have been sold. Game Over.");
         GameInfo.appendText("\nPlease press the End Game button to see\nthe player standings for all players");
         nextTurn.setDisable(true);
-        setEndGame(true);
+        Gui.setEndGame(true);
       }
       else if (unownedSpaces >= 1){
         nextTurn.setDisable(false);

@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 class GameMain {
 
-	// Private instance variables
 	static Player player1 = new Player();
 	static ComputerAI player2 = new ComputerAI(2, false);
 	static Board board = new Board();
@@ -30,10 +29,6 @@ class GameMain {
 	}
 
 
-	/**
-	 * Asks user if they would like the other player to be human or AI, and sets the other player to the choice of
-	 * the user
-	 */
 	public static void playerOrAI(){
 		Scanner playerOrAIScanner = new Scanner(System.in);
 		System.out.println("Would you like player 2 to be a (p)layer or a (c)omputer?");
@@ -119,11 +114,12 @@ class GameMain {
 		System.out.println(player2.getPlayerNumber());
 		playerOrAI();
 		gameStart();
-		//determine whether the game ends or not, runs game loop
+
+		//determine whether the game ends or not
 		while (endConditions(turn, player1, player2) == false) {
 			roundStart(turn);
-			wait(250);
-
+			Player.wait(250);
+			
 			player1.takeTurn(board, player2);
 			player2.takeTurn(board, player1);
 
