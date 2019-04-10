@@ -206,11 +206,11 @@ public class Gui extends Application{
     		root.add(sell, 9, 3);
 
 
-    		 /**
-     		 * When player selects the sell property button, method will loop through the properties the player owns
-         * and add a button to a pop up window for each property owned. The player is then able to select a button
-         * and sell the property represented, at which point the button is removed from the pop up window
-     		 */
+    		/**
+     		* When player selects the sell property button, method will loop through the properties the player owns
+        * and add a button to a pop up window for each property owned. The player is then able to select a button
+        * and sell the property represented, at which point the button is removed from the pop up window
+     		*/
     		sell.setOnAction(new EventHandler<ActionEvent>(){
     			@Override
     			public void handle(ActionEvent event){
@@ -265,7 +265,8 @@ public class Gui extends Application{
             if (getEndGame() == false){
               roll.setDisable(true);
 							final Player currentPlayer = allPlayers.get(getPlayerFlag() - 1);
-              currentPlayer.takeTurnGui(numOfLand, currentPlayer, GameInfo, positive, negative, nextTurn, allPlayers);
+              final TakeTurn turn = new TakeTurn();
+              turn.takeTurnGui(numOfLand, currentPlayer, GameInfo, positive, negative, nextTurn, allPlayers);
               currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
 
               if (getPlayerFlag() == 1){
@@ -307,7 +308,8 @@ public class Gui extends Application{
                 else if (allPlayers.get(1).getIsPlayer() == false){
                   roll.setDisable(true);
                   final Player currentPlayer = allPlayers.get(1);
-                  allPlayers.get(1).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers, nextTurn);
+                  final TakeTurn turn = new TakeTurn();
+                  turn.takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers, nextTurn);
                   currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                   currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                   nextTurn.setDisable(false);
@@ -334,7 +336,7 @@ public class Gui extends Application{
                   setPlayerFlag(2);
               }
 
-              //If it is player two's turn and player one has not been eliminated
+              //If it is player twos turn and player one has not been eliminated
               //Player one is always human, so we don't need to worry about an AI situation
               else if (getPlayerFlag() == 2){
                 if (totalPlayers == 2 && allPlayers.get(0).getEliminated() == false){
@@ -377,7 +379,8 @@ public class Gui extends Application{
                   else if (allPlayers.get(2).getIsPlayer() == false){
                     roll.setDisable(true);
                     final Player currentPlayer = allPlayers.get(2);
-                    allPlayers.get(2).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers, nextTurn);
+                    final TakeTurn turn = new TakeTurn();
+                    turn.takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers, nextTurn);
                     currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                     currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                     nextTurn.setDisable(false);
@@ -439,7 +442,8 @@ public class Gui extends Application{
                   else if (allPlayers.get(3).getIsPlayer() == false){
                     roll.setDisable(true);
                     final Player currentPlayer = allPlayers.get(3);
-                    allPlayers.get(3).takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers, nextTurn);
+                    final TakeTurn turn = new TakeTurn();
+                    turn.takeTurnAI(numOfLand, currentPlayer, GameInfo, allPlayers, nextTurn);
                     currentPlayer.updatePlayerInfo(playerInfo, currentPlayer, numOfLand, turnCount);
                     currentPlayer.updatePlayerStandings(playerStandings, allPlayers, numOfLand);
                     nextTurn.setDisable(false);
