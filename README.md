@@ -8,15 +8,19 @@ Game Instructions
 
 Introduction
 Welcome to Mono-Poly!
-This is a condensed version of the popular board game, with a slightly smaller board with less spaces.
-You can play PvP against another human player only.
+This is a condensed version of the popular board game Monopoly, with a slightly smaller board with less spaces.
+You can play PvP with up to 4 human players, or PvAI with any combination of human and computer players with a minimum of 1 
+human player and max of 4 players total.
 
 
 Installation
 
 Compile all java files in the zip file using javac -cp .:junit-4.12.jar:hamcrest-core-1.3.jar *.java 
-Run program by running only java Gui
-Run text based bersion but running java GameMain
+Run program by running java Gui
+Run text based version by running java GameMain
+
+To run tests with a .jar file run java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore GameMainTest 
+PlayerTest ComputerAITest BoardTest SpaceTest
 
 
 Game Instructions
@@ -33,4 +37,5 @@ property they will be prompted to sell enough properties to bring their balance 
 
 There are more than just property spaces available, there are also chance spaces, where you randomly pay money to the bank
 or are paid money from the bank, aswell as tax spaces, which require you to pay $100 to the bank, and the "go to jail" 
-space. When you land on these spaces, or a space that is owned by your opponent, no action is required by the user. Money will automatically be deposited or withdrawn from your total, and your avatar will automatically move for you.
+space. When you land on these spaces, or a space that is owned by your opponent, no action is required by the user. Money will 
+automatically be deposited or withdrawn from your total, and your avatar will automatically move for you.
