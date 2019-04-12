@@ -47,11 +47,4 @@ public class SpaceTest {
 		assertEquals("Expected 9", 9, DOG.getSaleValue());
 	}
 	
-	@Test
-	public void test_getInfo() {
-		Space bro = new Space("Test", 1, 2, 3, 4, 5);
-		assertEquals("did not match", "Test, Cost 1, Rent 2", bro.getInfo());
-	}
-	
-	
 }
