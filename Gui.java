@@ -23,6 +23,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
 
 public class Gui extends Application{
 
@@ -53,6 +59,7 @@ public class Gui extends Application{
 
   //button to start gameplay in start menu
   private Button begin = new Button("Start Game!");
+  private Button load = new Button("Load Game");
 
   /**
 	* board set up variables
@@ -657,6 +664,17 @@ public class Gui extends Application{
         boardButtons.get(22).setStyle("-fx-background-color: #00FA9A");
         boardButtons.get(23).setStyle("-fx-background-color: #7CFC00");
 
+        Button save = new Button("Save\nGame");
+        save.setMaxWidth(75);
+        save.setMaxHeight(75);
+        root.add(save, 17, 10);
+        save.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+                Save.gameSave("testSave.txt", allPlayers, numOfLand, turnCount, playerFlag);
+            }
+        });
+
         /**
       	* Exit button to prematurely end game without meeting end condition and pop up window to confirm
       	* if you'd like to quit or not
@@ -789,6 +807,7 @@ public class Gui extends Application{
           start.add(computer3, 10, 3, 1, 1);
           computer3.setDisable(true);
           start.add(begin, 5, 5, 2, 1);
+          start.add(load, 5, 5, 2, 2);
           start.add(totalPlayersPlaying, 5, 4, 2, 1);
 
           //Event handlers for all buttons, sets the amount of players in game in accordance with buttons clicked
@@ -896,6 +915,63 @@ public class Gui extends Application{
                 errorMessage.setText("Choose between 1 - 4 Players");
               }
             }});
+
+            load.setOnAction(new EventHandler<ActionEvent>(){
+                @Override
+                public void handle(ActionEvent event){
+                    try {
+                        BufferedReader reader = new BufferedReader(new FileReader("testSave.txt"));
+                        try {
+                            String line = reader.readLine();
+                            String[] lineOneInfo = line.split("\\s");
+                            totalHumanPlayers = Integer.parseInt(lineOneInfo[1]);
+                            totalComputerPlayers = Integer.parseInt(lineOneInfo[2]);
+                            totalPlayers = Integer.parseInt(lineOneInfo[0]);
+                            turnCount = Integer.parseInt(lineOneInfo[3]);
+                            playerFlag = Integer.parseInt(lineOneInfo[4]);
+                            if(playerFlag == 1)
+                                playerTurn.setTextFill(Color.BLUE);
+                            if(playerFlag == 2)
+                                playerTurn.setTextFill(Color.RED);
+                            if(playerFlag == 3)
+                                playerTurn.setTextFill(Color.ORANGE);
+                            if(playerFlag == 1)
+                                playerTurn.setTextFill(Color.PURPLE);
+                            playerTurn.setText("Player " + playerFlag +"'s Turn!");
+                            Player.createGame(totalPlayers, totalHumanPlayers, totalComputerPlayers, allPlayers);
+                            for (int i = 0; i < allPlayers.size(); i++) {
+                                line = reader.readLine();
+                                String[] playerLineInfo = line.split("\\s");
+                                allPlayers.get(i).setPlayerNumber(i + 1);
+                                allPlayers.get(i).setMoney(Integer.parseInt(playerLineInfo[0]));
+                                allPlayers.get(i).setPosition(Integer.parseInt(playerLineInfo[1]));
+                                allPlayers.get(i).setInJail(Boolean.parseBoolean(playerLineInfo[2]));
+                                allPlayers.get(i).setEliminated(Boolean.parseBoolean(playerLineInfo[3]));
+                            }
+                            line = reader.readLine();
+                            String[] boardLine = line.split("\\s");
+                            for (int i = 0; i < 24; i++) {
+                                int ownerNumber = Integer.parseInt(boardLine[i]);
+                                if (ownerNumber > 0 && ownerNumber < 5) {
+                                    allPlayers.get(ownerNumber - 1).setPropertiesOwned(allPlayers.get(ownerNumber - 1).getPropertiesOwned() + 1);
+                                    allPlayers.get(ownerNumber - 1).owns.add(i);
+                                    numOfLand.getSpace(i).setOwner(ownerNumber);
+                                }
+                            }
+                            reader.close();
+                        } catch (IOException ioe) {
+
+                        }
+                    }
+                    catch (FileNotFoundException fnfe){
+
+                    }
+
+                    Scene gamePlay = new Scene(root, 1200, 600);
+                    primaryStage.setTitle("Mono-Poly");
+                    primaryStage.setScene(gamePlay);
+                    primaryStage.show();
+                }});
 
         Scene menu = new Scene(start, 1200, 600);
       	primaryStage.setTitle("Mono-Poly");
