@@ -935,7 +935,7 @@ public class Gui extends Application{
                                 playerTurn.setTextFill(Color.RED);
                             if(playerFlag == 3)
                                 playerTurn.setTextFill(Color.ORANGE);
-                            if(playerFlag == 1)
+                            if(playerFlag == 4)
                                 playerTurn.setTextFill(Color.PURPLE);
                             playerTurn.setText("Player " + playerFlag +"'s Turn!");
                             Player.createGame(totalPlayers, totalHumanPlayers, totalComputerPlayers, allPlayers);
