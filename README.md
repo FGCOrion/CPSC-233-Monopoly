@@ -1,7 +1,6 @@
 Table of Contents 
 
 Introduction
-Features
 Installation
 Game Instructions
 
@@ -16,11 +15,11 @@ human player and max of 4 players total.
 Installation
 
 Compile all java files in the zip file using javac -cp .:junit-4.12.jar:hamcrest-core-1.3.jar *.java 
+
 Run program by running java Gui
 Run text based version by running java GameMain
 
-To run tests with a .jar file run java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore GameMainTest 
-PlayerTest ComputerAITest BoardTest SpaceTest
+To run tests, run java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore <Test Class>
 
 
 Game Instructions
