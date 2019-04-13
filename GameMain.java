@@ -91,7 +91,7 @@ class GameMain {
 	*@param computer;
 	**/
 
-	private static boolean endConditions(int turn, Player player1, Player player2) {
+	public static boolean endConditions(int turn, Player player1, Player player2) {
 		if (turn > 500)
 			return true;
 		if (player1.getMoney() < 0)
